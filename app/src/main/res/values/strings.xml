@@ -3,11 +3,15 @@
     <string name="apply_for_visit">随访申请</string>
     <string name="evaluation_guide">评估指导</string>
     <string name="msg_center">消息中心</string>
-    <string name="warn">告警提醒</string>
+    <string name="warn_notice">告警提醒</string>
     <string name="member_list">成员列表</string>
     <string name="recent_measure_time">最近测量时间</string>
     <string name="member_manager">成员管理</string>
     <string name="system_setting">系统设置</string>
     <string name="suggestion_feedback">意见反馈</string>
     <string name="about_us">关于我们</string>
+    <string name="data">数据</string>
+    <string name="guide">指导</string>
+    <string name="warn">告警</string>
+    <string name="location">定位</string>
 </resources>

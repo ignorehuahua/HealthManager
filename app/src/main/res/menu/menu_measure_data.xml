@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menu_data"
+        android:icon="@drawable/icon_data_default"
+        android:title="@string/data" />
+
+    <item android:id="@+id/menu_guide"
+        android:icon="@drawable/icon_bottom_guide"
+        android:title="@string/guide" />
+
+    <item android:id="@+id/menu_warn"
+        android:icon="@drawable/icon_bottom_warn"
+        android:title="@string/warn" />
+
+    <item android:id="@+id/menu_locate"
+        android:icon="@drawable/icon_bottom_locate"
+        android:title="@string/location" />
+</menu>

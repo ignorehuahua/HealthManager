@@ -7,4 +7,6 @@
     <color name="white">#FFFFFF</color>
     <color name="shape_gray">#8C8C8C</color>
     <color name="name_color">#222222</color>
+    <color name="red">#E51C23</color>
+    <color name="bottom_default">#444444</color>
 </resources>
