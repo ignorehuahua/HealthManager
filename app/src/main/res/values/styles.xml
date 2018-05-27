@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="main_page_guide">
+    <style name="main_page_guide_font">
         <item name="android:textColor">@color/name_color</item>
         <item name="android:textSize">14sp</item>
         <item name="android:gravity">center</item>

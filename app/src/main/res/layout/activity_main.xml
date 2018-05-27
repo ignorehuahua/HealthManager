@@ -45,7 +45,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                style="@style/main_page_guide"
+                style="@style/main_page_guide_font"
                 android:text="@string/apply_for_visit"
                 android:drawableTop="@drawable/icon_apply_visit"/>
 
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/evaluation_guide"
-                style="@style/main_page_guide"
+                style="@style/main_page_guide_font"
                 android:drawableTop="@drawable/icon_guide"/>
 
             <TextView
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/msg_center"
-                style="@style/main_page_guide"
+                style="@style/main_page_guide_font"
                 android:drawableTop="@drawable/icon_msg_center"/>
 
             <TextView
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/warn_notice"
-                style="@style/main_page_guide"
+                style="@style/main_page_guide_font"
                 android:drawableTop="@drawable/icon_warn"/>
 
         </LinearLayout>
