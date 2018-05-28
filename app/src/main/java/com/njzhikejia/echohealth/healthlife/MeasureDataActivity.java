@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
 import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
+import com.njzhikejia.echohealth.healthlife.fragment.HealthGuidanceFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.MeasureDataFragment;
 import com.njzhikejia.echohealth.healthlife.util.BottomNavigationViewHelper;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
@@ -63,7 +64,7 @@ public class MeasureDataActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MeasureDataFragment());
-        adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.guide)));
+        adapter.addFragment(new HealthGuidanceFragment());
         adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.warn)));
         adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.location)));
         viewPager.setAdapter(adapter);
