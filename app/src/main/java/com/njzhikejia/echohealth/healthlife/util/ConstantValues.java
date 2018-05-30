@@ -12,4 +12,6 @@ public class ConstantValues {
 
     public static final int SYSTOLIC_PRESSURE = 3; // 收缩压
 
+    public static final String KEY_MEMBER_INFO = "key_member_info";
+
 }

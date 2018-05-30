@@ -1,6 +1,7 @@
 package com.njzhikejia.echohealth.healthlife.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.EventLogTags;
 import android.view.LayoutInflater;
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by 16222 on 2018/5/26.
  */
 
-public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.MemberViewHolder>{
+public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.MemberViewHolder> implements View.OnClickListener {
 
     private static final String TAG = "MemberListAdapter";
 
@@ -33,13 +34,15 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
 
     @Override
     public MemberViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_member_list, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_member_list, null);
         MemberViewHolder viewHolder = new MemberViewHolder(view);
+        view.setOnClickListener(this);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(MemberViewHolder holder, int position) {
+    public void onBindViewHolder(MemberViewHolder holder, final int position) {
+        holder.itemView.setTag(position);
         Member member = list.get(position);
         if (member == null) {
             Logger.e(TAG, "member == null!");
@@ -64,6 +67,14 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
         notifyDataSetChanged();
     }
 
+    @Override
+    public void onClick(View v) {
+        if (mOnItemClickListener != null) {
+            //注意这里使用getTag方法获取position
+            mOnItemClickListener.onItemClick(v,(int)v.getTag());
+        }
+    }
+
 
     class MemberViewHolder extends RecyclerView.ViewHolder {
 
@@ -77,5 +88,14 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
             tvName = itemView.findViewById(R.id.tv_member_name);
             tvTime = itemView.findViewById(R.id.tv_member_measure_time);
         }
+    }
+    public interface OnItemClickListener {
+        void onItemClick(View view , int position);
+    }
+
+    private OnItemClickListener mOnItemClickListener = null;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
     }
 }
