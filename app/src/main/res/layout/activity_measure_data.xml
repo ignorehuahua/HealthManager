@@ -20,7 +20,16 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="right"
+            android:layout_marginRight="16dp"
             android:src="@drawable/icon_apply_visit"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/toolbar_title"
+            android:text="@string/measure_data"
+             />
 
     </android.support.v7.widget.Toolbar>
 

@@ -8,7 +8,10 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
 import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
@@ -26,12 +29,22 @@ public class MeasureDataActivity extends AppCompatActivity {
     private static final String TAG = "MeasureDataActivity";
     private ViewPager mViewPager;
     private MenuItem mMenuItem;
+    private Toolbar mToolbar;
+    private TextView tvTitle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Logger.d(TAG, "onCreate");
         setContentView(R.layout.activity_measure_data);
+        mToolbar = findViewById(R.id.toolbar);
+        tvTitle = findViewById(R.id.tv_title);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         final BottomNavigationView navigation = findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -51,6 +64,20 @@ public class MeasureDataActivity extends AppCompatActivity {
                 }
                 mMenuItem = navigation.getMenu().getItem(position);
                 mMenuItem.setChecked(true);
+                switch (position) {
+                    case 0:
+                        tvTitle.setText(R.string.measure_data);
+                        break;
+                    case 1:
+                        tvTitle.setText(R.string.evaluation_guide);
+                        break;
+                    case 2:
+                        tvTitle.setText(R.string.warn_notice);
+                        break;
+                    case 3:
+                        tvTitle.setText(R.string.location);
+                        break;
+                }
             }
             @Override
             public void onPageScrollStateChanged(int state) {
@@ -78,15 +105,19 @@ public class MeasureDataActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.menu_data:
                     mViewPager.setCurrentItem(0);
+                    tvTitle.setText(R.string.measure_data);
                     return true;
                 case R.id.menu_guide:
                     mViewPager.setCurrentItem(1);
+                    tvTitle.setText(R.string.evaluation_guide);
                     return true;
                 case R.id.menu_warn:
                     mViewPager.setCurrentItem(2);
+                    tvTitle.setText(R.string.warn_notice);
                     return true;
                 case R.id.menu_locate:
                     mViewPager.setCurrentItem(3);
+                    tvTitle.setText(R.string.location);
                     return true;
             }
             return false;
@@ -98,6 +129,10 @@ public class MeasureDataActivity extends AppCompatActivity {
         super.onResume();
         Logger.d(TAG, "onResume");
     }
+
+
+
+
 
     @Override
     protected void onDestroy() {

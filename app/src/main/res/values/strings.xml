@@ -14,4 +14,7 @@
     <string name="guide">指导</string>
     <string name="warn">告警</string>
     <string name="location">定位</string>
+    <string name="measure_data">测量数据</string>
+    <string name="my_follow">我关注的</string>
+    <string name="follow_me">关注我的</string>
 </resources>

@@ -23,6 +23,10 @@
         <activity android:name=".MeasureDataActivity">
 
         </activity>
+
+        <activity android:name=".MemberManageActivity">
+
+        </activity>
     </application>
 
 </manifest>

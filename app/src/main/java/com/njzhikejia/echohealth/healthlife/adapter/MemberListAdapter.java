@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
+
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.entity.Member;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
@@ -23,6 +25,7 @@ import java.util.List;
 public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.MemberViewHolder> implements View.OnClickListener {
 
     private static final String TAG = "MemberListAdapter";
+
 
     private Context context;
     private List<Member> list;
