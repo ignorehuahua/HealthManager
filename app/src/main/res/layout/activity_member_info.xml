@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/member_info_bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        app:navigationIcon="@drawable/icon_back"
+        android:background="@color/toolbar"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/toolbar_title"
+            android:text="@string/member_info" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:id="@+id/rl_member_relationship"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_below="@id/toolbar"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/icon_apply_visit" />
+
+        <TextView
+            android:id="@+id/tv_member_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/name_color"
+            android:layout_toRightOf="@id/iv_avatar"
+            android:text="name"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/tv_member_relationship"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/shape_gray"
+            android:layout_toRightOf="@id/iv_avatar"
+            android:paddingTop="5dp"
+            android:text="@string/relationship"
+            android:textSize="14sp"
+            android:layout_below="@id/tv_member_name"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:layout_below="@id/rl_member_relationship"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_number_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/phone_number"
+            style="@style/member_info_label_text"/>
+
+        <TextView
+            android:id="@+id/tv_number_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_number_label"
+            android:layout_marginLeft="2dp"
+            style="@style/member_info_value_text" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/rl_phone_number"
+        android:background="@color/divider_color"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_birthday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:layout_below="@id/divider_phone_number"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_birthday_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/birthdy"
+            style="@style/member_info_label_text"/>
+
+        <TextView
+            android:id="@+id/tv_birthday_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/member_info_value_text" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider_birthday"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/rl_birthday"
+        android:background="@color/divider_color"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_sex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:layout_below="@id/divider_birthday"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_sex_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sex"
+            style="@style/member_info_label_text"/>
+
+        <TextView
+            android:id="@+id/tv_sex_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/member_info_value_text" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

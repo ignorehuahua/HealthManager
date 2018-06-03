@@ -27,6 +27,10 @@
         <activity android:name=".MemberManageActivity">
 
         </activity>
+
+        <activity android:name=".MemberInfoActivity">
+
+        </activity>
     </application>
 
 </manifest>
