@@ -31,6 +31,10 @@
         <activity android:name=".MemberInfoActivity">
 
         </activity>
+
+        <activity android:name=".AddMeasureDataActivity">
+
+        </activity>
     </application>
 
 </manifest>

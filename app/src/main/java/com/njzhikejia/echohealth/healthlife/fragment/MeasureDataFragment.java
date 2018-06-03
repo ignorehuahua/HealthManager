@@ -1,14 +1,17 @@
 package com.njzhikejia.echohealth.healthlife.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.njzhikejia.echohealth.healthlife.AddMeasureDataActivity;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.adapter.MeasureDataAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.MeasureData;
@@ -29,6 +32,7 @@ public class MeasureDataFragment extends BaseFragment {
     private MeasureDataAdapter mAdapter;
     private List<MeasureData> measureDataList;
     private Context mContext;
+    private FloatingActionButton mFabBtn;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +53,7 @@ public class MeasureDataFragment extends BaseFragment {
 
     private void initView(View view) {
         mRecycleView = view.findViewById(R.id.recycle_view_data);
+        mFabBtn = view.findViewById(R.id.floating_action_btn);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mRecycleView.setHasFixedSize(true);
         mRecycleView.setLayoutManager(layoutManager);
@@ -56,6 +61,13 @@ public class MeasureDataFragment extends BaseFragment {
         testInitData();
         mAdapter = new MeasureDataAdapter(mContext, measureDataList);
         mRecycleView.setAdapter(mAdapter);
+        mFabBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addIntent = new Intent(mContext, AddMeasureDataActivity.class);
+                startActivity(addIntent);
+            }
+        });
     }
 
     private void testInitData() {
