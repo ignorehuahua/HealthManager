@@ -11,6 +11,9 @@ import android.view.View;
 
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
 import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
+import com.njzhikejia.echohealth.healthlife.fragment.BloodPressureFragment;
+import com.njzhikejia.echohealth.healthlife.fragment.HeartRateFragment;
+import com.njzhikejia.echohealth.healthlife.fragment.HeightAndWeightFragment;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 
 /**
@@ -51,9 +54,9 @@ public class AddMeasureDataActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         titles = new String[]{getString(R.string.blood_pressure), getString(R.string.heart_rate), getString(R.string.height_and_weight)};
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles);
-        adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.blood_pressure)));
-        adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.heart_rate)));
-        adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.height_and_weight)));
+        adapter.addFragment(new BloodPressureFragment());
+        adapter.addFragment(new HeartRateFragment());
+        adapter.addFragment(new HeightAndWeightFragment());
         viewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
