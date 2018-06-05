@@ -19,22 +19,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MeasureDataActivity" />
+        <activity android:name=".MemberManageActivity" />
+        <activity android:name=".MemberInfoActivity" />
+        <activity android:name=".AddMeasureDataActivity" />
+        <activity android:name=".LoginActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-        <activity android:name=".MeasureDataActivity">
-
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
-        <activity android:name=".MemberManageActivity">
-
-        </activity>
-
-        <activity android:name=".MemberInfoActivity">
-
-        </activity>
-
-        <activity android:name=".AddMeasureDataActivity">
-
-        </activity>
     </application>
 
 </manifest>
