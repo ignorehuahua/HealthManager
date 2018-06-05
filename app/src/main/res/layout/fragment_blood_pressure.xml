@@ -41,15 +41,50 @@
         android:maxLines="1"
         android:hint="@string/measure_time"/>
 
-    <EditText
-        android:id="@+id/et_measure_state"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/add_data_et"
-        android:layout_marginTop="20dp"
-        android:maxLines="1"
-        android:layout_below="@id/et_measure_time"
-        android:hint="@string/measure_state"/>
+        <RelativeLayout
+            android:id="@+id/rl_measure_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_measure_time"
+            style="@style/measure_state_radio_btn">
+
+            <TextView
+                android:id="@+id/tv_measure_state"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:text="@string/measure_state"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_centerVertical="true"/>
+
+            <RadioGroup
+                android:id="@+id/rg_measure_state"
+                android:layout_alignParentRight="true"
+                android:paddingRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/normal_state"/>
+
+                <RadioButton
+                    android:id="@+id/rb_sports"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/after_sports_state"/>
+
+                <RadioButton
+                    android:id="@+id/rb_rest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rest_state"/>
+            </RadioGroup>
+
+        </RelativeLayout>
 
     <EditText
         android:id="@+id/et_note"
@@ -57,7 +92,7 @@
         android:layout_height="wrap_content"
         style="@style/add_data_et"
         android:lines="4"
-        android:layout_below="@id/et_measure_state"
+        android:layout_below="@id/rl_measure_state"
         android:layout_marginTop="20dp"
         android:hint="@string/note"/>
 

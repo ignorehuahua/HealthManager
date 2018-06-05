@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.njzhikejia.echohealth.healthlife.R;
@@ -25,6 +26,12 @@ public class BloodPressureFragment extends BaseFragment {
     private static final String TAG = "BloodPressureFragment";
     private Context mContext;
     private EditText etTime;
+    private EditText etDiastolicPressure;
+    private EditText etSystolicPressure;
+    private RadioButton rbNormalState;
+    private RadioButton rbSportsState;
+    private RadioButton rbRestState;
+    private EditText etNote;
 
     @Nullable
     @Override
@@ -37,6 +44,12 @@ public class BloodPressureFragment extends BaseFragment {
 
     private void initView(View view) {
         mContext = getActivity();
+        etDiastolicPressure = view.findViewById(R.id.et_diastolic_pressure);
+        etSystolicPressure = view.findViewById(R.id.et_systolic_pressure);
+        rbNormalState = view.findViewById(R.id.rb_normal);
+        rbSportsState = view.findViewById(R.id.rb_sports);
+        rbRestState = view.findViewById(R.id.rb_rest);
+        etNote = view.findViewById(R.id.et_note);
         etTime = view.findViewById(R.id.et_measure_time);
         etTime.setOnClickListener(new View.OnClickListener() {
             @Override

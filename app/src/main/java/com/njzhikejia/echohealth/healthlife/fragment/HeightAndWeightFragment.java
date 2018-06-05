@@ -23,6 +23,9 @@ public class HeightAndWeightFragment extends BaseFragment {
 
     private static final String TAG = "HeightAndWeightFragment";
     private Context mContext;
+    private EditText etHeight;
+    private EditText etWeight;
+    private EditText etNote;
     private EditText etTime;
 
     @Nullable
@@ -35,6 +38,9 @@ public class HeightAndWeightFragment extends BaseFragment {
 
     private void initView(View view) {
         mContext = getActivity();
+        etHeight = view.findViewById(R.id.et_height);
+        etWeight = view.findViewById(R.id.et_weight);
+        etNote = view.findViewById(R.id.et_note);
         etTime = view.findViewById(R.id.et_measure_time);
         etTime.setOnClickListener(new View.OnClickListener() {
             @Override

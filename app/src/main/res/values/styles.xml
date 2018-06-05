@@ -48,6 +48,17 @@
         <item name="android:paddingBottom">10dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingLeft">10dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="measure_state_radio_btn">
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:background">@drawable/shape_add_data</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:layout_marginTop">20dp</item>
     </style>
 
 </resources>
