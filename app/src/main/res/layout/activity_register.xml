@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/toolbar"
+        android:layout_marginBottom="30dp"
+        app:navigationIcon="@drawable/icon_back">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/toolbar_title"
+            android:text="@string/register" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <EditText
+        android:id="@+id/et_mobile_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/input_phone_number"
+        android:background="@null"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:inputType="number"
+        android:layout_below="@id/toolbar"
+        android:paddingBottom="16dp"/>
+
+    <View
+        android:id="@+id/divider_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color"
+        android:layout_below="@id/et_mobile_phone_number"/>
+
+    <LinearLayout
+        android:id="@+id/ll_verification_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider_phone_number"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_verification_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:hint="@string/input_verification_code"
+            android:background="@null"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:paddingRight="16dp"
+            android:text="@string/get_verification_code"/>
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/divider_verification_code"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color"
+        android:layout_below="@id/ll_verification_code"/>
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/input_password"
+        android:background="@null"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/divider_verification_code"
+        android:paddingBottom="16dp"/>
+
+    <View
+        android:id="@+id/divider_password"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color"
+        android:layout_below="@id/et_password"/>
+
+    <Button
+        android:id="@+id/btn_complete"
+        android:layout_below="@id/divider_password"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/complete"
+        android:textColor="@color/white"
+        android:background="@drawable/selector_login"
+        android:textSize="16sp"/>
+</RelativeLayout>

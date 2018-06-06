@@ -12,6 +12,9 @@
     <color name="data_value">#101010</color>
     <color name="blue_main">#1296DB</color>
     <color name="member_info_bg">#F8F8F8</color>
-    <color name="divider_color">#CFCFCF</color>
+    <color name="divider_color">#F4F5F0</color>
     <color name="medium_blue">#00BFFF</color>
+    <color name="btn_enabled">#F96650</color>
+    <color name="btn_disabled">#C6C6BD</color>
+    <color name="btn_pressed">#EE4422</color>
 </resources>
