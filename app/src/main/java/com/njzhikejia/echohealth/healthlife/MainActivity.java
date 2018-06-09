@@ -2,6 +2,8 @@ package com.njzhikejia.echohealth.healthlife;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import com.njzhikejia.echohealth.healthlife.adapter.MemberListAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.Member;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
+import com.njzhikejia.echohealth.healthlife.util.ImageUtil;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
@@ -86,12 +89,12 @@ public class MainActivity extends AppCompatActivity {
 
         View headerLayout = mNavigation.getHeaderView(0);
         ivAvatar= headerLayout.findViewById(R.id.iv_avatar);
-//        ivAvatar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                choosePhoto();
-//            }
-//        });
+        ivAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageUtil.choosePhoto(MainActivity.this, REQUEST_CODE_CHOOSE);
+            }
+        });
 
 
         mRecycleView = findViewById(R.id.recycle_view);
@@ -117,23 +120,29 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void choosePhoto() {
-        Matisse.from(MainActivity.this)
-                .choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.GIF))
-                .countable(true)
-                .maxSelectable(9)
-                .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                .thumbnailScale(0.85f)
-                .imageEngine(new GlideEngine())
-                .forResult(REQUEST_CODE_CHOOSE);
-    }
-
     private void testInitMembers() {
         Member wukong = new Member(null, "悟空", "12:30");
         Member bajie = new Member(null, "八戒","14:00");
         memberList.add(wukong);
         memberList.add(bajie);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Logger.d(TAG, "onActivityResult resultCode = "+resultCode+" requestCode = "+requestCode);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHOOSE) {
+            if (data == null) {
+                Logger.e(TAG, "no selected photo");
+                return;
+            }
+            List<Uri> mSelected = Matisse.obtainResult(data);
+            if (mSelected != null && mSelected.size() > 0) {
+                Bitmap selectedPhoto = ImageUtil.decodeUri(MainActivity.this, mSelected.get(0),150, 150);
+                ivAvatar.setImageBitmap(ImageUtil.createCircleImage(selectedPhoto, 100));
+            }
+
+        }
     }
 }
 
