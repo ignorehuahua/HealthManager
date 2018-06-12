@@ -14,4 +14,14 @@ public class ConstantValues {
 
     public static final String KEY_MEMBER_INFO = "key_member_info";
 
+    public static final String KEY_TO_PAGE = "key_to_page";
+
+    public static final int PAGE_OF_DATA = 0;
+
+    public static final int PAGE_OF_GUIDANCE = 1;
+
+    public static final int PAGE_OF_WARN = 2;
+
+    public static final int PAGE_OF_LOCATE = 3;
+
 }

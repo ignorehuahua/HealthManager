@@ -16,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.njzhikejia.echohealth.healthlife.adapter.MemberListAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.Member;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
@@ -27,7 +29,7 @@ import com.zhihu.matisse.engine.impl.GlideEngine;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
 
@@ -39,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
     private MemberListAdapter mAdapter;
     private List<Member> memberList;
     private ImageView ivAvatar;
+    private TextView tvVisit;
+    private TextView tvGuidance;
+    private TextView tvMsgCenter;
+    private TextView tvWarning;
     private static final int REQUEST_CODE_CHOOSE = 200;
 
     @Override
@@ -53,6 +59,14 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.toolbar);
         mNavigation = findViewById(R.id.navigation);
         mDrawerLayout = findViewById(R.id.drawerLayout);
+        tvVisit = findViewById(R.id.tv_apply_visit);
+        tvGuidance = findViewById(R.id.tv_evaluation_guide);
+        tvMsgCenter = findViewById(R.id.tv_msg_center);
+        tvWarning = findViewById(R.id.tv_warn);
+        tvVisit.setOnClickListener(this);
+        tvGuidance.setOnClickListener(this);
+        tvMsgCenter.setOnClickListener(this);
+        tvWarning.setOnClickListener(this);
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,
                 mDrawerLayout,
@@ -138,10 +152,31 @@ public class MainActivity extends AppCompatActivity {
             }
             List<Uri> mSelected = Matisse.obtainResult(data);
             if (mSelected != null && mSelected.size() > 0) {
-                Bitmap selectedPhoto = ImageUtil.decodeUri(MainActivity.this, mSelected.get(0),150, 150);
-                ivAvatar.setImageBitmap(ImageUtil.createCircleImage(selectedPhoto, 100));
+                Bitmap selectedPhoto = ImageUtil.decodeUri(MainActivity.this, mSelected.get(0),300, 300);
+                ivAvatar.setImageBitmap(selectedPhoto);
             }
 
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_apply_visit:
+
+                break;
+            case R.id.tv_evaluation_guide:
+                Intent intentGuidance = new Intent(MainActivity.this, MeasureDataActivity.class);
+                intentGuidance.putExtra(ConstantValues.KEY_TO_PAGE, ConstantValues.PAGE_OF_GUIDANCE);
+                startActivity(intentGuidance);
+                break;
+            case R.id.tv_msg_center:
+                break;
+            case R.id.tv_warn:
+                Intent intentWarn = new Intent(MainActivity.this, MeasureDataActivity.class);
+                intentWarn.putExtra( ConstantValues.KEY_TO_PAGE, ConstantValues.PAGE_OF_WARN);
+                startActivity(intentWarn);
+                break;
         }
     }
 }

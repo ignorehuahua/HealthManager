@@ -1,6 +1,7 @@
 package com.njzhikejia.echohealth.healthlife;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.HealthGuidanceFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.MeasureDataFragment;
 import com.njzhikejia.echohealth.healthlife.util.BottomNavigationViewHelper;
+import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 
 /**
@@ -87,6 +89,7 @@ public class MeasureDataActivity extends AppCompatActivity {
         });
 
         setupViewPager(mViewPager);
+        initPage();
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -96,6 +99,16 @@ public class MeasureDataActivity extends AppCompatActivity {
         adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.warn)));
         adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.location)));
         viewPager.setAdapter(adapter);
+    }
+
+    private void initPage() {
+        Intent intentPage = getIntent();
+        if (intentPage == null) {
+            return;
+        }
+
+        int currentPage = intentPage.getIntExtra(ConstantValues.KEY_TO_PAGE, 0);
+        mViewPager.setCurrentItem(currentPage);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
