@@ -90,7 +90,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="30dp"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/blue_main"
+        android:textColor="@color/btn_enabled"
         android:textSize="16sp"
         android:background="@drawable/shape_register"
         android:text="@string/register"/>
