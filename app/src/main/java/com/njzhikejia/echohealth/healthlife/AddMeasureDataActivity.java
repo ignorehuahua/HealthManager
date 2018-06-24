@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
@@ -38,17 +39,11 @@ public class AddMeasureDataActivity extends AppCompatActivity {
 
     private void initView() {
         mToolbar = findViewById(R.id.toolbar);
-
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mTabLayout = findViewById(R.id.tab_layout);
         mViewPager = findViewById(R.id.viewpager);
         setupViewPager(mViewPager);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
-
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -65,6 +60,16 @@ public class AddMeasureDataActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Logger.d(TAG, "onResume");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

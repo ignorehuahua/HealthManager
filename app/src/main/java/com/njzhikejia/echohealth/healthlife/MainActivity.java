@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvGuidance.setOnClickListener(this);
         tvMsgCenter.setOnClickListener(this);
         tvWarning.setOnClickListener(this);
+
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,
                 mDrawerLayout,
