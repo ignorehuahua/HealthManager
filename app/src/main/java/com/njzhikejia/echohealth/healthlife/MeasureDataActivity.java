@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
+import com.njzhikejia.echohealth.healthlife.entity.Member;
 import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.HealthGuidanceFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.MeasureDataFragment;
@@ -33,6 +34,7 @@ public class MeasureDataActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private MenuItem mMenuItem;
     private Toolbar mToolbar;
+    private String name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,16 +65,16 @@ public class MeasureDataActivity extends AppCompatActivity {
                 mMenuItem.setChecked(true);
                 switch (position) {
                     case 0:
-                        mToolbar.setTitle((R.string.measure_data));
+                        mToolbar.setTitle(name+"-"+getString(R.string.measure_data));
                         break;
                     case 1:
-                        mToolbar.setTitle((R.string.evaluation_guide));
+                        mToolbar.setTitle(name+"-"+getString(R.string.evaluation_guide));
                         break;
                     case 2:
-                        mToolbar.setTitle(R.string.warn_notice);
+                        mToolbar.setTitle(name+"-"+getString(R.string.warn_notice));
                         break;
                     case 3:
-                        mToolbar.setTitle(R.string.location);
+                        mToolbar.setTitle(name+"-"+getString(R.string.location));
                         break;
                 }
             }
@@ -102,6 +104,12 @@ public class MeasureDataActivity extends AppCompatActivity {
         }
 
         int currentPage = intentPage.getIntExtra(ConstantValues.KEY_TO_PAGE, 0);
+        Member member = intentPage.getParcelableExtra(ConstantValues.KEY_MEMBER_INFO);
+        if (member != null) {
+            name = member.getName();
+            Logger.d(TAG, "get name = "+name);
+            mToolbar.setTitle(name+"-"+getString(R.string.measure_data));
+        }
         mViewPager.setCurrentItem(currentPage);
     }
 
@@ -113,19 +121,19 @@ public class MeasureDataActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.menu_data:
                     mViewPager.setCurrentItem(0);
-                    mToolbar.setTitle(R.string.measure_data);
+                    mToolbar.setTitle(name+"-"+getString(R.string.measure_data));
                     return true;
                 case R.id.menu_guide:
                     mViewPager.setCurrentItem(1);
-                    mToolbar.setTitle(R.string.evaluation_guide);
+                    mToolbar.setTitle(name+"-"+getString(R.string.evaluation_guide));
                     return true;
                 case R.id.menu_warn:
                     mViewPager.setCurrentItem(2);
-                    mToolbar.setTitle(R.string.warn_notice);
+                    mToolbar.setTitle(name+"-"+getString(R.string.warn_notice));
                     return true;
                 case R.id.menu_locate:
                     mViewPager.setCurrentItem(3);
-                    mToolbar.setTitle(R.string.location);
+                    mToolbar.setTitle(name+"-"+getString(R.string.location));
                     return true;
             }
             return false;
