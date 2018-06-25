@@ -8,34 +8,82 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        android:layout_marginTop="20dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_heart_rate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/et_heart_rate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/add_data_et"
-            android:layout_marginTop="30dp"
+            style="@style/input_et"
             android:maxLines="1"
+            android:inputType="number"
             android:hint="@string/heart_rate_with_unit"/>
 
-        <EditText
-            android:id="@+id/et_measure_time"
+        </android.support.design.widget.TextInputLayout>
+
+        <View
+            android:id="@+id/divider_heart_rate"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color"
+            android:layout_below="@id/input_heart_rate"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_measure_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/add_data_et"
-            android:layout_below="@id/et_heart_rate"
-            android:layout_marginTop="20dp"
-            android:editable="false"
-            android:focusable="false"
-            android:maxLines="1"
-            android:hint="@string/measure_time"/>
+            android:layout_below="@id/divider_heart_rate"
+            android:paddingLeft="16dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingRight="16dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <TextView
+                android:id="@+id/tv_measure_time_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/measure_time"
+                android:layout_alignParentLeft="true"
+                android:textSize="15sp"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:id="@+id/tv_measure_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/tv_measure_time_label"
+                android:layout_marginLeft="6dp"
+                android:layout_centerVertical="true"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_chevron_right"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/divider_measure_time"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color"
+            android:layout_below="@id/rl_measure_time"/>
 
         <RelativeLayout
             android:id="@+id/rl_measure_state"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/et_measure_time"
+            android:layout_below="@id/divider_measure_time"
             style="@style/measure_state_radio_btn">
 
             <TextView
@@ -44,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:text="@string/measure_state"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:layout_centerVertical="true"/>
 
             <RadioGroup
@@ -76,15 +124,35 @@
 
         </RelativeLayout>
 
-        <EditText
-            android:id="@+id/et_note"
+        <View
+            android:id="@+id/divider_measure_state"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color"
+            android:layout_below="@id/rl_measure_state"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/add_data_et"
-            android:lines="4"
-            android:layout_below="@id/rl_measure_state"
-            android:layout_marginTop="20dp"
-            android:hint="@string/note"/>
+            android:layout_marginTop="2dp"
+            android:layout_below="@id/divider_measure_state">
+            <EditText
+                android:id="@+id/et_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/input_et"
+                android:lines="4"
+                android:hint="@string/note"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <View
+            android:id="@+id/divider_note"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color"
+            android:layout_below="@id/input_note"/>
 
     </RelativeLayout>
 

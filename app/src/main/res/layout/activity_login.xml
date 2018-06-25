@@ -9,53 +9,59 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher" />
-
+        android:src="@mipmap/ic_launcher"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+m
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_mobile_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_below="@id/iv_app_icon">
 
             <EditText
                 android:id="@+id/et_mobile_phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/mobile_phone_number"
-                android:background="@null"
                 android:inputType="number"
-                android:paddingLeft="16dp"
-                android:paddingTop="16dp"
-                android:layout_marginTop="30dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/iv_app_icon"
-                android:paddingBottom="16dp"/>
+                style="@style/input_et"/>
+    </android.support.design.widget.TextInputLayout>
 
         <View
             android:id="@+id/divider_login"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/divider_color"
-            android:layout_below="@id/et_mobile_phone_number"/>
+            android:layout_below="@id/input_mobile_phone_number"/>
 
 
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_login_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_below="@id/divider_login">
 
         <EditText
             android:id="@+id/et_login_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password"
-            android:background="@null"
-            android:layout_below="@+id/divider_login"
-            android:paddingLeft="16dp"
-            android:paddingTop="16dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:paddingBottom="16dp" />
+            android:inputType="textPassword"
+            style="@style/input_et" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <View
         android:id="@+id/divider_password"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/divider_color"
-        android:layout_below="@id/et_login_password"/>
+        android:layout_below="@id/input_login_password"/>
 
     <Button
         android:id="@+id/btn_login"
@@ -71,6 +77,19 @@
         android:textSize="16sp"/>
 
     <TextView
+        android:id="@+id/tv_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="16dp"
+        android:textSize="14sp"
+        android:textColor="@color/shape_gray"
+        android:clickable="true"
+        android:layout_marginTop="16dp"
+        android:text="@string/register_immedicately"
+        android:layout_below="@id/btn_login"/>
+
+    <TextView
         android:id="@+id/tv_forget_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -82,16 +101,4 @@
         android:clickable="true"
         android:layout_below="@id/btn_login"
         android:layout_marginTop="16dp"/>
-
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/btn_enabled"
-        android:textSize="16sp"
-        android:background="@drawable/shape_register"
-        android:text="@string/register"/>
 </RelativeLayout>

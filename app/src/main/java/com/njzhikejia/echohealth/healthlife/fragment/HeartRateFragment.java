@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.njzhikejia.echohealth.healthlife.R;
@@ -28,8 +30,9 @@ public class HeartRateFragment extends BaseFragment {
     private RadioButton rbNormalState;
     private RadioButton rbSportsState;
     private RadioButton rbRestState;
-    private EditText etTime;
     private EditText etNote;
+    private RelativeLayout rlTime;
+    private TextView tvMeasureTime;
 
     @Nullable
     @Override
@@ -47,8 +50,9 @@ public class HeartRateFragment extends BaseFragment {
         rbSportsState = view.findViewById(R.id.rb_sports);
         rbRestState = view.findViewById(R.id.rb_rest);
         etNote = view.findViewById(R.id.et_note);
-        etTime = view.findViewById(R.id.et_measure_time);
-        etTime.setOnClickListener(new View.OnClickListener() {
+        rlTime = view.findViewById(R.id.rl_measure_time);
+        tvMeasureTime = view.findViewById(R.id.tv_measure_time);
+        rlTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TimeUtil.showTimePickerDialog(mContext, new OnTimeSelectListener() {
@@ -57,7 +61,7 @@ public class HeartRateFragment extends BaseFragment {
                     public void onTimeSelect(Date date, View v) {
                         Logger.d(TAG, "onTimeSelect");
                         String time = TimeUtil.getTime(date);
-                        etTime.setText(time);
+                        tvMeasureTime.setText(time);
                     }
                 });
             }

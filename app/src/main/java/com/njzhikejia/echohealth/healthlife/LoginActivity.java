@@ -3,22 +3,11 @@ package com.njzhikejia.echohealth.healthlife;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
-import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
-import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
-import com.njzhikejia.echohealth.healthlife.util.ImageUtil;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
-import com.zhihu.matisse.engine.impl.GlideEngine;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 /**
  * Created by 16222 on 2018/6/5.
@@ -27,7 +16,7 @@ import okhttp3.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
-    private Button btnRegister;
+    private TextView tvRegister;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,8 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        btnRegister = findViewById(R.id.btn_register);
-        btnRegister.setOnClickListener(new View.OnClickListener() {
+        tvRegister = findViewById(R.id.tv_register);
+        tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentRegister = new Intent(LoginActivity.this, RegisterActivity.class);

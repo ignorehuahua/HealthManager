@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.njzhikejia.echohealth.healthlife.R;
@@ -26,7 +28,8 @@ public class HeightAndWeightFragment extends BaseFragment {
     private EditText etHeight;
     private EditText etWeight;
     private EditText etNote;
-    private EditText etTime;
+    private RelativeLayout rlTime;
+    private TextView tvMeasureTime;
 
     @Nullable
     @Override
@@ -41,8 +44,9 @@ public class HeightAndWeightFragment extends BaseFragment {
         etHeight = view.findViewById(R.id.et_height);
         etWeight = view.findViewById(R.id.et_weight);
         etNote = view.findViewById(R.id.et_note);
-        etTime = view.findViewById(R.id.et_measure_time);
-        etTime.setOnClickListener(new View.OnClickListener() {
+        rlTime = view.findViewById(R.id.rl_measure_time);
+        tvMeasureTime = view.findViewById(R.id.tv_measure_time);
+        rlTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TimeUtil.showTimePickerDialog(mContext, new OnTimeSelectListener() {
@@ -51,7 +55,7 @@ public class HeightAndWeightFragment extends BaseFragment {
                     public void onTimeSelect(Date date, View v) {
                         Logger.d(TAG, "onTimeSelect");
                         String time = TimeUtil.getTime(date);
-                        etTime.setText(time);
+                        tvMeasureTime.setText(time);
                     }
                 });
             }
