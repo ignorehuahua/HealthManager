@@ -4,22 +4,22 @@
     <group android:id="@+id/menu_group_member_manager">
         <item
             android:id="@+id/menu_meember_manager"
-            android:icon="@drawable/icon_member"
+            android:icon="@drawable/ic_person"
             android:title="@string/member_manager"/>
     </group>
 
     <group android:id="@+id/menu_group_settings">
         <item
             android:id="@+id/menu_setting"
-            android:icon="@drawable/icon_setting"
+            android:icon="@drawable/ic_settings"
             android:title="@string/system_setting"/>
         <item
             android:id="@+id/menu_feedback"
-            android:icon="@drawable/icon_suggestion"
+            android:icon="@drawable/ic_feedback"
             android:title="@string/suggestion_feedback"/>
         <item
             android:id="@+id/menu_about"
-            android:icon="@drawable/icon_about"
+            android:icon="@drawable/ic_about"
             android:title="@string/about_us"/>
     </group>
 
