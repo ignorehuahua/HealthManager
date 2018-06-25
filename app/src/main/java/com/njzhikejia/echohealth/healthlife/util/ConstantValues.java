@@ -24,4 +24,8 @@ public class ConstantValues {
 
     public static final int PAGE_OF_LOCATE = 3;
 
+    public static final int MSG_REFRESH_TIME_OUT = 100;
+
+    public static final int REFRESH_TIME_OUT = 10 * 1000;
+
 }
