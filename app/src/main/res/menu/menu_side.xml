@@ -13,6 +13,11 @@
             android:id="@+id/menu_setting"
             android:icon="@drawable/ic_settings"
             android:title="@string/system_setting"/>
+
+        <item android:id="@+id/menu_msg_center"
+            android:icon="@drawable/ic_msg"
+            android:title="@string/msg_center" />
+
         <item
             android:id="@+id/menu_feedback"
             android:icon="@drawable/ic_feedback"
