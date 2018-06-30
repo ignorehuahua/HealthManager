@@ -23,6 +23,8 @@ import com.njzhikejia.echohealth.healthlife.entity.Member;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.ImageUtil;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.widget.banner.CycleViewPager;
+import com.njzhikejia.echohealth.healthlife.widget.banner.ViewUtil;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
@@ -41,10 +43,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MemberListAdapter mAdapter;
     private List<Member> memberList;
     private ImageView ivAvatar;
-    private TextView tvVisit;
-    private TextView tvGuidance;
-    private TextView tvMsgCenter;
-    private TextView tvWarning;
     private static final int REQUEST_CODE_CHOOSE = 200;
 
     @Override
@@ -59,14 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mToolbar = findViewById(R.id.toolbar);
         mNavigation = findViewById(R.id.navigation);
         mDrawerLayout = findViewById(R.id.drawerLayout);
-        tvVisit = findViewById(R.id.tv_apply_visit);
-        tvGuidance = findViewById(R.id.tv_evaluation_guide);
-        tvMsgCenter = findViewById(R.id.tv_msg_center);
-        tvWarning = findViewById(R.id.tv_warn);
-        tvVisit.setOnClickListener(this);
-        tvGuidance.setOnClickListener(this);
-        tvMsgCenter.setOnClickListener(this);
-        tvWarning.setOnClickListener(this);
+
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,
@@ -115,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRecycleView = findViewById(R.id.recycle_view);
         memberList = new ArrayList<>();
         testInitMembers();
+        initBanner();
         mAdapter = new MemberListAdapter(this, memberList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
     //    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -142,6 +134,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         memberList.add(bajie);
     }
 
+    private void initBanner() {
+        List<View> views = new ArrayList<View>();
+        // 将最后一个view添加进来
+        views.add(ViewUtil.getView(this, R.drawable.photo_four));
+        views.add(ViewUtil.getView(this, R.drawable.photo_one));
+        views.add(ViewUtil.getView(this, R.drawable.photo_two));
+        views.add(ViewUtil.getView(this, R.drawable.photo_three));
+        views.add(ViewUtil.getView(this, R.drawable.photo_four));
+
+        // 将第一个view添加进来
+        views.add(ViewUtil.getView(this, R.drawable.photo_one));
+
+        final CycleViewPager cycleViewPager = (CycleViewPager) findViewById(R.id.banner);
+        cycleViewPager.setIndicatorCenter();
+        cycleViewPager.setIndicatorsSpace(8);
+        cycleViewPager.setData(views, true, true, 3000);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -163,21 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_apply_visit:
 
-                break;
-            case R.id.tv_evaluation_guide:
-                Intent intentGuidance = new Intent(MainActivity.this, MeasureDataActivity.class);
-                intentGuidance.putExtra(ConstantValues.KEY_TO_PAGE, ConstantValues.PAGE_OF_GUIDANCE);
-                startActivity(intentGuidance);
-                break;
-            case R.id.tv_msg_center:
-                break;
-            case R.id.tv_warn:
-                Intent intentWarn = new Intent(MainActivity.this, MeasureDataActivity.class);
-                intentWarn.putExtra( ConstantValues.KEY_TO_PAGE, ConstantValues.PAGE_OF_WARN);
-                startActivity(intentWarn);
-                break;
         }
     }
 }

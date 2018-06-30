@@ -23,52 +23,13 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         </android.support.v7.widget.Toolbar>
 
-        <LinearLayout
-            android:id="@+id/ll_main_item"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <com.njzhikejia.echohealth.healthlife.widget.banner.CycleViewPager
+            android:id="@+id/banner"
             android:layout_below="@id/toolbar"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="180dp">
 
-            <TextView
-                android:id="@+id/tv_apply_visit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="@style/main_page_guide_font"
-                android:text="@string/apply_for_visit"
-                android:drawableTop="@drawable/icon_apply_visit"/>
-
-            <TextView
-                android:id="@+id/tv_evaluation_guide"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/evaluation_guide"
-                style="@style/main_page_guide_font"
-                android:drawableTop="@drawable/icon_guide"/>
-
-            <TextView
-                android:id="@+id/tv_msg_center"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/msg_center"
-                style="@style/main_page_guide_font"
-                android:drawableTop="@drawable/icon_msg_center"/>
-
-            <TextView
-                android:id="@+id/tv_warn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/warn_notice"
-                style="@style/main_page_guide_font"
-                android:drawableTop="@drawable/icon_warn"/>
-
-        </LinearLayout>
+        </com.njzhikejia.echohealth.healthlife.widget.banner.CycleViewPager>
 
         <TextView
             android:id="@+id/tv_member_list"
@@ -77,7 +38,7 @@
             android:layout_marginLeft="16dp"
             android:textSize="14sp"
             android:textColor="@color/name_color"
-            android:layout_below="@id/ll_main_item"
+            android:layout_below="@id/banner"
             android:layout_marginTop="20dp"
             android:text="@string/member_list"/>
 
