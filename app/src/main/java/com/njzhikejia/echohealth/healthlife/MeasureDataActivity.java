@@ -20,6 +20,7 @@ import com.njzhikejia.echohealth.healthlife.entity.Member;
 import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.HealthGuidanceFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.MeasureDataFragment;
+import com.njzhikejia.echohealth.healthlife.fragment.WarningFragment;
 import com.njzhikejia.echohealth.healthlife.util.BottomNavigationViewHelper;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
@@ -92,7 +93,7 @@ public class MeasureDataActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MeasureDataFragment());
         adapter.addFragment(new HealthGuidanceFragment());
-        adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.warn)));
+        adapter.addFragment(new WarningFragment());
         adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.location)));
         viewPager.setAdapter(adapter);
     }

@@ -46,7 +46,7 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
 
         holder.tvName.setText(healthGuidance.getHealthGuideName());
         holder.tvTime.setText(healthGuidance.getHealthGuideTime());
-        holder.ivAvatar.setImageResource(R.drawable.icon_apply_visit);
+        holder.ivAvatar.setImageResource(R.drawable.blood_pressure);
     }
 
     @Override

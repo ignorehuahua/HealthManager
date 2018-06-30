@@ -52,7 +52,7 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
             return;
         }
         if (member.getBitmap() == null) {
-            holder.ivAvatar.setImageResource(R.drawable.icon_apply_visit);
+            holder.ivAvatar.setImageResource(R.drawable.icon_avatar_default);
         } else {
             holder.ivAvatar.setImageBitmap(member.getBitmap());
         }

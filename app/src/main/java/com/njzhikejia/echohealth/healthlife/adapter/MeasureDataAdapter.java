@@ -43,7 +43,7 @@ public class MeasureDataAdapter extends RecyclerView.Adapter<MeasureDataAdapter.
             Logger.e(TAG, "measureData == null!");
             return;
         }
-        holder.ivType.setImageResource(R.drawable.icon_apply_visit);
+        holder.ivType.setImageResource(R.drawable.blood_pressure);
         holder.tvDataType.setText(measureData.getDataName());
         holder.tvHealthRate.setText("ddddddddddd");
         holder.tvDataValue.setText(measureData.getDataValue());

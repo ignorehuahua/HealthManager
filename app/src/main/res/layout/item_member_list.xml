@@ -30,7 +30,7 @@
             android:layout_marginRight="10dp"
             app:civ_border_width="1dp"
             app:civ_border_color="@color/light"
-            android:src="@drawable/icon_apply_visit" />
+            android:src="@drawable/icon_avatar_default" />
 
         <TextView
             android:id="@+id/tv_member_name"
