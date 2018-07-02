@@ -3,19 +3,29 @@ package com.njzhikejia.echohealth.healthlife;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.adapter.MemberListAdapter;
@@ -28,6 +38,8 @@ import com.njzhikejia.echohealth.healthlife.widget.banner.ViewUtil;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,12 +56,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<Member> memberList;
     private ImageView ivAvatar;
     private static final int REQUEST_CODE_CHOOSE = 200;
+    private PopupWindow mPopupWindow;
+    private TextView tvGallery;
+    private TextView tvCamera;
+    private TextView tvCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        initPopupWindow();
     }
 
     private void initView() {
@@ -98,7 +115,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageUtil.choosePhoto(MainActivity.this, REQUEST_CODE_CHOOSE);
+//                ImageUtil.choosePhoto(MainActivity.this, REQUEST_CODE_CHOOSE);
+                if (mPopupWindow == null) {
+                    return;
+                }
+                if (mPopupWindow.isShowing()) {
+                    closePopupWindow();
+                } else {
+                    showPopupWindow();
+                }
             }
         });
 
@@ -109,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initBanner();
         mAdapter = new MemberListAdapter(this, memberList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-    //    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecycleView.setHasFixedSize(true);
         mRecycleView.setLayoutManager(layoutManager);
 
@@ -152,10 +176,76 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cycleViewPager.setData(views, true, true, 3000);
     }
 
+    private void initPopupWindow() {
+        View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.popwindow_avatar, null);
+        tvGallery = view.findViewById(R.id.pop_pic);
+        tvCamera = view.findViewById(R.id.pop_camera);
+        tvCancel = view.findViewById(R.id.pop_cancel);
+        tvGallery.setOnClickListener(this);
+        tvCamera.setOnClickListener(this);
+        tvCancel.setOnClickListener(this);
+        mPopupWindow = new PopupWindow(view, 660,  ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                setBackgroundAlpha(1.0f);
+            }
+        });
+    }
+
+    private void setBackgroundAlpha(float alphaLevel) {
+        Window window = getWindow();
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.alpha = alphaLevel;
+        window.setAttributes(params);
+    }
+
+    private void showPopupWindow() {
+        if (mPopupWindow != null) {
+            setBackgroundAlpha(0.6f);
+            mPopupWindow.showAsDropDown(ivAvatar, 0, 20);
+        }
+    }
+
+    private void closePopupWindow() {
+        if (mPopupWindow != null) {
+            mPopupWindow.dismiss();
+            Logger.d(TAG, "close popupWindow");
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        closePopupWindow();
+    }
+
+    private void choosePhoto() {
+        Intent intentPhoto = new Intent(Intent.ACTION_GET_CONTENT);
+        intentPhoto.setType("image*//**//*");
+        startActivityForResult(intentPhoto, ConstantValues.REQUEST_CODE_OF_GRLLERY);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Logger.d(TAG, "onActivityResult resultCode = "+resultCode+" requestCode = "+requestCode);
+        switch (requestCode) {
+            case ConstantValues.REQUEST_CODE_OF_GRLLERY:
+                if (data == null) {
+                    Logger.e(TAG, "no photo selected");
+                    return;
+                }
+
+
+                break;
+            case ConstantValues.REQUEST_CODE_OF_CAMERA:
+                break;
+        }
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHOOSE) {
             if (data == null) {
                 Logger.e(TAG, "no selected photo");
@@ -170,11 +260,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void setAvatar(Uri uri) {
+        Bitmap selectedPhoto = ImageUtil.decodeUri(MainActivity.this,uri,800, 480);
+        ivAvatar.setImageBitmap(selectedPhoto);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case R.id.pop_pic:
+                Logger.d(TAG, "choose photo from gallery");
+                choosePhoto();
+                closePopupWindow();
+                break;
+            case R.id.pop_camera:
+                Logger.d(TAG, "take photo");
+                closePopupWindow();
+                break;
+            case R.id.pop_cancel:
+                Logger.d(TAG, "cancel select photo");
+                closePopupWindow();
+                break;
         }
     }
+
 }
 

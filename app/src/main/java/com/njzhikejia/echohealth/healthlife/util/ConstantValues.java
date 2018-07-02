@@ -28,4 +28,8 @@ public class ConstantValues {
 
     public static final int REFRESH_TIME_OUT = 10 * 1000;
 
+    public static final int REQUEST_CODE_OF_GRLLERY = 200;
+
+    public static final int REQUEST_CODE_OF_CAMERA = 201;
+
 }
