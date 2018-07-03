@@ -6,10 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.FileProvider;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +42,7 @@ import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tvGallery;
     private TextView tvCamera;
     private TextView tvCancel;
+    private Uri mImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,39 +228,67 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         closePopupWindow();
     }
 
+
+    /**
+     * 从相册选取
+     */
     private void choosePhoto() {
-        Intent intentPhoto = new Intent(Intent.ACTION_GET_CONTENT);
-        intentPhoto.setType("image*//**//*");
+        Intent intentPhoto = new Intent(Intent.ACTION_PICK);
+        intentPhoto.setType("image/*");
         startActivityForResult(intentPhoto, ConstantValues.REQUEST_CODE_OF_GRLLERY);
     }
+
+
+    /**
+     * 拍照
+     */
+    private void takePhoto() {
+        //创建一个file，用来存储拍照后的照片
+        File imageFile = new File(this.getExternalCacheDir(),"output.png");
+        try {
+            if (imageFile.exists()){
+                imageFile.delete();//删除
+            }
+            imageFile.createNewFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT >= 24){
+            mImageUri = FileProvider.getUriForFile(MainActivity.this,
+                    "com.njzhikejia.echohealth.healthlife.fileprovider",
+                    imageFile);
+        }else{
+            mImageUri = Uri.fromFile(imageFile);
+        }
+        //启动相机程序
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,mImageUri);
+        startActivityForResult(intent,ConstantValues.REQUEST_CODE_OF_CAMERA);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Logger.d(TAG, "onActivityResult resultCode = "+resultCode+" requestCode = "+requestCode);
-        switch (requestCode) {
-            case ConstantValues.REQUEST_CODE_OF_GRLLERY:
-                if (data == null) {
-                    Logger.e(TAG, "no photo selected");
-                    return;
-                }
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case ConstantValues.REQUEST_CODE_OF_GRLLERY:
+                    if (data == null) {
+                        Logger.e(TAG, "no photo selected");
+                        return;
+                    }
+                    setAvatar(data.getData());
+                    break;
+                case ConstantValues.REQUEST_CODE_OF_CAMERA:
+                    if (mImageUri == null) {
+                        Logger.e(TAG, "take photo imageuri is null");
+                        return;
+                    }
+                    setAvatar(mImageUri);
+                    break;
 
-
-                break;
-            case ConstantValues.REQUEST_CODE_OF_CAMERA:
-                break;
-        }
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHOOSE) {
-            if (data == null) {
-                Logger.e(TAG, "no selected photo");
-                return;
             }
-            List<Uri> mSelected = Matisse.obtainResult(data);
-            if (mSelected != null && mSelected.size() > 0) {
-                Bitmap selectedPhoto = ImageUtil.decodeUri(MainActivity.this, mSelected.get(0),300, 300);
-                ivAvatar.setImageBitmap(selectedPhoto);
-            }
-
         }
     }
 
@@ -275,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.pop_camera:
                 Logger.d(TAG, "take photo");
+                takePhoto();
                 closePopupWindow();
                 break;
             case R.id.pop_cancel:
