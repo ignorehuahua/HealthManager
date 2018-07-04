@@ -13,10 +13,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias 'release'
-            keyPassword 'abc123'
-            storeFile file('D:\\healthlife\\release.jks')
-            storePassword 'abc123'
+            storeFile file("/work/SharedLibs/hms.jks")
+            storePassword "android"
+            keyAlias "hms"
+            keyPassword "android"
         }
     }
 
