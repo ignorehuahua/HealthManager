@@ -55,5 +55,8 @@
     <string name="take_photo">拍照</string>
     <string name="gallery">相册</string>
     <string name="cancel">取消</string>
+    <string name="user_details">个人信息</string>
+    <string name="user_base_info">基本资料</string>
+    <string name="user_health_info">健康档案</string>
 
 </resources>

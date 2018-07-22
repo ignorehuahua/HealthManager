@@ -40,26 +40,34 @@ public class CommonRequest {
        return request;
    }
 
-   public static Request getRequest(String url,Map<String, String> params){
-       StringBuilder urlBuilder = new StringBuilder(url).append("?");
-       if (params != null) {
-           for (Map.Entry<String, String> entity : params.entrySet()) {
-               urlBuilder.append(entity.getKey()).append("=").append(entity.getValue()).append("&");
-           }
-       }
-       String realUrl = urlBuilder.substring(0, urlBuilder.length() - 1);
+   public static Request getRequest(String url){
         Request request = new Request.Builder()
-                .url(realUrl)
+                .url(url)
                 .get()
                 .build();
         return request;
    }
 
+    /**
+     * 登录
+     * @param name
+     * @param password
+     * @return
+     */
    public static Request postLoginRequest(String name, String password) {
        Map<String, String> map = new HashMap<>();
        map.put("name", name);
        String passwordSha1 = PhoneUtil.shaEncrypt(password);
        map.put("password", passwordSha1);
        return postRequest(ServerAddrUtils.getLoginUrl(), map);
+   }
+
+    /**
+     * 获取用户详情
+     * @param uid
+     * @return
+     */
+   public static Request getUserDetailsRequest(int uid) {
+       return getRequest(ServerAddrUtils.getUserDetailsUrl(uid));
    }
 }

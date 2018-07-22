@@ -30,8 +30,11 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.adapter.MemberListAdapter;
+import com.njzhikejia.echohealth.healthlife.entity.LoginResponse;
 import com.njzhikejia.echohealth.healthlife.entity.Member;
+import com.njzhikejia.echohealth.healthlife.entity.UserDetailsResponse;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.http.ServerAddrUtils;
@@ -40,9 +43,11 @@ import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.ImageUtil;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.njzhikejia.echohealth.healthlife.util.PhoneUtil;
+import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 import com.njzhikejia.echohealth.healthlife.widget.banner.CycleViewPager;
 import com.njzhikejia.echohealth.healthlife.widget.banner.ViewUtil;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import okhttp3.Call;
@@ -124,14 +129,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPopupWindow == null) {
-                    return;
-                }
-                if (mPopupWindow.isShowing()) {
-                    closePopupWindow();
-                } else {
-                    showPopupWindow();
-                }
+//                if (mPopupWindow == null) {
+//                    return;
+//                }
+//                if (mPopupWindow.isShowing()) {
+//                    closePopupWindow();
+//                } else {
+//                    showPopupWindow();
+//                }
+                Intent intentDetails = new Intent(MainActivity.this, UserDetailsActivity.class);
+                startActivity(intentDetails);
             }
         });
 
