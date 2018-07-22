@@ -4,6 +4,7 @@ import android.content.Context;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.njzhikejia.echohealth.healthlife.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,6 +22,8 @@ public class TimeUtil {
         Logger.d(TAG, "showTimePickerDialog");
         TimePickerView timePickerView = new TimePickerBuilder(context, onTimeSelectListener)
                 .setType(new boolean[]{true, true, true, true, true, false})
+                .setCancelColor(0xFF009688)
+                .setSubmitColor(0xFF009688)
                 .build();
         timePickerView.show();
 
