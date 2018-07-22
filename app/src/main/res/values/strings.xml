@@ -50,4 +50,6 @@
     <string name="input_verification_code">请输入验证码</string>
     <string name="input_password">请输入6-20位密码</string>
     <string name="register_immedicately">立即注册</string>
+    <string name="input_number_pattern_error">手机号码格式错误</string>
+    <string name="input_pwd_error">密码错误</string>
 </resources>

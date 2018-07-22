@@ -1,5 +1,15 @@
 package com.njzhikejia.echohealth.healthlife.http;
 
+import android.support.design.widget.TabLayout;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.PhoneUtil;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -15,16 +25,17 @@ import okhttp3.RequestBody;
 
 public class CommonRequest {
 
+    private static final String TAG = "CommonRequest";
+
    public static Request postRequest(String url, Map<String, String> params) {
-       FormBody.Builder builder = new FormBody.Builder();
-       if (params != null) {
-           for (Map.Entry<String, String> entity : params.entrySet()) {
-               builder.add(entity.getKey(), entity.getValue());
-           }
-       }
+       Gson gson = new Gson();
+       String jsonStr = gson.toJson(params);
+       Logger.d(TAG, "postRequest jsonStr = "+jsonStr);
+       MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+       RequestBody body = RequestBody.create(JSON, jsonStr);
        Request request = new Request.Builder()
                .url(url)
-               .post(builder.build())
+               .post(body)
                .build();
        return request;
    }
@@ -42,5 +53,13 @@ public class CommonRequest {
                 .get()
                 .build();
         return request;
+   }
+
+   public static Request postLoginRequest(String name, String password) {
+       Map<String, String> map = new HashMap<>();
+       map.put("name", name);
+       String passwordSha1 = PhoneUtil.shaEncrypt(password);
+       map.put("password", passwordSha1);
+       return postRequest(ServerAddrUtils.getLoginUrl(), map);
    }
 }

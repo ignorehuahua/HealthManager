@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -20,16 +21,28 @@ import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.adapter.MemberListAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.Member;
+import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
+import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
+import com.njzhikejia.echohealth.healthlife.http.ServerAddrUtils;
+import com.njzhikejia.echohealth.healthlife.service.LoopService;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.ImageUtil;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.PhoneUtil;
 import com.njzhikejia.echohealth.healthlife.widget.banner.CycleViewPager;
 import com.njzhikejia.echohealth.healthlife.widget.banner.ViewUtil;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -85,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
 
                     case R.id.menu_about:
+                        Intent intentAbout = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intentAbout);
                         break;
                 }
                 mDrawerLayout.closeDrawer(mNavigation);
@@ -175,6 +190,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
 
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 }
 
