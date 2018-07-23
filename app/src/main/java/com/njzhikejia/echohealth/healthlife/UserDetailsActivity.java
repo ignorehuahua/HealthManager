@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.UserDetailsResponse;
 import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
+import com.njzhikejia.echohealth.healthlife.fragment.UserBaseInfoFragment;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
@@ -36,6 +37,7 @@ public class UserDetailsActivity extends AppCompatActivity {
     private String[] titles;
     private Toolbar mToolbar;
     private UserDetailsResponse userDetailsResponse;
+    private UserBaseInfoFragment userBaseInfoFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +60,8 @@ public class UserDetailsActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         titles = new String[]{getString(R.string.user_base_info), getString(R.string.user_health_info)};
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles);
-        adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.user_base_info)));
+        userBaseInfoFragment = new UserBaseInfoFragment();
+        adapter.addFragment(userBaseInfoFragment);
         adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.user_health_info)));
         viewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -78,9 +81,12 @@ public class UserDetailsActivity extends AppCompatActivity {
                 Logger.d(TAG, "responseContent = "+resonseContent);
                 Gson gson = new Gson();
                 userDetailsResponse = gson.fromJson(resonseContent, UserDetailsResponse.class);
-                String name = userDetailsResponse.getData().getUser().getName();
-                String interests = userDetailsResponse.getData().getUser().getExtend().getInterests();
-                Logger.d(TAG, "name = "+name+ " interests = "+interests);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        userBaseInfoFragment.initData();
+                    }
+                });
             }
         });
     }

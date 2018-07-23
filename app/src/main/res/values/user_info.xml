@@ -26,6 +26,7 @@
     <item>医疗支付:</item>
 </string-array>
 
+    <!-- 民族 -->
     <string-array name="nation">
         <item>汉族</item>
         <item>壮族</item>
@@ -82,8 +83,190 @@
         <item>赫哲族</item>
         <item>高山族</item>
         <item>珞巴族</item>
-
-
     </string-array>
 
+    <!-- 居住情况 -->
+    <string-array name="living_status">
+        <item>未知</item>
+        <item>人户同在</item>
+        <item>人在户不在</item>
+        <item>其他</item>
+    </string-array>
+
+    <!-- 婚姻状况 -->
+    <string-array name="marriage_status">
+        <item>未知</item>
+        <item>离婚</item>
+        <item>丧偶</item>
+        <item>事实初婚</item>
+        <item>同居</item>
+        <item>未婚</item>
+        <item>有偶</item>
+        <item>有效初婚</item>
+        <item>再婚</item>
+        <item>其他</item>
+    </string-array>
+
+    <!-- 政治面貌 -->
+    <string-array name="political_status">
+        <item>未知</item>
+        <item>群众</item>
+        <item>无党派民主人士</item>
+        <item>中国共产党党员</item>
+        <item>中国共产党预备党员</item>
+        <item>中国共产主义青年团团员</item>
+        <item>其他</item>
+    </string-array>
+
+    <!-- 健康状况 -->
+    <string-array name="health_status">
+        <item>未知</item>
+        <item>残疾</item>
+        <item>健康</item>
+        <item>精神疾病</item>
+        <item>慢性肾炎</item>
+        <item>脑血管疾病</item>
+        <item>言语残疾</item>
+        <item>一般或较弱</item>
+        <item>有慢性疾病</item>
+        <item>肢体残疾</item>
+    </string-array>
+
+    <!-- 教育程度 -->
+    <string-array name="education_status">
+        <item>未知</item>
+        <item>文盲</item>
+        <item>学龄前</item>
+        <item>小学</item>
+        <item>小学肄业</item>
+        <item>小学毕业</item>
+        <item>初中</item>
+        <item>初中肄业</item>
+        <item>初中毕业</item>
+        <item>中专</item>
+        <item>中等专科毕业</item>
+        <item>高中</item>
+        <item>普通高中结业</item>
+        <item>普通高中毕业</item>
+        <item>职业高中结业</item>
+        <item>职业高中毕业</item>
+        <item>技工学校肄业</item>
+        <item>技工学校结业</item>
+        <item>技工学校毕业</item>
+        <item>专科</item>
+        <item>大学专科肄业</item>
+        <item>大学专科结业</item>
+        <item>大学专科毕业</item>
+        <item>大学普通班毕业</item>
+        <item>大学本科毕业</item>
+        <item>研究生</item>
+        <item>博士生</item>
+        <item>硕士生导师</item>
+        <item>博士生导师</item>
+        <item>副教授</item>
+        <item>教授</item>
+        <item>其他</item>
+    </string-array>
+
+    <!-- 血型 -->
+    <string-array name="blood_type">
+        <item>未知</item>
+        <item>A型</item>
+        <item>B型</item>
+        <item>O型</item>
+        <item>AB型</item>
+        <item>其他</item>
+    </string-array>
+
+    <!-- 体育锻炼 -->
+    <string-array name="exercise">
+        <item>不锻炼</item>
+        <item>偶尔</item>
+        <item>每天</item>
+        <item>每周一次以上</item>
+    </string-array>
+
+    <!-- 饮食习惯 -->
+    <string-array name="eating_habit">
+        <item></item>
+        <item>荤素均衡</item>
+        <item>荤食为主</item>
+        <item>素食为主</item>
+    </string-array>
+
+    <!-- 进食能力、 梳洗能力、穿衣能力、如厕能力、活动能力 -->
+    <string-array name="self_care_ability">
+        <item></item>
+        <item>可自理</item>
+        <item>轻度依赖</item>
+        <item>中度依赖</item>
+        <item>不能自理</item>
+    </string-array>
+
+    <!-- 收入水平 -->
+    <string-array name="income_level">
+        <item></item>
+        <item>500元以下</item>
+        <item>500~1000元</item>
+        <item>1000~2000元</item>
+        <item>2000~3000元</item>
+        <item>3000元以上</item>
+    </string-array>
+
+    <!-- 医疗支付 -->
+    <string-array name="medical_payment">
+        <item></item>
+        <item>城镇职工基本医疗保险</item>
+        <item>城镇居民基本医疗保险</item>
+        <item>新型农村合作医疗</item>
+        <item>贫困救济</item>
+        <item>商业医疗保险</item>
+        <item>新型农村合作医疗</item>
+        <item>全公费</item>
+        <item>全自费</item>
+        <item>其他</item>
+    </string-array>
+
+    <!-- 慢性病史；为多选项，按”,“隔开，每个数字对应数组的索引值 -->
+    <string-array name="chronic_history">
+        <item>无</item>
+        <item>高血压</item>
+        <item>糖尿病</item>
+        <item>冠心病</item>
+        <item>脑卒中</item>
+        <item>慢性阻塞性疾病</item>
+        <item>重性精神疾病</item>
+        <item>结核病</item>
+        <item>肝炎</item>
+        <item>法定传染病</item>
+        <item>恶性肿瘤</item>
+        <item>职业病</item>
+        <item>其他</item>
+    </string-array>
+
+    <!-- 残疾情况 -->
+    <string-array name="disability">
+        <item>无残疾</item>
+        <item>听力残疾</item>
+        <item>视力残疾</item>
+        <item>语言残疾</item>
+        <item>肢体残疾</item>
+        <item>智力残疾</item>
+        <item>精神残疾</item>
+        <item>其他疾病</item>
+    </string-array>
+
+    <!-- 中医体质 -->
+    <string-array name="tcm_constitution">
+        <item>未知</item>
+        <item>平和质</item>
+        <item>气虚质</item>
+        <item>阳虚质</item>
+        <item>阴虚质</item>
+        <item>痰湿质</item>
+        <item>湿热质</item>
+        <item>血瘀质</item>
+        <item>气郁质</item>
+        <item>特禀质</item>
+    </string-array>
 </resources>
