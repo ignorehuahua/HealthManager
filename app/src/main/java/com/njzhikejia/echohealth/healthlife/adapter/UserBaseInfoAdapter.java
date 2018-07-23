@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.R;
+import com.njzhikejia.echohealth.healthlife.entity.UserBaseInfo;
+import com.njzhikejia.echohealth.healthlife.util.Logger;
 
 import java.util.List;
 
@@ -20,9 +22,9 @@ public class UserBaseInfoAdapter extends RecyclerView.Adapter<UserBaseInfoAdapte
 
     private static final String TAG = "UserBaseInfoAdapter";
     private Context mContext;
-    private List<String> list;
+    private List<UserBaseInfo> list;
 
-    public UserBaseInfoAdapter(Context mContext, List<String> list) {
+    public UserBaseInfoAdapter(Context mContext, List<UserBaseInfo> list) {
         this.mContext = mContext;
         this.list = list;
     }
@@ -36,7 +38,13 @@ public class UserBaseInfoAdapter extends RecyclerView.Adapter<UserBaseInfoAdapte
 
     @Override
     public void onBindViewHolder(BaseInfoViewHolder holder, int position) {
-        String value = list.get(position).toString();
+        UserBaseInfo userBaseInfo = list.get(position);
+        if (userBaseInfo == null) {
+            Logger.e(TAG, "userBaseInfo is null");
+            return;
+        }
+        holder.tvLabel.setText(userBaseInfo.getLabel());
+        holder.tvValue.setText(userBaseInfo.getValue());
 
     }
 

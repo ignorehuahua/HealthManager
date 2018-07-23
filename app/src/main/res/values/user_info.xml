@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string-array name="base_info_label">
+    <item>姓名:</item>
+    <item>电话:</item>
+    <item>身份证:</item>
+    <item>出生日期:</item>
+    <item>性别:</item>
+    <item>民族:</item>
+    <item>户籍情况:</item>
+    <item>婚姻状况:</item>
+    <item>政治面貌:</item>
+    <item>文化程度:</item>
+    <item>健康状况:</item>
+    <item>血型:</item>
+    <item>地址详情:</item>
+    <item>体育锻炼:</item>
+    <item>饮食习惯:</item>
+    <item>进餐能力:</item>
+    <item>梳洗能力:</item>
+    <item>穿衣能力:</item>
+    <item>如厕能力:</item>
+    <item>活动能力:</item>
+    <item>兴趣爱好:</item>
+    <item>收入水平:</item>
+    <item>医疗支付:</item>
+</string-array>
+
+    <string-array name="nation">
+        <item>汉族</item>
+        <item>壮族</item>
+        <item>满族</item>
+        <item>回族</item>
+        <item>苗族</item>
+        <item>维吾尔族</item>
+        <item>土家族</item>
+        <item>彝族</item>
+        <item>蒙古族</item>
+        <item>藏族</item>
+        <item>布依族</item>
+        <item>侗族</item>
+        <item>瑶族</item>
+        <item>朝鲜族</item>
+        <item>白族</item>
+        <item>哈尼族</item>
+        <item>哈萨克族</item>
+        <item>黎族</item>
+        <item>傣族</item>
+        <item>畲族</item>
+        <item>僳僳族</item>
+        <item>仡佬族</item>
+        <item>东乡族</item>
+        <item>拉祜族</item>
+        <item>水族</item>
+        <item>佤族</item>
+        <item>纳西族</item>
+        <item>羌族</item>
+        <item>土族</item>
+        <item>仫佬族</item>
+        <item>锡伯族</item>
+        <item>柯尔克孜族</item>
+        <item>达斡尔族</item>
+        <item>景颇族</item>
+        <item>毛南族</item>
+        <item>撒拉族</item>
+        <item>布朗族</item>
+        <item>塔吉克族</item>
+        <item>阿昌族</item>
+        <item>普米族</item>
+        <item>鄂温克族</item>
+        <item>怒族</item>
+        <item>京族</item>
+        <item>基诺族</item>
+        <item>德昂族</item>
+        <item>保安族</item>
+        <item>俄罗斯族</item>
+        <item>乌孜别克族</item>
+        <item>门巴族</item>
+        <item>回鄂伦春族</item>
+        <item>独龙族</item>
+        <item>塔塔尔族</item>
+        <item>赫哲族</item>
+        <item>高山族</item>
+        <item>珞巴族</item>
+
+
+    </string-array>
+
+</resources>

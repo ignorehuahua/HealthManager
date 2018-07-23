@@ -20,8 +20,6 @@
     <string name="member_info">成员信息</string>
     <string name="relationship">关系</string>
     <string name="phone_number">电话号码:</string>
-    <string name="birthdy">出生日期:</string>
-    <string name="sex">性&#12288;&#12288;别:</string>
     <string name="add_measure_data">添加测量数据</string>
     <string name="blood_pressure">血压</string>
     <string name="heart_rate">心率</string>
@@ -58,5 +56,46 @@
     <string name="user_details">个人信息</string>
     <string name="user_base_info">基本资料</string>
     <string name="user_health_info">健康档案</string>
+    <string name="name">姓名:</string>
+    <string name="phone">电话:</string>
+    <string name="id_card">身份证:</string>
+    <string name="birthdy">出生日期:</string>
+    <string name="sex">性别:</string>
+    <string name="nation">民族:</string>
+    <string name="Household_status">户籍情况:</string>
+    <string name="marital_status">婚姻状况:</string>
+    <string name="political_outlook">政治面貌:</string>
+    <string name="degree_of_education">文化程度:</string>
+    <string name="health">健康状况:</string>
+    <string name="blood_type">血型:</string>
+    <string name="address">地址详情:</string>
+    <string name="physical_exercise">体育锻炼:</string>
+    <string name="eating_habits">饮食习惯:</string>
+    <string name="dining_ability">进餐能力:</string>
+    <string name="combing_ability">梳洗能力:</string>
+    <string name="clothing_ability">穿衣能力:</string>
+    <string name="toilet_abliity">如厕能力:</string>
+    <string name="move_ability">活动能力:</string>
+    <string name="interests">兴趣爱好:</string>
+    <string name="income_level">收入水平:</string>
+    <string name="medical_payment">医疗支付:</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+    <string name="nation_han">汉族</string>
+    <string name="nation_zhuang">壮族</string>
+    <string name="nation_man">满族</string>
+    <string name="nation_hui">回族</string>
+    <string name="nation_miao">苗族</string>
+    <string name="nation_wei">维吾尔族</string>
+    <string name="nation_tu">土家族</string>
+    <string name="nation_yi">彝族</string>
+    <string name="nation_meng">蒙古族</string>
+    <string name="nation_zang">藏族</string>
+    <string name="nation_buyi">布依族</string>
+    <string name="nation_tong">侗族</string>
+
+
+
+    "汉族", "壮族", "满族", "回族", "苗族", "维吾尔族", "土家族", "彝族", "蒙古族", "藏族", "布依族", "侗族", "瑶族", "朝鲜族", "白族", "哈尼族", "哈萨克族", "黎族", "傣族", "畲族", "僳僳族", "仡佬族", "东乡族", "拉祜族", "水族", "佤族", "纳西族", "羌族", "土族", "仫佬族", "锡伯族", "柯尔克孜族", "达斡尔族", "景颇族", "毛南族", "撒拉族", "布朗族", "塔吉克族", "阿昌族", "普米族", "鄂温克族", "怒族", "京族", "基诺族", "德昂族", "保安族", "俄罗斯族", "裕固族", "乌孜别克族", "门巴族", "回鄂伦春族", "独龙族", "塔塔尔族", "赫哲族", "高山族", "珞巴族"]
 
 </resources>

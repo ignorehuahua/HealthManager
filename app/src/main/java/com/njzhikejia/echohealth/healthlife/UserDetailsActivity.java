@@ -35,6 +35,7 @@ public class UserDetailsActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private String[] titles;
     private Toolbar mToolbar;
+    private UserDetailsResponse userDetailsResponse;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,7 +77,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                 String resonseContent = response.body().string();
                 Logger.d(TAG, "responseContent = "+resonseContent);
                 Gson gson = new Gson();
-                UserDetailsResponse userDetailsResponse = gson.fromJson(resonseContent, UserDetailsResponse.class);
+                userDetailsResponse = gson.fromJson(resonseContent, UserDetailsResponse.class);
                 String name = userDetailsResponse.getData().getUser().getName();
                 String interests = userDetailsResponse.getData().getUser().getExtend().getInterests();
                 Logger.d(TAG, "name = "+name+ " interests = "+interests);
@@ -88,6 +89,14 @@ public class UserDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Logger.d(TAG,"onResume");
+    }
+
+    public UserDetailsResponse getUserDetailsResponse() {
+        return userDetailsResponse;
+    }
+
+    public void setUserDetailsResponse(UserDetailsResponse userDetailsResponse) {
+        this.userDetailsResponse = userDetailsResponse;
     }
 
     @Override
