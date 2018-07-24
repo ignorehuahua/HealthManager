@@ -1,6 +1,8 @@
 package com.njzhikejia.echohealth.healthlife;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputLayout;
@@ -14,12 +16,14 @@ import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.UserDetailsResponse;
 import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.UserBaseInfoFragment;
+import com.njzhikejia.echohealth.healthlife.fragment.UserHealthInfoFragment;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -38,6 +42,9 @@ public class UserDetailsActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private UserDetailsResponse userDetailsResponse;
     private UserBaseInfoFragment userBaseInfoFragment;
+    private UserHealthInfoFragment userHealthInfoFragment;
+    private UserDetailsHandler mHandler;
+    private static final String KEY_USER_DETAILS = "key_user_details";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +53,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         Logger.d(TAG, "onCreate");
         initView();
         queryUserInfo();
+        mHandler = new UserDetailsHandler(this);
     }
 
     private void initView() {
@@ -61,8 +69,9 @@ public class UserDetailsActivity extends AppCompatActivity {
         titles = new String[]{getString(R.string.user_base_info), getString(R.string.user_health_info)};
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles);
         userBaseInfoFragment = new UserBaseInfoFragment();
+        userHealthInfoFragment = new UserHealthInfoFragment();
         adapter.addFragment(userBaseInfoFragment);
-        adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.user_health_info)));
+        adapter.addFragment(userHealthInfoFragment);
         viewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
@@ -81,28 +90,47 @@ public class UserDetailsActivity extends AppCompatActivity {
                 Logger.d(TAG, "responseContent = "+resonseContent);
                 Gson gson = new Gson();
                 userDetailsResponse = gson.fromJson(resonseContent, UserDetailsResponse.class);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        userBaseInfoFragment.initData();
-                    }
-                });
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        userBaseInfoFragment.initData();
+//                        userHealthInfoFragment.initData();
+//                    }
+//                });
+                Message message = new Message();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(KEY_USER_DETAILS, userDetailsResponse);
+                message.setData(bundle);
+                mHandler.sendMessage(message);
             }
         });
+    }
+
+    class UserDetailsHandler extends Handler{
+
+        private WeakReference<UserDetailsActivity> weakReference;
+
+        public UserDetailsHandler(UserDetailsActivity activity) {
+            weakReference = new WeakReference<UserDetailsActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+           Bundle bundle = msg.getData();
+            if (bundle != null) {
+                if (weakReference.get() != null) {
+                    UserDetailsResponse userDetailsResponse = bundle.getParcelable(KEY_USER_DETAILS);
+                    userBaseInfoFragment.initData(userDetailsResponse);
+                    userHealthInfoFragment.initData(userDetailsResponse);
+                }
+            }
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Logger.d(TAG,"onResume");
-    }
-
-    public UserDetailsResponse getUserDetailsResponse() {
-        return userDetailsResponse;
-    }
-
-    public void setUserDetailsResponse(UserDetailsResponse userDetailsResponse) {
-        this.userDetailsResponse = userDetailsResponse;
     }
 
     @Override

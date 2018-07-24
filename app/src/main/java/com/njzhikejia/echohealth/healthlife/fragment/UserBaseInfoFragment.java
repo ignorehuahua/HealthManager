@@ -29,7 +29,6 @@ public class UserBaseInfoFragment extends BaseFragment {
     private Context mContext;
     private RecyclerView mRecycleView;
     private List<UserBaseInfo> userBaseInfoList;
-    private UserDetailsResponse userDetailsResponse;
     private UserBaseInfoAdapter mAdapter;
 
     @Override
@@ -56,10 +55,9 @@ public class UserBaseInfoFragment extends BaseFragment {
         mRecycleView.setLayoutManager(layoutManager);
     }
 
-    public void initData() {
+
+    public void initData(UserDetailsResponse userDetailsResponse) {
         userBaseInfoList = new ArrayList<>();
-        UserDetailsActivity parentActivity = (UserDetailsActivity) getActivity();
-        userDetailsResponse = parentActivity.getUserDetailsResponse();
         String[] label = getResources().getStringArray(R.array.base_info_label);
         UserDetailsResponse.ResponseData.User user = userDetailsResponse.getData().getUser();
         UserDetailsResponse.ResponseData.User.Extend extend = user.getExtend();
@@ -182,27 +180,5 @@ public class UserBaseInfoFragment extends BaseFragment {
         return medicalPays[extend.getPay_type()];
     }
 
-    // 慢性病史；为多选项
-    private String matchChronicHistory(UserDetailsResponse.ResponseData.User.Extend extend) {
-        String[] chronicHistories = getResources().getStringArray(R.array.chronic_history);
-        String chronicHistoryContent = extend.getChronic_illness();
-        String[] parms = chronicHistoryContent.split(",");
-        StringBuffer stringBuffer = new StringBuffer();
-        for (int i = 0; i < parms.length; i++) {
-            stringBuffer.append(chronicHistories[Integer.parseInt(parms[i])]);
-        }
-        return stringBuffer.toString();
-    }
 
-    // 残疾情况
-    private String matchDisability(UserDetailsResponse.ResponseData.User.Extend extend) {
-        String[] disabilities = getResources().getStringArray(R.array.disability);
-        return disabilities[Integer.parseInt(extend.getDisability())];
-    }
-
-    // 中医体质
-    private String matchTCMconstitution(UserDetailsResponse.ResponseData.User.Extend extend) {
-        String[] TCMconstitutions = getResources().getStringArray(R.array.tcm_constitution);
-        return TCMconstitutions[extend.getConstitution_type()];
-    }
 }
