@@ -15,10 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.Member;
 import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.HealthGuidanceFragment;
+import com.njzhikejia.echohealth.healthlife.fragment.LocationFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.MeasureDataFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.WarningFragment;
 import com.njzhikejia.echohealth.healthlife.util.BottomNavigationViewHelper;
@@ -94,7 +96,7 @@ public class MeasureDataActivity extends AppCompatActivity {
         adapter.addFragment(new MeasureDataFragment());
         adapter.addFragment(new HealthGuidanceFragment());
         adapter.addFragment(new WarningFragment());
-        adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.location)));
+        adapter.addFragment(new LocationFragment());
         viewPager.setAdapter(adapter);
     }
 

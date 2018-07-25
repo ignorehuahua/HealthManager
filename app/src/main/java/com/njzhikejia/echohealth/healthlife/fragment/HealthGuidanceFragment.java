@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,15 +13,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.adapter.HealthGuidanceAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.HealthGuidance;
+import com.njzhikejia.echohealth.healthlife.entity.ReportData;
+import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
+import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by 16222 on 2018/5/28.
@@ -33,8 +44,9 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecycleView;
     private HealthGuidanceAdapter mAdapter;
-    private List<HealthGuidance> healthGuidanceList;
+    private List<ReportData.Data.Reports> healthGuidanceList;
     private HealthGuidanceHandler mHandler;
+    private static final int KEY_REPORT = 21;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,16 +74,9 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
         mRecycleView.setHasFixedSize(true);
         mRecycleView.setLayoutManager(layoutManager);
         healthGuidanceList = new ArrayList<>();
-        initData();
         mAdapter = new HealthGuidanceAdapter(mContext, healthGuidanceList);
         mRecycleView.setAdapter(mAdapter);
-    }
-
-    private void initData() {
-        HealthGuidance bloodPressure = new HealthGuidance("血压","2018-05-12 12:30");
-        HealthGuidance pressure = new HealthGuidance("舒张压","2018-05-12 12:30");
-        healthGuidanceList.add(bloodPressure);
-        healthGuidanceList.add(pressure);
+        loadReports();
     }
 
     static class HealthGuidanceHandler extends Handler {
@@ -88,6 +93,11 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
                 case ConstantValues.MSG_REFRESH_TIME_OUT:
                     if (healthGuidanceFragmentWeakReference.get() != null)
                         healthGuidanceFragmentWeakReference.get().stopRefresh();
+                    break;
+                case KEY_REPORT:
+                    if (healthGuidanceFragmentWeakReference.get() != null) {
+                        healthGuidanceFragmentWeakReference.get().mAdapter.setList(healthGuidanceFragmentWeakReference.get().healthGuidanceList);
+                    }
                     break;
             }
         }
@@ -111,6 +121,25 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
             mSwipeRefreshLayout.setRefreshing(false);
             Logger.d(TAG, "stopRefresh!");
         }
+    }
+
+    private void loadReports() {
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserReports(PreferenceUtil.getUID(mContext)), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.e(TAG, "onFailure");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+                Logger.d(TAG, "onResponse code = "+response.code() + "responseContent = "+responseContent);
+                Gson gson = new Gson();
+                ReportData reportData = gson.fromJson(responseContent, ReportData.class);
+                healthGuidanceList = reportData.getData().getReports();
+                mHandler.sendEmptyMessage(KEY_REPORT);
+            }
+        });
     }
 }
 

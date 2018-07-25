@@ -34,4 +34,13 @@ public class ServerAddrUtils {
     public static String getUserRecentMeasureData(int uid) {
         return ROOT_SERVER_ADDR + "/user/1/measure/datas/latest?appid=4&t=" + System.currentTimeMillis() + "&uid=" + uid;
     }
+
+    /**
+     * 获取报告
+     * @param uid
+     * @return
+     */
+    public static String getReportUrl(int uid) {
+        return ROOT_SERVER_ADDR + "/user/1/reports/" + "?uid=" + uid + "&appid=4&t=" + System.currentTimeMillis();
+    }
 }

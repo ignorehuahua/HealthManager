@@ -71,7 +71,21 @@ public class CommonRequest {
        return getRequest(ServerAddrUtils.getUserDetailsUrl(uid));
    }
 
+    /**
+     * 获取最新测量数据
+     * @param uid
+     * @return
+     */
    public static Request getUserRecentMeasureData(int uid) {
        return getRequest(ServerAddrUtils.getUserRecentMeasureData(uid));
+   }
+
+    /**
+     * 获取报告
+     * @param uid
+     * @return
+     */
+   public static Request getUserReports(int uid) {
+       return getRequest(ServerAddrUtils.getReportUrl(uid));
    }
 }

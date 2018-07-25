@@ -90,5 +90,9 @@
     <string name="high">高</string>
     <string name="low">偏低</string>
     <string name="normal">正常</string>
+    <string name="blood_pressure_report">血压报告</string>
+    <string name="sleep_report">睡眠质量报告</string>
+    <string name="depression_report">抑郁症报告</string>
+    <string name="chronic_prostate">慢性前列腺炎报告</string>
 
 </resources>

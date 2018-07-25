@@ -2,6 +2,7 @@ package com.njzhikejia.echohealth.healthlife;
 
 import android.app.Application;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.njzhikejia.echohealth.healthlife.service.LoopService;
 
 /**
@@ -13,6 +14,7 @@ public class HealthLifeApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        SDKInitializer.initialize(getApplicationContext());
         LoopService.startPollingService(getApplicationContext());
     }
 

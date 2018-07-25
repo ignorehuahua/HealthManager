@@ -10,7 +10,10 @@ import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.entity.HealthGuidance;
+import com.njzhikejia.echohealth.healthlife.entity.ReportData;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+
+import org.w3c.dom.ProcessingInstruction;
 
 import java.util.List;
 
@@ -22,9 +25,13 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
 
     private static final String TAG = "HealthGuidanceAdapter";
     private Context context;
-    private List<HealthGuidance> list;
+    private List<ReportData.Data.Reports> list;
+    private static final int BLOOD_PRESSURE_REPORT = 1;
+    private static final int SLEEP_REPORT = 2;
+    private static final int DEPRESSION_REPORT = 4;
+    private static final int CHRONIC_PROSTATE = 5;
 
-    public HealthGuidanceAdapter(Context context, List<HealthGuidance> list) {
+    public HealthGuidanceAdapter(Context context, List<ReportData.Data.Reports> list) {
         this.context = context;
         this.list = list;
     }
@@ -38,15 +45,19 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
 
     @Override
     public void onBindViewHolder(HealthGuidanceViewHolder holder, int position) {
-        HealthGuidance healthGuidance = list.get(position);
+        ReportData.Data.Reports healthGuidance = list.get(position);
         if (healthGuidance == null) {
             Logger.e(TAG, "healthGuidance == null!");
             return;
         }
-
-        holder.tvName.setText(healthGuidance.getHealthGuideName());
-        holder.tvTime.setText(healthGuidance.getHealthGuideTime());
+        holder.tvTime.setText(healthGuidance.getCreate_time());
         holder.ivAvatar.setImageResource(R.drawable.blood_pressure);
+        matchReportType(healthGuidance, holder);
+    }
+
+    public void setList(List<ReportData.Data.Reports> list) {
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -65,6 +76,23 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
             ivAvatar = itemView.findViewById(R.id.iv_health_guidance_avatar);
             tvName = itemView.findViewById(R.id.tv_health_guidance_name);
             tvTime = itemView.findViewById(R.id.tv_health_guidance_time);
+        }
+    }
+
+    private void matchReportType(ReportData.Data.Reports data, HealthGuidanceViewHolder holder) {
+        switch (data.getType()) {
+            case BLOOD_PRESSURE_REPORT:
+                holder.tvName.setText(R.string.blood_pressure_report);
+                break;
+            case SLEEP_REPORT:
+                holder.tvName.setText(R.string.sleep_report);
+                break;
+            case DEPRESSION_REPORT:
+                holder.tvName.setText(R.string.depression_report);
+                break;
+            case CHRONIC_PROSTATE:
+                holder.tvName.setText(R.string.chronic_prostate);
+                break;
         }
     }
 }
