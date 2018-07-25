@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,16 +15,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.AddMeasureDataActivity;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.adapter.MeasureDataAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.MeasureData;
+import com.njzhikejia.echohealth.healthlife.entity.RecentMeasureData;
+import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
+import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by 16222 on 2018/5/27.
@@ -35,10 +47,11 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecycleView;
     private MeasureDataAdapter mAdapter;
-    private List<MeasureData> measureDataList;
+    private List<RecentMeasureData.AllData.SpecificData> measureDataList;
     private Context mContext;
     private FloatingActionButton mFabBtn;
     private MeasureDataHandler mHandler;
+    private static final int KEY_RECENT_DATA = 20;
 
 
 
@@ -56,6 +69,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
         View view = inflater.inflate(R.layout.fragment_measure_data, null);
         initView(view);
         mHandler = new MeasureDataHandler(this);
+        queryRecentData();
         return view;
 
     }
@@ -70,7 +84,6 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
         mRecycleView.setHasFixedSize(true);
         mRecycleView.setLayoutManager(layoutManager);
         measureDataList = new ArrayList<>();
-        testInitData();
         mAdapter = new MeasureDataAdapter(mContext, measureDataList);
         mRecycleView.setAdapter(mAdapter);
         mFabBtn.setOnClickListener(new View.OnClickListener() {
@@ -81,12 +94,45 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
             }
         });
     }
+    private void queryRecentData() {
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserRecentMeasureData(PreferenceUtil.getUID(mContext)), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.e(TAG, "onFailure queryRecentData");
+            }
 
-    private void testInitData() {
-        MeasureData bloodPressure = new MeasureData(ConstantValues.BLOOD_PRESSURE, "血压", "120", 10, "12:00" );
-        MeasureData diastolicPressure = new MeasureData(ConstantValues.DIASTOLIC_PRESSURE, "舒张压", "120", 10, "12:00" );
-        measureDataList.add(bloodPressure);
-        measureDataList.add(diastolicPressure);
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+                Logger.d(TAG, "onResponse code = "+response.code() + "responseContent = "+responseContent);
+                Gson gson = new Gson();
+                RecentMeasureData recentMeasureData = gson.fromJson(responseContent, RecentMeasureData.class);
+                measureDataList = recentMeasureData.getData().getData();
+                for (RecentMeasureData.AllData.SpecificData data : measureDataList) {
+                    if (data.getType() == MeasureDataAdapter.BLOOD_PRESSURE) {
+                        RecentMeasureData.AllData.SpecificData diastolicData = new RecentMeasureData.AllData.SpecificData();
+                        diastolicData.setBlood_pressure_type(MeasureDataAdapter.DIASTOLIC_PRESSURE);
+                        diastolicData.setMeasure_time(data.getMeasure_time());
+                        diastolicData.setType(data.getType());
+                        diastolicData.setValue1(data.getValue1());
+                        diastolicData.setValue2(data.getValue2());
+
+                        RecentMeasureData.AllData.SpecificData systolicData = new RecentMeasureData.AllData.SpecificData();
+                        systolicData.setBlood_pressure_type(MeasureDataAdapter.SYSTOLIC_PRESSURE);
+                        systolicData.setMeasure_time(data.getMeasure_time());
+                        systolicData.setType(data.getType());
+                        systolicData.setValue1(data.getValue1());
+                        systolicData.setValue2(data.getValue2());
+
+                        measureDataList.remove(data);
+                        measureDataList.add(diastolicData);
+                        measureDataList.add(systolicData);
+                        break;
+                    }
+                }
+                mHandler.sendEmptyMessage(KEY_RECENT_DATA);
+            }
+        });
     }
 
     @Override
@@ -109,8 +155,15 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case ConstantValues.MSG_REFRESH_TIME_OUT:
-                    if (measureDataFragmentWeakReference.get() != null)
-                    measureDataFragmentWeakReference.get().stopRefresh();
+                    if (measureDataFragmentWeakReference.get() != null) {
+                        measureDataFragmentWeakReference.get().stopRefresh();
+                    }
+                    break;
+                case KEY_RECENT_DATA:
+                    Logger.d(TAG, "getRecentData");
+                    if (measureDataFragmentWeakReference.get() != null) {
+                        measureDataFragmentWeakReference.get().mAdapter.setList(measureDataFragmentWeakReference.get().measureDataList);
+                    }
                     break;
             }
         }

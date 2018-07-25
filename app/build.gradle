@@ -15,7 +15,7 @@ android {
         release {
             keyAlias 'release'
             keyPassword 'abc123'
-            storeFile file('/work/MyCode/healthlife/V1.0.0/release.jks')
+            storeFile file('D:\\healthlife\\release.jks')
             storePassword 'abc123'
         }
     }

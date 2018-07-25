@@ -70,4 +70,8 @@ public class CommonRequest {
    public static Request getUserDetailsRequest(int uid) {
        return getRequest(ServerAddrUtils.getUserDetailsUrl(uid));
    }
+
+   public static Request getUserRecentMeasureData(int uid) {
+       return getRequest(ServerAddrUtils.getUserRecentMeasureData(uid));
+   }
 }
