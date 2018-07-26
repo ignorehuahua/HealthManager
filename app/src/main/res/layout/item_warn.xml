@@ -34,7 +34,6 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/name_color"
                 android:textSize="14sp"
-                android:text="血压"
                 android:layout_toRightOf="@id/iv_type"
                 android:layout_marginLeft="10dp"/>
 
@@ -46,14 +45,12 @@
                 android:layout_below="@id/iv_type"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/red"
-                android:text="舒张压偏低"
                 android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_warn_info_explanation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="，标准值为90-140"
                 android:layout_toRightOf="@id/tv_warn_info"
                 android:textColor="@color/name_color"
                 android:textSize="14sp"
@@ -68,8 +65,7 @@
                 android:textColor="@color/name_color"
                 android:textSize="14sp"
                 android:layout_marginTop="4dp"
-                android:layout_below="@id/tv_warn_info"
-                android:text="本次实测值："/>
+                android:layout_below="@id/tv_warn_info"/>
 
             <TextView
                 android:id="@+id/tv_value"
@@ -79,8 +75,7 @@
                 android:layout_below="@id/tv_warn_info"
                 android:textColor="@color/name_color"
                 android:textSize="14sp"
-                android:layout_marginTop="4dp"
-                android:text="收缩压138，舒张压72"/>
+                android:layout_marginTop="4dp" />
 
             <TextView
                 android:id="@+id/tv_measure_time_label"
@@ -101,8 +96,7 @@
                 android:layout_below="@id/tv_value_label"
                 android:textColor="@color/name_color"
                 android:textSize="14sp"
-                android:layout_marginTop="4dp"
-                android:text="2018-06-30 11:30" />
+                android:layout_marginTop="4dp" />
 
 
         </RelativeLayout>

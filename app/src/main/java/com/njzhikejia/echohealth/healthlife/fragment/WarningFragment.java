@@ -14,17 +14,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.adapter.MeasureDataAdapter;
 import com.njzhikejia.echohealth.healthlife.adapter.WarnAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.MeasureData;
 import com.njzhikejia.echohealth.healthlife.entity.WarnInfo;
+import com.njzhikejia.echohealth.healthlife.entity.WarnNoticesData;
+import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
+import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by 16222 on 2018/6/30.
@@ -36,9 +46,10 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecycleView;
     private WarnAdapter mAdapter;
-    private List<WarnInfo> warnInfoList;
+    private List<WarnNoticesData.Data.Notices> warnInfoList;
     private Context mContext;
     private WarnHandler mHandler;
+    private static final int KEY_WARN = 22;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,17 +76,9 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         mRecycleView.setHasFixedSize(true);
         mRecycleView.setLayoutManager(layoutManager);
         warnInfoList = new ArrayList<>();
-        testInitData();
         mAdapter = new WarnAdapter(mContext, warnInfoList);
         mRecycleView.setAdapter(mAdapter);
-    }
-
-    private void testInitData() {
-        WarnInfo bloodWarn = new WarnInfo();
-        WarnInfo heartWarn = new WarnInfo();
-        warnInfoList.add(bloodWarn);
-        warnInfoList.add(heartWarn);
-
+        loadWarnNotices();
     }
 
     @Override
@@ -106,6 +109,11 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
                     if (warningFragmentWeakReference.get() != null)
                         warningFragmentWeakReference.get().stopRefresh();
                     break;
+                case KEY_WARN:
+                    if (warningFragmentWeakReference.get() != null) {
+                        warningFragmentWeakReference.get().mAdapter.setlist(warningFragmentWeakReference.get().warnInfoList);
+                    }
+                    break;
             }
         }
     }
@@ -115,5 +123,24 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
             mSwipeRefreshLayout.setRefreshing(false);
             Logger.d(TAG, "stopRefresh!");
         }
+    }
+
+    private void loadWarnNotices() {
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserWarnInfo(PreferenceUtil.getUID(mContext)), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.e(TAG, "loadWarnNotices onFailure");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+                Logger.d(TAG, "code = "+response.code() + "responseContent = "+responseContent);
+                Gson gson = new Gson();
+                WarnNoticesData warnNoticesData = gson.fromJson(responseContent, WarnNoticesData.class);
+                warnInfoList = warnNoticesData.getData().getNotices();
+                mHandler.sendEmptyMessage(KEY_WARN);
+            }
+        });
     }
 }

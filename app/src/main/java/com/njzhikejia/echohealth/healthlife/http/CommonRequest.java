@@ -88,4 +88,13 @@ public class CommonRequest {
    public static Request getUserReports(int uid) {
        return getRequest(ServerAddrUtils.getReportUrl(uid));
    }
+
+    /**
+     * 获取告警列表
+     * @param uid
+     * @return
+     */
+   public static Request getUserWarnInfo(int uid) {
+       return getRequest(ServerAddrUtils.getWarnList(uid));
+   }
 }

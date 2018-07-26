@@ -43,4 +43,13 @@ public class ServerAddrUtils {
     public static String getReportUrl(int uid) {
         return ROOT_SERVER_ADDR + "/user/1/reports/" + "?uid=" + uid + "&appid=4&t=" + System.currentTimeMillis();
     }
+
+    /**
+     * 获取告警列表
+     * @param uid
+     * @return
+     */
+    public static String getWarnList(int uid) {
+        return ROOT_SERVER_ADDR + "/user/1/alarm/notices?status=0,1,2&type=1,2,3,4" ;
+    }
 }
