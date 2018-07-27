@@ -1,20 +1,12 @@
 package com.njzhikejia.echohealth.healthlife.http;
 
-import android.support.design.widget.TabLayout;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.njzhikejia.echohealth.healthlife.util.PhoneUtil;
 
-import org.json.JSONObject;
-
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -95,6 +87,10 @@ public class CommonRequest {
      * @return
      */
    public static Request getUserWarnInfo(int uid) {
-       return getRequest(ServerAddrUtils.getWarnList(uid));
+       return getRequest(ServerAddrUtils.getWarnListUrl(uid));
+   }
+
+   public static Request getLocation(int uid) {
+       return getRequest(ServerAddrUtils.getLocationUrl(uid));
    }
 }

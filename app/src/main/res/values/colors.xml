@@ -19,4 +19,7 @@
     <color name="btn_pressed">#0a6a64</color>
     <color name="dark">#FF222222</color>
     <color name="light">#FFEEEEEE</color>
+    <color name="status_normal">#259B24</color>
+    <color name="status_low">#C8BC05</color>
+    <color name="status_high">#E51C23</color>
 </resources>

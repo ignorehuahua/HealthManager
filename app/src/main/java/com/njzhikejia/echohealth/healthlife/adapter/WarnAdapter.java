@@ -2,12 +2,14 @@ package com.njzhikejia.echohealth.healthlife.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.entity.WarnInfo;
 import com.njzhikejia.echohealth.healthlife.entity.WarnNoticesData;
@@ -70,8 +72,29 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
         }
         matchWarnType(holder, warnInfo);
         holder.tvMeasureTime.setText(warnInfo.getSrc_data().getMeasure().getMeasure_time());
-        holder.tvWarnInfo.setText(warnInfo.getRemark().getNotice_desc());
+        Logger.d(TAG, "remark = "+warnInfo.getRemark());
+//        {"notice_desc":"心率疑似异常 [心率偏高]"}
+        Gson gson = new Gson();
+        String remarkJson = warnInfo.getRemark();
+        if (!TextUtils.isEmpty(remarkJson)) {
+            RemarkDesc desc = gson.fromJson(remarkJson, RemarkDesc.class);
+            Logger.d(TAG, "desc = "+desc.getNotice_desc());
+            holder.tvWarnInfo.setText(desc.getNotice_desc());
+        }
 
+
+    }
+
+    class RemarkDesc{
+        private String notice_desc;
+
+        public String getNotice_desc() {
+            return notice_desc;
+        }
+
+        public void setNotice_desc(String notice_desc) {
+            this.notice_desc = notice_desc;
+        }
     }
 
     @Override

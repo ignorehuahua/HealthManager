@@ -74,9 +74,11 @@ public class MeasureDataAdapter extends RecyclerView.Adapter<MeasureDataAdapter.
                 if (measureData.getBlood_pressure_type() == DIASTOLIC_PRESSURE) {
                     holder.tvDataType.setText(R.string.diastolic_pressure);
                     holder.tvDataValue.setText(String.valueOf(measureData.getValue1()));
+                    holder.ivType.setImageResource(R.drawable.ic_diastolic);
                 } else {
                     holder.tvDataType.setText(R.string.systolic_pressure);
                     holder.tvDataValue.setText(String.valueOf(measureData.getValue2()));
+                    holder.ivType.setImageResource(R.drawable.ic_systolic);
                 }
                 holder.tvDataUnit.setText(R.string.blood_pressure_unit);
                 break;
@@ -84,16 +86,19 @@ public class MeasureDataAdapter extends RecyclerView.Adapter<MeasureDataAdapter.
                 holder.tvDataType.setText(R.string.heart_rate);
                 holder.tvDataUnit.setText(R.string.rate);
                 holder.tvDataValue.setText(String.valueOf(measureData.getValue1()));
+                holder.ivType.setImageResource(R.drawable.ic_heart_rate);
                 break;
             case BLOOD_SUGAR:
                 holder.tvDataType.setText(R.string.blood_sugar);
                 holder.tvDataUnit.setText(R.string.blood_sugar_unit);
                 holder.tvDataValue.setText(String.valueOf(measureData.getValue1()));
+                holder.ivType.setImageResource(R.drawable.ic_blood_fat);
                 break;
             case BLOOD_OXYGEN:
                 holder.tvDataType.setText(R.string.blood_oxygen);
                 holder.tvDataUnit.setText(R.string.blood_oxygen_unit);
                 holder.tvDataValue.setText(String.valueOf(measureData.getValue1()));
+                holder.ivType.setImageResource(R.drawable.ic_blood_oxygen);
                 break;
         }
     }
@@ -103,46 +108,61 @@ public class MeasureDataAdapter extends RecyclerView.Adapter<MeasureDataAdapter.
             case HEART_RATE:
                     if (measureData.getValue1() > 100) {
                         viewHolder.tvHealthRate.setText(R.string.high);
+                        viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_high_status);
                     } else if (measureData.getValue1() < 60) {
                         viewHolder.tvHealthRate.setText(R.string.low);
+                        viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_low_status);
                     } else {
                         viewHolder.tvHealthRate.setText(R.string.normal);
+                        viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_normal_status);
                     }
                 break;
             case BLOOD_SUGAR:
                 if (measureData.getValue1() > 6.2) {
                     viewHolder.tvHealthRate.setText(R.string.high);
+                    viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_high_status);
                 } else if (measureData.getValue1() < 3.1) {
                     viewHolder.tvHealthRate.setText(R.string.low);
+                    viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_low_status);
                 } else {
                     viewHolder.tvHealthRate.setText(R.string.normal);
+                    viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_normal_status);
                 }
                 break;
             case BLOOD_OXYGEN:
                 if (measureData.getValue1() > 100) {
                     viewHolder.tvHealthRate.setText(R.string.high);
+                    viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_high_status);
                 } else if (measureData.getValue1() < 95) {
                     viewHolder.tvHealthRate.setText(R.string.low);
+                    viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_low_status);
                 } else {
                     viewHolder.tvHealthRate.setText(R.string.normal);
+                    viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_normal_status);
                 }
                 break;
             case BLOOD_PRESSURE:
                 if (measureData.getBlood_pressure_type() == DIASTOLIC_PRESSURE) {
                     if (measureData.getValue1() > 90) {
                         viewHolder.tvHealthRate.setText(R.string.high);
+                        viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_high_status);
                     } else if (measureData.getValue1() < 60) {
                         viewHolder.tvHealthRate.setText(R.string.low);
+                        viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_low_status);
                     } else {
                         viewHolder.tvHealthRate.setText(R.string.normal);
+                        viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_normal_status);
                     }
                 } else {
                     if (measureData.getValue1() > 140) {
                         viewHolder.tvHealthRate.setText(R.string.high);
+                        viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_high_status);
                     } else if (measureData.getValue1() < 90) {
                         viewHolder.tvHealthRate.setText(R.string.low);
+                        viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_low_status);
                     } else {
                         viewHolder.tvHealthRate.setText(R.string.normal);
+                        viewHolder.tvHealthRate.setBackgroundResource(R.drawable.shape_normal_status);
                     }
                 }
                 break;

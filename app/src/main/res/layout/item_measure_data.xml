@@ -40,31 +40,36 @@
                 android:id="@+id/tv_data_health_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:layout_alignParentRight="true"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true">
 
             <TextView
                 android:id="@+id/tv_data_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:gravity="center"
                 android:textSize="18sp"
-                android:textColor="@color/data_value"
-                />
+                android:textColor="@color/data_value" />
 
             <TextView
                 android:id="@+id/tv_data_unit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:gravity="center"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/tv_data_value"
                 android:layout_marginLeft="4dp"
                 android:textColor="@color/name_color"
                 android:textSize="14sp"/>
 
-
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/tv_data_measure_time"

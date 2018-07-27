@@ -1,7 +1,11 @@
 package com.njzhikejia.echohealth.healthlife.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +21,21 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.bumptech.glide.util.LogTime;
+import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.R;
+import com.njzhikejia.echohealth.healthlife.entity.LocationData;
+import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
+import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
+import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
+
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by 16222 on 2018/7/25.
@@ -29,10 +47,18 @@ public class LocationFragment extends BaseFragment {
     private BaiduMap mBaiduMap;
     private LocationClient mLocationClient;
     private MyLocationListener myListener = new MyLocationListener();
+    private Context mContext;
+    private static final String TAG = "LocationFragment";
+    private static final int KEY_LOCATION = 23;
+    private double latitude;
+    private double longitude;
+    private LocationHandler mHandler;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Logger.d(TAG, "onCreate");
+        mContext = getActivity();
         mLocationClient = new LocationClient(getContext().getApplicationContext());
         mLocationClient.registerLocationListener(myListener);
         LocationClientOption option = new LocationClientOption();
@@ -50,8 +76,10 @@ public class LocationFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Logger.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_location, null);
         initView(view);
+        mHandler = new LocationHandler(this);
         return view;
     }
 
@@ -60,7 +88,60 @@ public class LocationFragment extends BaseFragment {
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(16).build()));
-        mLocationClient.start();
+//        mLocationClient.start();
+        queryLocation();
+    }
+
+    static class LocationHandler extends Handler{
+
+        private WeakReference<LocationFragment> weakReference;
+
+        public LocationHandler(LocationFragment fragment) {
+            weakReference = new WeakReference<LocationFragment>(fragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case KEY_LOCATION:
+                    LocationFragment fragment = weakReference.get();
+                    if (fragment != null) {
+                        Logger.d(TAG, "latitude = "+String.valueOf(fragment.latitude) + "longitude = "+String.valueOf(fragment.longitude));
+                        LatLng ll = new LatLng(fragment.latitude, fragment.longitude);
+                        MyLocationData locData = new MyLocationData.Builder()
+                                .latitude(fragment.latitude).longitude(fragment.longitude).build();
+                        fragment.mBaiduMap.setMyLocationData(locData);
+                        MapStatus.Builder builder = new MapStatus.Builder();
+                        //设置缩放中心点；缩放比例；
+                        builder.target(ll).zoom(18.0f);
+                        fragment.mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+                    }
+
+                    break;
+            }
+
+        }
+    }
+
+    private void queryLocation() {
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getLocation(PreferenceUtil.getUID(mContext)), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.e(TAG, "queryLocation failure");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+                Logger.d(TAG, "onResponse code = "+response.code() + "responseContent = "+responseContent);
+                Gson gson = new Gson();
+                LocationData locationData = gson.fromJson(responseContent, LocationData.class);
+                Logger.d(TAG, "address = "+locationData.getData().getLocations().get(0).getAddress());
+                latitude = locationData.getData().getLocations().get(0).getLatitude();
+                longitude = locationData.getData().getLocations().get(0).getLongitude();
+                mHandler.sendEmptyMessage(KEY_LOCATION);
+            }
+        });
     }
 
     public class MyLocationListener extends BDAbstractLocationListener {
@@ -79,12 +160,12 @@ public class LocationFragment extends BaseFragment {
             if (location == null) {
                 return;
             }
-            MyLocationData locData = new MyLocationData.Builder().accuracy(location.getRadius()).direction(100)
-                    .latitude(location.getLatitude()).longitude(location.getLongitude()).build();
-            mBaiduMap.setMyLocationData(locData);
-                        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-                MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
-                mBaiduMap.animateMapStatus(u);
+//            MyLocationData locData = new MyLocationData.Builder().accuracy(location.getRadius()).direction(100)
+//                    .latitude(location.getLatitude()).longitude(location.getLongitude()).build();
+//            mBaiduMap.setMyLocationData(locData);
+//                        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+//                MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
+//                mBaiduMap.animateMapStatus(u);
 
 
         }

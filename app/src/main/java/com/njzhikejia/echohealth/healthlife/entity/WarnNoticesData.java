@@ -54,7 +54,7 @@ public class WarnNoticesData {
             private String dispatch_time;
             private int dispatch_operator;
             private int screen_flag;
-            private Remark remark;
+            private String remark;
             private SrcData src_data;
 
             public int getId() {
@@ -113,12 +113,14 @@ public class WarnNoticesData {
                 this.screen_flag = screen_flag;
             }
 
-            public Remark getRemark() {
+            public String getRemark() {
                 return remark;
             }
 
-            public void setRemark(Remark remark) {
+            public void setRemark(String remark) {
                 this.remark = remark;
+
+
             }
 
             public SrcData getSrc_data() {

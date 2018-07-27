@@ -8,7 +8,7 @@ import android.util.Log;
 
 public class Logger {
 
-    private static final String TAG = "[healthlife]";
+    private static final String TAG = "[HealthLife]";
 
     public static void v (String tag, String msg) {
         Log.v(TAG+tag, msg);

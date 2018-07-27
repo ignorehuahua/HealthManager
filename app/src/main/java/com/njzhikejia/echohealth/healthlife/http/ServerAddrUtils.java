@@ -8,6 +8,12 @@ public class ServerAddrUtils {
 
     public static final String ROOT_SERVER_ADDR = "http://120.55.22.117:28001";
 
+    /**
+     * API_HOST = http://120.55.22.117:28001
+     post请求的contentType统一设置为： application/json
+     post请求的body为json格式
+     请求url统一携带uid参数,appid,以及t（时间戳）
+     */
 
     /**
      *
@@ -49,7 +55,16 @@ public class ServerAddrUtils {
      * @param uid
      * @return
      */
-    public static String getWarnList(int uid) {
+    public static String getWarnListUrl(int uid) {
         return ROOT_SERVER_ADDR + "/user/1/alarm/notices?status=0,1,2&type=1,2,3,4" ;
+    }
+
+    /**
+     * 获取定位
+     * @param uid
+     * @return
+     */
+    public static String getLocationUrl(int uid) {
+        return ROOT_SERVER_ADDR + "/user/1/locations?page=0&count=1";
     }
 }
