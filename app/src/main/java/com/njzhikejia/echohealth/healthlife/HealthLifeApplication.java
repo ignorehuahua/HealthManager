@@ -15,7 +15,7 @@ public class HealthLifeApplication extends Application{
     public void onCreate() {
         super.onCreate();
         SDKInitializer.initialize(getApplicationContext());
-        LoopService.startPollingService(getApplicationContext());
+//        LoopService.startPollingService(getApplicationContext());
     }
 
     @Override
