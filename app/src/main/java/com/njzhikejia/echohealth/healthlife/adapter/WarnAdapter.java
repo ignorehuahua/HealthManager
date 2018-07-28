@@ -1,8 +1,13 @@
 package com.njzhikejia.echohealth.healthlife.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,41 +130,74 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
     private void matchWarnType(WarnViewHolder holder, WarnNoticesData.Data.Notices notice) {
         switch (notice.getType()) {
             case MEASURE_DATA_WARN:
+                float value1 = notice.getSrc_data().getMeasure().getValue1();
+                float value2 = notice.getSrc_data().getMeasure().getValue2();
+                String value1Text = String.valueOf(value1);
+                String value2Text = String.valueOf(value2);
                 switch (notice.getSrc_data().getMeasure().getType()) {
                     case BLOOD_PRESSURE_WARN:
                         holder.tvType.setText(R.string.blood_pressure_warn);
                         String diastolicStandardValue = mContext.getString(R.string.diastolic_pressure) + "60-90";
                         String systolicStandValue = mContext.getString(R.string.systolic_pressure) + "90-140";
                         holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), diastolicStandardValue + systolicStandValue));
-                        holder.tvMeasureValue.setText(mContext.getString(R.string.diastolic_pressure) + String.valueOf(notice.getSrc_data().getMeasure().getValue1()) +
-                        mContext.getString(R.string.systolic_pressure) + String.valueOf(notice.getSrc_data().getMeasure().getValue2()));
+                        matchBloodPressureValueColor(holder, value1Text, value2Text);
                         break;
                     case HEART_RATE_WARN:
                         holder.tvType.setText(R.string.heart_rate_warn);
                         String heartStandardValue = "60-100";
                         holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), heartStandardValue));
+                        matchMeasuredValueColor(holder, value1Text, mContext.getString(R.string.heart_rate_with_unit));
                         break;
                     case BLOOD_SUGAR_WARN:
                         holder.tvType.setText(R.string.blood_sugar_warn);
                         String sugarStandardValue = "3.1-6.2";
                         holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), sugarStandardValue));
+                        matchMeasuredValueColor(holder, value1Text, mContext.getString(R.string.blood_sugar_unit));
                         break;
                     case BLOOD_OXYGEN_WARN:
                         holder.tvType.setText(R.string.blood_oxygen_warn);
                         String oxygenStandardValue = "95-100";
                         holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), oxygenStandardValue));
+                        matchMeasuredValueColor(holder, value1Text, mContext.getString(R.string.blood_oxygen_unit));
                         break;
                 }
+                holder.tvMeasureTime.setText(R.string.measure_time);
                 break;
             case FENCE_WARN:
                 holder.tvType.setText(R.string.fence_warn);
+                holder.tvMeasureTime.setText(R.string.warn_time);
                 break;
             case SOS_WARN:
                 holder.tvType.setText(R.string.sos_warn);
+                holder.tvMeasureTime.setText(R.string.warn_time);
                 break;
             case FALL_WARN:
                 holder.tvType.setText(R.string.fall_warn);
+                holder.tvMeasureTime.setText(R.string.warn_time);
                 break;
         }
+    }
+
+    private void matchMeasuredValueColor(WarnViewHolder holder, String measuredValue, String valueUnit) {
+        String text = String.format(mContext.getString(R.string.measured_value), measuredValue, valueUnit);
+        int index[] = new int[2];
+        index[0] = text.indexOf(measuredValue);
+        index[1] = text.indexOf(valueUnit);
+
+        SpannableStringBuilder style = new SpannableStringBuilder(text);
+        style.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.red)),index[0],index[0]+measuredValue.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        holder.tvMeasureValue.setText(style);
+    }
+
+    private void matchBloodPressureValueColor(WarnViewHolder holder, String value1, String value2) {
+        String text = String.format(mContext.getString(R.string.blood_pressure_measured_value), value1, value2);
+        int index[] = new int[2];
+        index[0] = text.indexOf(value1);
+        index[1] = text.indexOf(value2);
+
+        SpannableStringBuilder style = new SpannableStringBuilder(text);
+        style.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.red)),index[0],index[0]+value1.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        style.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.red)),index[1],index[1]+value2.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        holder.tvMeasureValue.setText(style);
     }
 }

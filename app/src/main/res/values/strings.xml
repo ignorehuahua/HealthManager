@@ -38,6 +38,7 @@
     <string name="height_with_unit">身高(cm)</string>
     <string name="weight_with_unit">体重(kg)</string>
     <string name="measure_time">测量时间</string>
+    <string name="warn_time">告警时间</string>
     <string name="measure_state">测量状态</string>
     <string name="note">备注</string>
     <string name="normal_state">常规</string>
@@ -102,4 +103,7 @@
     <string name="fence_warn">围栏告警</string>
     <string name="fall_warn">跌倒告警</string>
     <string name="standard_value">标准值为%1$s</string>
+    <string name="result">结论:</string>
+    <string name="measured_value">本次实测值:%1$s%2$s</string>
+    <string name="blood_pressure_measured_value">本次实测值:舒张压%1$smmHg,收缩压%2$smmHg</string>
 </resources>

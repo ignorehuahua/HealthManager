@@ -67,12 +67,14 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
         private ImageView ivAvatar;
         private TextView tvName;
         private TextView tvTime;
+        private TextView tvResult;
 
         public HealthGuidanceViewHolder(View itemView) {
             super(itemView);
             ivAvatar = itemView.findViewById(R.id.iv_health_guidance_avatar);
             tvName = itemView.findViewById(R.id.tv_health_guidance_name);
             tvTime = itemView.findViewById(R.id.tv_health_guidance_time);
+            tvResult = itemView.findViewById(R.id.tv_health_guidance_result);
         }
     }
 
@@ -80,15 +82,25 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
         switch (data.getType()) {
             case BLOOD_PRESSURE_REPORT:
                 holder.tvName.setText(R.string.blood_pressure_report);
+                holder.tvResult.setVisibility(View.GONE);
+                holder.ivAvatar.setImageResource(R.drawable.ic_blood_pressure);
                 break;
             case SLEEP_REPORT:
                 holder.tvName.setText(R.string.sleep_report);
+                holder.tvResult.setVisibility(View.GONE);
+                holder.ivAvatar.setImageResource(R.drawable.ic_sleep);
                 break;
             case DEPRESSION_REPORT:
                 holder.tvName.setText(R.string.depression_report);
+                holder.tvResult.setVisibility(View.VISIBLE);
+                holder.tvResult.setText(context.getString(R.string.result) + data.getResult());
+                holder.ivAvatar.setImageResource(R.drawable.ic_depression);
                 break;
             case CHRONIC_PROSTATE:
                 holder.tvName.setText(R.string.chronic_prostate);
+                holder.tvResult.setVisibility(View.VISIBLE);
+                holder.ivAvatar.setImageResource(R.drawable.ic_chronic_prostate);
+                holder.tvResult.setText(context.getString(R.string.result) + data.getResult());
                 break;
         }
     }
