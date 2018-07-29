@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.entity.LoginResponse;
+import com.njzhikejia.echohealth.healthlife.entity.MeasureData;
 import com.njzhikejia.echohealth.healthlife.fragment.MeasureDataFragment;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
@@ -72,9 +73,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void skipLogin() {
         if (PreferenceUtil.getSecKey(LoginActivity.this, null) != null) {
-            Intent intentMain = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intentMain);
-            finish();
+            if (HealthLifeApplication.isMultiUser) {
+                Intent intentMain = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intentMain);
+                finish();
+            } else {
+                Intent intentMain = new Intent(LoginActivity.this, MeasureDataActivity.class);
+                startActivity(intentMain);
+                finish();
+            }
+
         }
     }
 
@@ -103,9 +111,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             switch (msg.what) {
                 case LOGIN_SUCCESS:
                     if (loginActivityWeakReference.get() != null) {
-                        Intent intentSuccess = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intentSuccess);
-                        finish();
+                        if (HealthLifeApplication.isMultiUser) {
+                            Intent intentSuccess = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intentSuccess);
+                            finish();
+                        } else {
+                            Intent intentSuccess = new Intent(LoginActivity.this, MeasureDataActivity.class);
+                            startActivity(intentSuccess);
+                            finish();
+                        }
                     }
                     break;
                 case LOGIN_FAILURE:

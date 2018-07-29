@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.AddMeasureDataActivity;
+import com.njzhikejia.echohealth.healthlife.HealthLifeApplication;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.adapter.MeasureDataAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.MeasureData;
@@ -80,6 +81,11 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mRecycleView = view.findViewById(R.id.recycle_view_data);
         mFabBtn = view.findViewById(R.id.floating_action_btn);
+        if (HealthLifeApplication.isMultiUser) {
+            mFabBtn.setVisibility(View.VISIBLE);
+        } else {
+            mFabBtn.setVisibility(View.GONE);
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mRecycleView.setHasFixedSize(true);
         mRecycleView.setLayoutManager(layoutManager);

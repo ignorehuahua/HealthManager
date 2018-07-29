@@ -6,19 +6,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageView;
 
-import com.baidu.mapapi.SDKInitializer;
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.Member;
-import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.HealthGuidanceFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.LocationFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.MeasureDataFragment;
@@ -38,16 +37,43 @@ public class MeasureDataActivity extends AppCompatActivity {
     private MenuItem mMenuItem;
     private Toolbar mToolbar;
     private String name;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private NavigationView mNavigation;
+    private ImageView ivAvatar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Logger.d(TAG, "onCreate");
         setContentView(R.layout.activity_measure_data);
+        initView();
+        setupViewPager(mViewPager);
+        initPage();
+    }
+
+    private void initView() {
         mToolbar = findViewById(R.id.toolbar);
+        mDrawerLayout = findViewById(R.id.drawerLayout);
+        mNavigation = findViewById(R.id.navigation);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        final BottomNavigationView navigation = findViewById(R.id.navigation);
+        if (HealthLifeApplication.isMultiUser) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            mNavigation.setVisibility(View.GONE);
+        } else {
+            mNavigation.setVisibility(View.VISIBLE);
+            mToolbar.setNavigationIcon(R.drawable.ic_menu);
+            mDrawerToggle = new ActionBarDrawerToggle(
+                    this,
+                    mDrawerLayout,
+                    mToolbar,0,0
+            );
+            mDrawerLayout.addDrawerListener(mDrawerToggle);
+            mDrawerToggle.syncState();
+        }
+
+
+        final BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mViewPager = findViewById(R.id.viewpager);
@@ -66,6 +92,9 @@ public class MeasureDataActivity extends AppCompatActivity {
                 }
                 mMenuItem = navigation.getMenu().getItem(position);
                 mMenuItem.setChecked(true);
+                if (!HealthLifeApplication.isMultiUser) {
+                    return;
+                }
                 switch (position) {
                     case 0:
                         mToolbar.setTitle(name+"-"+getString(R.string.measure_data));
@@ -87,8 +116,49 @@ public class MeasureDataActivity extends AppCompatActivity {
             }
         });
 
-        setupViewPager(mViewPager);
-        initPage();
+        mNavigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_meember_manager:
+                        Logger.d(TAG, "menu member manager clicked");
+                        Intent intentMember = new Intent(MeasureDataActivity.this, MemberManageActivity.class);
+                        startActivity(intentMember);
+                        break;
+
+                    case R.id.menu_setting:
+                        break;
+
+                    case R.id.menu_feedback:
+                        break;
+
+                    case R.id.menu_about:
+                        Intent intentAbout = new Intent(MeasureDataActivity.this, LoginActivity.class);
+                        startActivity(intentAbout);
+                        break;
+                }
+                mDrawerLayout.closeDrawer(mNavigation);
+                return false;
+            }
+        });
+
+        View headerLayout = mNavigation.getHeaderView(0);
+        ivAvatar= headerLayout.findViewById(R.id.iv_avatar);
+        ivAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                if (mPopupWindow == null) {
+//                    return;
+//                }
+//                if (mPopupWindow.isShowing()) {
+//                    closePopupWindow();
+//                } else {
+//                    showPopupWindow();
+//                }
+                Intent intentDetails = new Intent(MeasureDataActivity.this, UserDetailsActivity.class);
+                startActivity(intentDetails);
+            }
+        });
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -111,7 +181,9 @@ public class MeasureDataActivity extends AppCompatActivity {
         if (member != null) {
             name = member.getName();
             Logger.d(TAG, "get name = "+name);
-            mToolbar.setTitle(name+"-"+getString(R.string.measure_data));
+            if (HealthLifeApplication.isMultiUser) {
+                mToolbar.setTitle(name+"-"+getString(R.string.measure_data));
+            }
         }
         mViewPager.setCurrentItem(currentPage);
     }
@@ -124,18 +196,22 @@ public class MeasureDataActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.menu_data:
                     mViewPager.setCurrentItem(0);
+                    if (HealthLifeApplication.isMultiUser)
                     mToolbar.setTitle(name+"-"+getString(R.string.measure_data));
                     return true;
                 case R.id.menu_guide:
                     mViewPager.setCurrentItem(1);
+                    if (HealthLifeApplication.isMultiUser)
                     mToolbar.setTitle(name+"-"+getString(R.string.evaluation_guide));
                     return true;
                 case R.id.menu_warn:
                     mViewPager.setCurrentItem(2);
+                    if (HealthLifeApplication.isMultiUser)
                     mToolbar.setTitle(name+"-"+getString(R.string.warn_notice));
                     return true;
                 case R.id.menu_locate:
                     mViewPager.setCurrentItem(3);
+                    if (HealthLifeApplication.isMultiUser)
                     mToolbar.setTitle(name+"-"+getString(R.string.location));
                     return true;
             }
@@ -153,7 +229,9 @@ public class MeasureDataActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (HealthLifeApplication.isMultiUser) {
+                    finish();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -164,4 +242,5 @@ public class MeasureDataActivity extends AppCompatActivity {
         super.onDestroy();
         Logger.d(TAG, "onDestroy");
     }
+
 }

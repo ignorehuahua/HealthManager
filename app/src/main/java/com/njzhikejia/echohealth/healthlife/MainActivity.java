@@ -1,13 +1,11 @@
 package com.njzhikejia.echohealth.healthlife;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -30,29 +27,16 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.adapter.MemberListAdapter;
-import com.njzhikejia.echohealth.healthlife.entity.LoginResponse;
 import com.njzhikejia.echohealth.healthlife.entity.Member;
-import com.njzhikejia.echohealth.healthlife.entity.UserDetailsResponse;
-import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
-import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
-import com.njzhikejia.echohealth.healthlife.http.ServerAddrUtils;
-import com.njzhikejia.echohealth.healthlife.service.LoopService;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.ImageUtil;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
-import com.njzhikejia.echohealth.healthlife.util.PhoneUtil;
-import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 import com.njzhikejia.echohealth.healthlife.widget.banner.CycleViewPager;
 import com.njzhikejia.echohealth.healthlife.widget.banner.ViewUtil;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -84,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         Logger.d(TAG, "initView");
         mToolbar = findViewById(R.id.toolbar);
-        mNavigation = findViewById(R.id.navigation);
+        mNavigation = findViewById(R.id.bottom_navigation);
         mDrawerLayout = findViewById(R.id.drawerLayout);
 
 

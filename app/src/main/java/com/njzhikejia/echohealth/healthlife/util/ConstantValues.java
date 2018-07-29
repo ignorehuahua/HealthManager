@@ -34,4 +34,8 @@ public class ConstantValues {
     // 拍照
     public static final int REQUEST_CODE_OF_CAMERA = 201;
 
+    public static final String MULTI_USER_MODE = "multi_user";
+
+    public static final String SINGLE_USER_MODE = "sigle_user";
+
 }
