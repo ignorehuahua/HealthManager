@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.AddMeasureDataActivity;
@@ -26,7 +27,9 @@ import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
+import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -101,10 +104,15 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
         });
     }
     private void queryRecentData() {
+        if (!NetWorkUtils.isNetworkConnected(mContext)) {
+            ToastUtil.showShortToast(mContext, R.string.net_work_error);
+            return;
+        }
         OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserRecentMeasureData(PreferenceUtil.getUID(mContext)), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure queryRecentData");
+                stopRefresh();
             }
 
             @Override
@@ -168,6 +176,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
                 case KEY_RECENT_DATA:
                     Logger.d(TAG, "getRecentData");
                     if (measureDataFragmentWeakReference.get() != null) {
+                        measureDataFragmentWeakReference.get().stopRefresh();
                         measureDataFragmentWeakReference.get().mAdapter.setList(measureDataFragmentWeakReference.get().measureDataList);
                     }
                     break;
@@ -178,6 +187,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
     @Override
     public void onRefresh() {
         Logger.d(TAG, "onRefresh");
+        queryRecentData();
         mHandler.sendEmptyMessageDelayed(ConstantValues.MSG_REFRESH_TIME_OUT, ConstantValues.REFRESH_TIME_OUT);
     }
 

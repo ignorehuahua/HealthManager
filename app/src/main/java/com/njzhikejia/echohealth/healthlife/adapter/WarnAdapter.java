@@ -175,6 +175,7 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
                 holder.tvType.setText(R.string.fence_warn);
                 holder.tvMeasureTime.setText(R.string.warn_time);
                 break;
+
             case SOS_WARN:
                 holder.tvType.setText(R.string.sos_warn);
                 holder.tvMeasureTime.setText(R.string.warn_time);

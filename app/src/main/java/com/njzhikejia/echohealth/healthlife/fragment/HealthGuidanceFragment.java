@@ -20,7 +20,9 @@ import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
+import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -94,6 +96,7 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
                     break;
                 case KEY_REPORT:
                     if (healthGuidanceFragmentWeakReference.get() != null) {
+                        healthGuidanceFragmentWeakReference.get().stopRefresh();
                         healthGuidanceFragmentWeakReference.get().mAdapter.setList(healthGuidanceFragmentWeakReference.get().healthGuidanceList);
                     }
                     break;
@@ -104,6 +107,7 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
     @Override
     public void onRefresh() {
         Logger.d(TAG, "onRefresh");
+        loadReports();
         mHandler.sendEmptyMessageDelayed(ConstantValues.MSG_REFRESH_TIME_OUT, ConstantValues.REFRESH_TIME_OUT);
     }
 
@@ -122,10 +126,15 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
     }
 
     private void loadReports() {
+        if (!NetWorkUtils.isNetworkConnected(mContext)) {
+            ToastUtil.showShortToast(mContext, R.string.net_work_error);
+            return;
+        }
         OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserReports(PreferenceUtil.getUID(mContext)), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure");
+                stopRefresh();
             }
 
             @Override

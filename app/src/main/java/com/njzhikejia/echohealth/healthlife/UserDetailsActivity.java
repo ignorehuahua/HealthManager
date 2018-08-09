@@ -10,6 +10,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
@@ -20,7 +22,9 @@ import com.njzhikejia.echohealth.healthlife.fragment.UserHealthInfoFragment;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
+import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -45,6 +49,7 @@ public class UserDetailsActivity extends AppCompatActivity {
     private UserHealthInfoFragment userHealthInfoFragment;
     private UserDetailsHandler mHandler;
     private static final String KEY_USER_DETAILS = "key_user_details";
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,12 +57,14 @@ public class UserDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_details);
         Logger.d(TAG, "onCreate");
         initView();
+        mProgressBar.setVisibility(View.VISIBLE);
         queryUserInfo();
         mHandler = new UserDetailsHandler(this);
     }
 
     private void initView() {
         mToolbar = findViewById(R.id.toolbar);
+        mProgressBar = findViewById(R.id.progress_bar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mTabLayout = findViewById(R.id.tab_layout);
@@ -77,10 +84,18 @@ public class UserDetailsActivity extends AppCompatActivity {
     }
 
     private void queryUserInfo() {
+        if (!NetWorkUtils.isNetworkConnected(this)) {
+            ToastUtil.showShortToast(this, R.string.net_work_error);
+            if (mProgressBar != null) {
+                mProgressBar.setVisibility(View.GONE);
+            }
+            return;
+        }
         OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserDetailsRequest(PreferenceUtil.getUID(UserDetailsActivity.this)), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure call = "+call.toString());
+                mProgressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -120,6 +135,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             if (bundle != null) {
                 if (weakReference.get() != null) {
                     UserDetailsResponse userDetailsResponse = bundle.getParcelable(KEY_USER_DETAILS);
+                    mProgressBar.setVisibility(View.GONE);
                     userBaseInfoFragment.initData(userDetailsResponse);
                     userHealthInfoFragment.initData(userDetailsResponse);
                 }

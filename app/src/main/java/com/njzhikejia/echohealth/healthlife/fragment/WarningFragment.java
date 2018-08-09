@@ -25,7 +25,9 @@ import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
+import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -91,6 +93,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     @Override
     public void onRefresh() {
         Logger.d(TAG, "onRefresh");
+        loadWarnNotices();
         mHandler.sendEmptyMessageDelayed(ConstantValues.MSG_REFRESH_TIME_OUT, ConstantValues.REFRESH_TIME_OUT);
     }
 
@@ -111,6 +114,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
                     break;
                 case KEY_WARN:
                     if (warningFragmentWeakReference.get() != null) {
+                        warningFragmentWeakReference.get().stopRefresh();
                         warningFragmentWeakReference.get().mAdapter.setlist(warningFragmentWeakReference.get().warnInfoList);
                     }
                     break;
@@ -126,10 +130,15 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     }
 
     private void loadWarnNotices() {
+        if (!NetWorkUtils.isNetworkConnected(mContext)) {
+            ToastUtil.showShortToast(mContext, R.string.net_work_error);
+            return;
+        }
         OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserWarnInfo(PreferenceUtil.getUID(mContext)), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "loadWarnNotices onFailure");
+                stopRefresh();
             }
 
             @Override
