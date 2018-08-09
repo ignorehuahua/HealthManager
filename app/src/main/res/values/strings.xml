@@ -102,7 +102,7 @@
     <string name="sos_warn">SOS告警</string>
     <string name="fence_warn">围栏告警</string>
     <string name="fall_warn">跌倒告警</string>
-    <string name="standard_value">标准值为%1$s</string>
+    <string name="standard_value">标准值:%1$s</string>
     <string name="result">结论:</string>
     <string name="measured_value">本次实测值:%1$s%2$s</string>
     <string name="blood_pressure_measured_value">本次实测值:舒张压%1$smmHg,收缩压%2$smmHg</string>

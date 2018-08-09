@@ -136,28 +136,36 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
                 String value2Text = String.valueOf(value2);
                 switch (notice.getSrc_data().getMeasure().getType()) {
                     case BLOOD_PRESSURE_WARN:
+                        holder.ivType.setImageResource(R.drawable.ic_diastolic);
                         holder.tvType.setText(R.string.blood_pressure_warn);
-                        String diastolicStandardValue = mContext.getString(R.string.diastolic_pressure) + "60-90";
+                        String diastolicStandardValue = mContext.getString(R.string.diastolic_pressure) + "60-90,";
                         String systolicStandValue = mContext.getString(R.string.systolic_pressure) + "90-140";
-                        holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), diastolicStandardValue + systolicStandValue));
+                        holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), diastolicStandardValue + systolicStandValue) +
+                                "(" +mContext.getString(R.string.blood_pressure_unit) + ")");
                         matchBloodPressureValueColor(holder, value1Text, value2Text);
                         break;
                     case HEART_RATE_WARN:
+                        holder.ivType.setImageResource(R.drawable.ic_heart_rate);
                         holder.tvType.setText(R.string.heart_rate_warn);
                         String heartStandardValue = "60-100";
-                        holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), heartStandardValue));
+                        holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), heartStandardValue) +
+                                "(" +mContext.getString(R.string.heart_rate_with_unit) + ")");
                         matchMeasuredValueColor(holder, value1Text, mContext.getString(R.string.heart_rate_with_unit));
                         break;
                     case BLOOD_SUGAR_WARN:
+                        holder.ivType.setImageResource(R.drawable.ic_blood_fat);
                         holder.tvType.setText(R.string.blood_sugar_warn);
                         String sugarStandardValue = "3.1-6.2";
-                        holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), sugarStandardValue));
+                        holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), sugarStandardValue) +
+                                "(" +mContext.getString(R.string.blood_sugar_unit) + ")");
                         matchMeasuredValueColor(holder, value1Text, mContext.getString(R.string.blood_sugar_unit));
                         break;
                     case BLOOD_OXYGEN_WARN:
+                        holder.ivType.setImageResource(R.drawable.ic_blood_oxygen);
                         holder.tvType.setText(R.string.blood_oxygen_warn);
                         String oxygenStandardValue = "95-100";
-                        holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), oxygenStandardValue));
+                        holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), oxygenStandardValue) +
+                                "(" +mContext.getString(R.string.blood_oxygen_unit) + ")");
                         matchMeasuredValueColor(holder, value1Text, mContext.getString(R.string.blood_oxygen_unit));
                         break;
                 }

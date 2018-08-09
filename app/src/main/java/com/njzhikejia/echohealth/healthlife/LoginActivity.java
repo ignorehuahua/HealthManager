@@ -150,14 +150,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private boolean checkInput(String inputNumber, String inputPwd) {
         if (!PhoneUtil.checkPhoneNumber(inputNumber)) {
-            numberLayout.setError(getString(R.string.input_number_pattern_error));
-            return false;
+//            numberLayout.setError(getString(R.string.input_number_pattern_error));
+            return true;
         }
         return true;
     }
 
     private void login(String name, String password) {
-        OKHttpClientManager.getInstance().postAsync(CommonRequest.postLoginRequest("13777302139", "123456"), new Callback() {
+        OKHttpClientManager.getInstance().postAsync(CommonRequest.postLoginRequest("66666666", "123456"), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.d(TAG,"onFailure "+call.toString());
