@@ -37,7 +37,7 @@
     <string name="heart_rate_with_unit">次/分</string>
     <string name="height_with_unit">身高(cm)</string>
     <string name="weight_with_unit">体重(kg)</string>
-    <string name="measure_time">测量时间</string>
+    <string name="measure_time">测量时间:</string>
     <string name="warn_time">告警时间</string>
     <string name="measure_state">测量状态</string>
     <string name="note">备注</string>
