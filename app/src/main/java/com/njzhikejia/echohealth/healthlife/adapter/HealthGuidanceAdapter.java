@@ -18,14 +18,14 @@ import java.util.List;
  * Created by 16222 on 2018/5/28.
  */
 
-public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAdapter.HealthGuidanceViewHolder> {
+public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAdapter.HealthGuidanceViewHolder> implements View.OnClickListener {
 
     private static final String TAG = "HealthGuidanceAdapter";
     private Context context;
     private List<ReportData.Data.Reports> list;
     private static final int BLOOD_PRESSURE_REPORT = 1;
-    private static final int SLEEP_REPORT = 2;
-    private static final int DEPRESSION_REPORT = 4;
+    public static final int SLEEP_REPORT = 2;
+    public static final int DEPRESSION_REPORT = 4;
     private static final int CHRONIC_PROSTATE = 5;
 
     public HealthGuidanceAdapter(Context context, List<ReportData.Data.Reports> list) {
@@ -35,13 +35,15 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
 
     @Override
     public HealthGuidanceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_health_guidance, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_health_guidance, null);
         HealthGuidanceViewHolder viewHolder = new HealthGuidanceViewHolder(view);
+        view.setOnClickListener(this);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(HealthGuidanceViewHolder holder, int position) {
+        holder.itemView.setTag(position);
         ReportData.Data.Reports healthGuidance = list.get(position);
         if (healthGuidance == null) {
             Logger.e(TAG, "healthGuidance == null!");
@@ -60,6 +62,14 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mOnItemClickListener != null) {
+            //注意这里使用getTag方法获取position
+            mOnItemClickListener.onItemClick(v,(int)v.getTag());
+        }
     }
 
     class HealthGuidanceViewHolder extends RecyclerView.ViewHolder{
@@ -103,5 +113,17 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
                 holder.tvResult.setText(context.getString(R.string.result) + data.getResult());
                 break;
         }
+    }
+
+
+
+    public interface OnItemClickListener {
+        void onItemClick(View view , int position);
+    }
+
+    private OnItemClickListener mOnItemClickListener = null;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
     }
 }

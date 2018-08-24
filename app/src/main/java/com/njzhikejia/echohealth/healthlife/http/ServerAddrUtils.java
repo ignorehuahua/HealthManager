@@ -67,4 +67,15 @@ public class ServerAddrUtils {
     public static String getLocationUrl(int uid) {
         return ROOT_SERVER_ADDR + "/user/1/locations?page=0&count=1";
     }
+
+    /**
+     * 点击获取报告详情
+     * http://120.55.22.115/user/sleepReport.html?id=20&uid=1
+     * @param id
+     * @param uid
+     * @return
+     */
+    public static String getReportDetailUrl(int id,int uid) {
+        return ROOT_SERVER_ADDR + "/user/sleepReports?id=" + id + "&uid=" + uid;
+    }
 }

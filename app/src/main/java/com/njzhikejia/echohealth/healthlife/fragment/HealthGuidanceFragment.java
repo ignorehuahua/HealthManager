@@ -1,6 +1,7 @@
 package com.njzhikejia.echohealth.healthlife.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,9 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.R;
+import com.njzhikejia.echohealth.healthlife.ReportDetailsActivity;
 import com.njzhikejia.echohealth.healthlife.adapter.HealthGuidanceAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.ReportData;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
@@ -76,6 +80,19 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
         healthGuidanceList = new ArrayList<>();
         mAdapter = new HealthGuidanceAdapter(mContext, healthGuidanceList);
         mRecycleView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new HealthGuidanceAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                ReportData.Data.Reports report = healthGuidanceList.get(position);
+                int reportType = report.getType();
+                Logger.d(TAG, "onItemClick reportType = "+reportType);
+                if (reportType == HealthGuidanceAdapter.DEPRESSION_REPORT || reportType == HealthGuidanceAdapter.SLEEP_REPORT) {
+                    Intent intentDetail = new Intent(mContext, ReportDetailsActivity.class);
+                    intentDetail.putExtra(ConstantValues.KEY_REPORT_DETAIL_ID, report.getId());
+                    startActivity(intentDetail);
+                }
+            }
+        });
         loadReports();
     }
 

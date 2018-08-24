@@ -38,4 +38,6 @@ public class ConstantValues {
 
     public static final String SINGLE_USER_MODE = "sigle_user";
 
+    public static final String KEY_REPORT_DETAIL_ID = "key_report_detail_id";
+
 }

@@ -87,7 +87,6 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
             holder.tvWarnInfo.setText(desc.getNotice_desc());
         }
 
-
     }
 
     class RemarkDesc{
