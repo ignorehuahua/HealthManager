@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -25,6 +26,7 @@ import com.njzhikejia.echohealth.healthlife.fragment.WarningFragment;
 import com.njzhikejia.echohealth.healthlife.util.BottomNavigationViewHelper;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.NoScrollViewPager;
 
 /**
  * Created by 16222 on 2018/5/27.
@@ -33,7 +35,7 @@ import com.njzhikejia.echohealth.healthlife.util.Logger;
 public class MeasureDataActivity extends AppCompatActivity {
 
     private static final String TAG = "MeasureDataActivity";
-    private ViewPager mViewPager;
+    private NoScrollViewPager mViewPager;
     private MenuItem mMenuItem;
     private Toolbar mToolbar;
     private String name;
@@ -77,44 +79,44 @@ public class MeasureDataActivity extends AppCompatActivity {
         BottomNavigationViewHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mViewPager = findViewById(R.id.viewpager);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (mMenuItem != null) {
-                    mMenuItem.setChecked(false);
-                } else {
-                    navigation.getMenu().getItem(0).setChecked(false);
-                }
-                mMenuItem = navigation.getMenu().getItem(position);
-                mMenuItem.setChecked(true);
-                if (!HealthLifeApplication.isMultiUser) {
-                    return;
-                }
-                switch (position) {
-                    case 0:
-                        mToolbar.setTitle(name+"-"+getString(R.string.measure_data));
-                        break;
-                    case 1:
-                        mToolbar.setTitle(name+"-"+getString(R.string.evaluation_guide));
-                        break;
-                    case 2:
-                        mToolbar.setTitle(name+"-"+getString(R.string.warn_notice));
-                        break;
-                    case 3:
-                        mToolbar.setTitle(name+"-"+getString(R.string.location));
-                        break;
-                }
-            }
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+//        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                if (mMenuItem != null) {
+//                    mMenuItem.setChecked(false);
+//                } else {
+//                    navigation.getMenu().getItem(0).setChecked(false);
+//                }
+//                mMenuItem = navigation.getMenu().getItem(position);
+//                mMenuItem.setChecked(true);
+//                if (!HealthLifeApplication.isMultiUser) {
+//                    return;
+//                }
+//                switch (position) {
+//                    case 0:
+//                        mToolbar.setTitle(name+"-"+getString(R.string.measure_data));
+//                        break;
+//                    case 1:
+//                        mToolbar.setTitle(name+"-"+getString(R.string.evaluation_guide));
+//                        break;
+//                    case 2:
+//                        mToolbar.setTitle(name+"-"+getString(R.string.warn_notice));
+//                        break;
+//                    case 3:
+//                        mToolbar.setTitle(name+"-"+getString(R.string.location));
+//                        break;
+//                }
+//            }
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
 
         mNavigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -161,7 +163,7 @@ public class MeasureDataActivity extends AppCompatActivity {
         });
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(NoScrollViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MeasureDataFragment());
         adapter.addFragment(new HealthGuidanceFragment());

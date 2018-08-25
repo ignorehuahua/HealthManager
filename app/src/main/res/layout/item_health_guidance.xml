@@ -4,21 +4,15 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="5dp"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:layout_margin="10dp">
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:paddingLeft="16dp"
             android:paddingTop="16dp"
             android:paddingBottom="10dp"
-            android:paddingRight="16dp">
+            android:paddingRight="16dp"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground">
 
             <ImageView
                 android:id="@+id/iv_health_guidance_avatar"
@@ -72,5 +66,9 @@
 
         </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="@color/divider_color" />
+
 </RelativeLayout>

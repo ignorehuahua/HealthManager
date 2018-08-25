@@ -14,6 +14,7 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
@@ -21,7 +22,7 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
-import com.bumptech.glide.util.LogTime;
+import com.baidu.mapapi.utils.CoordinateConverter;
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.entity.LocationData;
@@ -39,6 +40,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static com.baidu.mapapi.utils.CoordinateConverter.CoordType.GPS;
+
 /**
  * Created by 16222 on 2018/7/25.
  */
@@ -52,9 +55,8 @@ public class LocationFragment extends BaseFragment {
     private Context mContext;
     private static final String TAG = "LocationFragment";
     private static final int KEY_LOCATION = 23;
-    private double latitude;
-    private double longitude;
     private LocationHandler mHandler;
+    private LatLng bdLatLng;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,15 +110,16 @@ public class LocationFragment extends BaseFragment {
                 case KEY_LOCATION:
                     LocationFragment fragment = weakReference.get();
                     if (fragment != null) {
-                        Logger.d(TAG, "latitude = "+String.valueOf(fragment.latitude) + "longitude = "+String.valueOf(fragment.longitude));
-                        LatLng ll = new LatLng(fragment.latitude, fragment.longitude);
-                        MyLocationData locData = new MyLocationData.Builder()
-                                .latitude(fragment.latitude).longitude(fragment.longitude).build();
-                        fragment.mBaiduMap.setMyLocationData(locData);
-                        MapStatus.Builder builder = new MapStatus.Builder();
-                        //设置缩放中心点；缩放比例；
-                        builder.target(ll).zoom(18.0f);
-                        fragment.mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+                        if (fragment.bdLatLng != null) {
+                            MyLocationData locData = new MyLocationData.Builder()
+                                    .latitude(fragment.bdLatLng.latitude).longitude(fragment.bdLatLng.longitude).build();
+                            Logger.d(TAG, "latitude = "+fragment.bdLatLng.latitude + "longitude = "+fragment.bdLatLng.longitude);
+                            fragment.mBaiduMap.setMyLocationData(locData);
+                            MapStatus.Builder builder = new MapStatus.Builder();
+                            //设置缩放中心点；缩放比例；
+                            builder.target(fragment.bdLatLng).zoom(18.0f);
+                            fragment.mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+                        }
                     }
 
                     break;
@@ -143,11 +146,24 @@ public class LocationFragment extends BaseFragment {
                 Gson gson = new Gson();
                 LocationData locationData = gson.fromJson(responseContent, LocationData.class);
                 Logger.d(TAG, "address = "+locationData.getData().getLocations().get(0).getAddress());
-                latitude = locationData.getData().getLocations().get(0).getLatitude();
-                longitude = locationData.getData().getLocations().get(0).getLongitude();
+
+                double latitude = locationData.getData().getLocations().get(0).getLatitude();
+                double longitude = locationData.getData().getLocations().get(0).getLongitude();
+                bdLatLng = toBD09(new LatLng(latitude, longitude));
                 mHandler.sendEmptyMessage(KEY_LOCATION);
             }
         });
+    }
+
+    // 其他坐标转换为百度坐标
+    private LatLng toBD09(LatLng sourceLatLng) {
+    // 将GPS设备采集的原始GPS坐标转换成百度坐标
+        CoordinateConverter converter  = new CoordinateConverter();
+        converter.from(GPS);
+        // sourceLatLng待转换坐标
+        converter.coord(sourceLatLng);
+        LatLng desLatLng = converter.convert();
+        return desLatLng;
     }
 
     public class MyLocationListener extends BDAbstractLocationListener {

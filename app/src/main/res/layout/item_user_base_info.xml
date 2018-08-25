@@ -10,20 +10,20 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
+        android:paddingBottom="14dp"
+        android:paddingTop="14dp"
+        android:textColor="@color/name_color"
         android:layout_alignParentLeft="true"/>
 
     <TextView
         android:id="@+id/tv_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/tv_label"
-        android:textColor="@color/name_color"
+        android:layout_alignParentRight="true"
         android:gravity="center"
         android:textSize="16sp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
+        android:paddingBottom="14dp"
+        android:paddingTop="14dp"
         android:layout_marginLeft="4dp"/>
 
     <View

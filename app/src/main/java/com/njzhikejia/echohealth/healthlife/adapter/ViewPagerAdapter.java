@@ -3,6 +3,7 @@ package com.njzhikejia.echohealth.healthlife.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private ArrayList<Fragment> list ;
     private String[] titles;
+    private boolean isScroll;
+
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
         list = new ArrayList<>();
@@ -24,6 +27,16 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         list = new ArrayList<>();
         this.titles = titles;
     }
+
+    public boolean isScroll() {
+        return isScroll;
+    }
+
+    public void setScroll(boolean scroll) {
+        isScroll = scroll;
+    }
+
+
 
     @Override
     public Fragment getItem(int position) {
