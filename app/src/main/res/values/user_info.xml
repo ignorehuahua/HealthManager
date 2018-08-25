@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="base_info_label">
-    <item>姓&#12288;&#12288;名:</item>
-    <item>电&#12288;&#12288;话:</item>
-    <item>身&#160;&#160;份&#160;&#160;证:</item>
-    <item>出生日期:</item>
-    <item>性&#12288;&#12288;别:</item>
-    <item>民&#12288;&#12288;族:</item>
-    <item>户籍情况:</item>
-    <item>婚姻状况:</item>
-    <item>政治面貌:</item>
-    <item>文化程度:</item>
-    <item>健康状况:</item>
-    <item>血&#12288;&#12288;型:</item>
-    <item>地址详情:</item>
-    <item>体育锻炼:</item>
-    <item>饮食习惯:</item>
-    <item>进餐能力:</item>
-    <item>梳洗能力:</item>
-    <item>穿衣能力:</item>
-    <item>如厕能力:</item>
-    <item>活动能力:</item>
-    <item>兴趣爱好:</item>
-    <item>收入水平:</item>
-    <item>医疗支付:</item>
+    <item>姓名</item>
+    <item>电话</item>
+    <item>身证</item>
+    <item>出生日期</item>
+    <item>性别</item>
+    <item>民族</item>
+    <item>户籍情况</item>
+    <item>婚姻状况</item>
+    <item>政治面貌</item>
+    <item>文化程度</item>
+    <item>健康状况</item>
+    <item>血型</item>
+    <item>地址详情</item>
+    <item>体育锻炼</item>
+    <item>饮食习惯</item>
+    <item>进餐能力</item>
+    <item>梳洗能力</item>
+    <item>穿衣能力</item>
+    <item>如厕能力</item>
+    <item>活动能力</item>
+    <item>兴趣爱好</item>
+    <item>收入水平</item>
+    <item>医疗支付</item>
 </string-array>
 
     <string-array name="health_info_label">
-        <item>身高(cm):</item>
-        <item>体重(kg):</item>
-        <item>胸围(cm):</item>
-        <item>腰围(cm):</item>
-        <item>臀围(cm):</item>
-        <item>中医体质:</item>
-        <item>慢性病史:</item>
-        <item>残疾情况:</item>
-        <item>手&#160;&#160;术&#160;&#160;史:</item>
-        <item>过&#160;&#160;敏&#160;&#160;史:</item>
-        <item>家族病史:</item>
-        <item>个人自述:</item>
+        <item>身高(cm)</item>
+        <item>体重(kg)</item>
+        <item>胸围(cm)</item>
+        <item>腰围(cm)</item>
+        <item>臀围(cm)</item>
+        <item>中医体质</item>
+        <item>慢性病史</item>
+        <item>残疾情况</item>
+        <item>手术史</item>
+        <item>过敏史</item>
+        <item>家族病史</item>
+        <item>个人自述</item>
     </string-array>
 
     <!-- 民族 -->

@@ -2,7 +2,9 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="12dp">
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/tv_label"
@@ -24,11 +26,12 @@
         android:textSize="16sp"
         android:paddingBottom="14dp"
         android:paddingTop="14dp"
+        android:textColor="@color/shape_gray"
         android:layout_marginLeft="4dp"/>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2px"
         android:background="@color/divider_color"
         android:layout_below="@id/tv_value"/>
 
