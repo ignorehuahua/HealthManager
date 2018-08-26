@@ -53,6 +53,7 @@ public class UserBaseInfoFragment extends BaseFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mRecycleView.setHasFixedSize(true);
         mRecycleView.setLayoutManager(layoutManager);
+        mRecycleView.setNestedScrollingEnabled(false);
     }
 
 
