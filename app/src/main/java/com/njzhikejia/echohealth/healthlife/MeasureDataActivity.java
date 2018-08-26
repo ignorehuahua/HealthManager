@@ -179,15 +179,17 @@ public class MeasureDataActivity extends BaseActivity {
         }
 
         int currentPage = intentPage.getIntExtra(ConstantValues.KEY_TO_PAGE, 0);
+        mViewPager.setCurrentItem(currentPage);
         Member member = intentPage.getParcelableExtra(ConstantValues.KEY_MEMBER_INFO);
         if (member != null) {
             name = member.getName();
             Logger.d(TAG, "get name = "+name);
             if (HealthLifeApplication.isMultiUser) {
-                mToolbar.setTitle(name+"-"+getString(R.string.measure_data));
+                Logger.d(TAG, "setToolbar title to "+name);
+                getSupportActionBar().setTitle(name+"-"+getString(R.string.measure_data));
             }
         }
-        mViewPager.setCurrentItem(currentPage);
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

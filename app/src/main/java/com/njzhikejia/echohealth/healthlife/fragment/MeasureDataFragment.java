@@ -85,7 +85,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
         mRecycleView = view.findViewById(R.id.recycle_view_data);
         mFabBtn = view.findViewById(R.id.floating_action_btn);
         if (HealthLifeApplication.isMultiUser) {
-            mFabBtn.setVisibility(View.VISIBLE);
+            mFabBtn.setVisibility(View.GONE);
         } else {
             mFabBtn.setVisibility(View.GONE);
         }

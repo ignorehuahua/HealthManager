@@ -50,6 +50,7 @@ public class UserDetailsActivity extends BaseActivity {
     private UserDetailsHandler mHandler;
     private static final String KEY_USER_DETAILS = "key_user_details";
     private ProgressBar mProgressBar;
+    private static final int NET_ERROR = 26;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,7 +96,7 @@ public class UserDetailsActivity extends BaseActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure call = "+call.toString());
-                mProgressBar.setVisibility(View.GONE);
+                mHandler.sendEmptyMessage(NET_ERROR);
             }
 
             @Override
@@ -112,7 +113,7 @@ public class UserDetailsActivity extends BaseActivity {
 //                        userHealthInfoFragment.initData();
 //                    }
 //                });
-                Message message = new Message();
+                Message message = Message.obtain();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(KEY_USER_DETAILS, userDetailsResponse);
                 message.setData(bundle);
@@ -131,6 +132,10 @@ public class UserDetailsActivity extends BaseActivity {
 
         @Override
         public void handleMessage(Message msg) {
+            if (msg.what == NET_ERROR) {
+                mProgressBar.setVisibility(View.GONE);
+                ToastUtil.showShortToast(UserDetailsActivity.this, R.string.net_work_error);
+            }
            Bundle bundle = msg.getData();
             if (bundle != null) {
                 if (weakReference.get() != null) {
