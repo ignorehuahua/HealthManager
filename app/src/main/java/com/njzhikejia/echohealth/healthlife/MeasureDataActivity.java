@@ -32,7 +32,7 @@ import com.njzhikejia.echohealth.healthlife.util.NoScrollViewPager;
  * Created by 16222 on 2018/5/27.
  */
 
-public class MeasureDataActivity extends AppCompatActivity {
+public class MeasureDataActivity extends BaseActivity {
 
     private static final String TAG = "MeasureDataActivity";
     private NoScrollViewPager mViewPager;

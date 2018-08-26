@@ -34,7 +34,7 @@ import okhttp3.Response;
  * Created by 16222 on 2018/6/5.
  */
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "LoginActivity";
     private TextView tvRegister;

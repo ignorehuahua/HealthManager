@@ -37,7 +37,7 @@ import okhttp3.Response;
  * Created by 16222 on 2018/7/22.
  */
 
-public class UserDetailsActivity extends AppCompatActivity {
+public class UserDetailsActivity extends BaseActivity {
 
     private static final String TAG = "UserDetailsActivity";
     private TabLayout mTabLayout;

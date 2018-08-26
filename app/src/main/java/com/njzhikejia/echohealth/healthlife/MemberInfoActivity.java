@@ -14,7 +14,7 @@ import com.njzhikejia.echohealth.healthlife.util.Logger;
  * Created by 16222 on 2018/6/3.
  */
 
-public class MemberInfoActivity extends AppCompatActivity{
+public class MemberInfoActivity extends BaseActivity{
 
     private static final String TAG = "MemberInfoActivity";
     private Toolbar mToolbar;

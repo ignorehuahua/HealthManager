@@ -13,7 +13,7 @@ import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
  * Created by 16222 on 2018/8/24.
  */
 
-public class ReportDetailsActivity extends AppCompatActivity {
+public class ReportDetailsActivity extends BaseActivity {
 
     private WebView mWebView;
 

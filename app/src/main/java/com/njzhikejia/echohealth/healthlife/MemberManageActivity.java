@@ -17,7 +17,7 @@ import com.njzhikejia.echohealth.healthlife.util.Logger;
  * Created by 16222 on 2018/6/1.
  */
 
-public class MemberManageActivity extends AppCompatActivity {
+public class MemberManageActivity extends BaseActivity {
 
     private static final String TAG = "MemberManageActivity";
     private TabLayout mTabLayout;

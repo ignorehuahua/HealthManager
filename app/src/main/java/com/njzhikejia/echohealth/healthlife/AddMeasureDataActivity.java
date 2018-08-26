@@ -21,7 +21,7 @@ import com.njzhikejia.echohealth.healthlife.util.Logger;
  * Created by 16222 on 2018/6/3.
  */
 
-public class AddMeasureDataActivity extends AppCompatActivity {
+public class AddMeasureDataActivity extends BaseActivity {
 
     private static final String TAG = "AddMeasureDataActivity";
     private TabLayout mTabLayout;
