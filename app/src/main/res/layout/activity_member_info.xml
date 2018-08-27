@@ -93,7 +93,7 @@
     <View
         android:id="@+id/divider_phone_number"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2px"
         android:layout_below="@id/rl_phone_number"
         android:background="@color/divider_color"/>
 
@@ -125,7 +125,7 @@
     <View
         android:id="@+id/divider_birthday"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2px"
         android:layout_below="@id/rl_birthday"
         android:background="@color/divider_color"/>
 

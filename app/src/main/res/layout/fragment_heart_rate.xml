@@ -30,7 +30,7 @@
         <View
             android:id="@+id/divider_heart_rate"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2px"
             android:background="@color/divider_color"
             android:layout_below="@id/input_heart_rate"/>
 
@@ -75,7 +75,7 @@
         <View
             android:id="@+id/divider_measure_time"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2px"
             android:background="@color/divider_color"
             android:layout_below="@id/rl_measure_time"/>
 
@@ -127,7 +127,7 @@
         <View
             android:id="@+id/divider_measure_state"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2px"
             android:background="@color/divider_color"
             android:layout_below="@id/rl_measure_state"/>
 
@@ -150,7 +150,7 @@
         <View
             android:id="@+id/divider_note"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2px"
             android:background="@color/divider_color"
             android:layout_below="@id/input_note"/>
 

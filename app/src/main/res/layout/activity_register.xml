@@ -38,7 +38,9 @@
     <View
         android:id="@+id/divider_phone_number"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2px"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         android:background="@color/divider_color"
         android:layout_below="@id/input_mobile_phone_number"/>
 
@@ -80,7 +82,9 @@
     <View
         android:id="@+id/divider_verification_code"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2px"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         android:background="@color/divider_color"
         android:layout_below="@id/ll_verification_code"/>
 
@@ -104,14 +108,16 @@
     <View
         android:id="@+id/divider_password"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2px"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         android:background="@color/divider_color"
         android:layout_below="@id/input_password"/>
 
     <Button
         android:id="@+id/btn_complete"
         android:layout_below="@id/divider_password"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"

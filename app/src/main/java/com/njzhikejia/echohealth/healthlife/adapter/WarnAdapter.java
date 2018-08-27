@@ -113,6 +113,7 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
         TextView tvWarnInfo;
         TextView tvWarnExplanation;
         TextView tvMeasureValue;
+        TextView tvTimeLabel;
         TextView tvMeasureTime;
 
         public WarnViewHolder(View itemView) {
@@ -122,6 +123,7 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
             tvWarnInfo = itemView.findViewById(R.id.tv_warn_info);
             tvWarnExplanation = itemView.findViewById(R.id.tv_warn_info_explanation);
             tvMeasureValue = itemView.findViewById(R.id.tv_value);
+            tvTimeLabel = itemView.findViewById(R.id.tv_measure_time_label);
             tvMeasureTime = itemView.findViewById(R.id.tv_measure_time_value);
         }
     }
@@ -168,23 +170,23 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
                         matchMeasuredValueColor(holder, value1Text, mContext.getString(R.string.blood_oxygen_unit));
                         break;
                 }
-                holder.tvMeasureTime.setText(R.string.measure_time);
+                holder.tvTimeLabel.setText(R.string.measure_time);
                 break;
             case FENCE_WARN:
                 holder.ivType.setImageResource(R.drawable.ic_fence);
                 holder.tvType.setText(R.string.fence_warn);
-                holder.tvMeasureTime.setText(R.string.warn_time);
+                holder.tvTimeLabel.setText(R.string.warn_time);
                 break;
 
             case SOS_WARN:
                 holder.ivType.setImageResource(R.drawable.ic_sos);
                 holder.tvType.setText(R.string.sos_warn);
-                holder.tvMeasureTime.setText(R.string.warn_time);
+                holder.tvTimeLabel.setText(R.string.warn_time);
                 break;
             case FALL_WARN:
                 holder.ivType.setImageResource(R.drawable.ic_fall);
                 holder.tvType.setText(R.string.fall_warn);
-                holder.tvMeasureTime.setText(R.string.warn_time);
+                holder.tvTimeLabel.setText(R.string.warn_time);
                 break;
         }
     }
