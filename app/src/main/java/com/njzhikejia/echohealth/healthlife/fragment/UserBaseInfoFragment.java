@@ -1,6 +1,7 @@
 package com.njzhikejia.echohealth.healthlife.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,7 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
+import com.njzhikejia.echohealth.healthlife.QRCodeActivity;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.UserDetailsActivity;
 import com.njzhikejia.echohealth.healthlife.adapter.UserBaseInfoAdapter;
@@ -30,6 +33,7 @@ public class UserBaseInfoFragment extends BaseFragment {
     private RecyclerView mRecycleView;
     private List<UserBaseInfo> userBaseInfoList;
     private UserBaseInfoAdapter mAdapter;
+    private RelativeLayout rlQRCode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,10 +54,18 @@ public class UserBaseInfoFragment extends BaseFragment {
 
     private void initView(View view) {
         mRecycleView = view.findViewById(R.id.recycle_view_data);
+        rlQRCode = view.findViewById(R.id.rl_qr_code);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mRecycleView.setHasFixedSize(true);
         mRecycleView.setLayoutManager(layoutManager);
         mRecycleView.setNestedScrollingEnabled(false);
+        rlQRCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentQRCode = new Intent(mContext, QRCodeActivity.class);
+                startActivity(intentQRCode);
+            }
+        });
     }
 
 
