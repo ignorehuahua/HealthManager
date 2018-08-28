@@ -92,9 +92,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         break;
 
                     case R.id.menu_setting:
+                        Logger.d(TAG, "menu system setting clicked");
+                        Intent intentSetting = new Intent(MainActivity.this, SystemSettingActivity.class);
+                        startActivity(intentSetting);
                         break;
 
                     case R.id.menu_feedback:
+                        Logger.d(TAG, "menu feedback clicked");
+                        Intent intentFeedback = new Intent(MainActivity.this, FeedbackActivity.class);
+                        startActivity(intentFeedback);
                         break;
 
                     case R.id.menu_about:

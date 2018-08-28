@@ -1,31 +1,22 @@
 package com.njzhikejia.echohealth.healthlife;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
 import com.njzhikejia.echohealth.healthlife.util.Logger;
-import com.njzhikejia.echohealth.healthlife.util.QRCodeUtils;
 
-/**
- * Created by 16222 on 2018/8/27.
- */
+public class FeedbackActivity extends BaseActivity {
 
-public class QRCodeActivity extends BaseActivity {
-
-    private static final String TAG = "QRCodeActivity";
-    private ImageView ivQRCode;
+    private static final String TAG = "FeedbackActivity";
     private Toolbar mToolbar;
-    private static final int QRCODE_SIZE = 540;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_feedback);
         Logger.d(TAG, "onCreate");
-        setContentView(R.layout.activity_qrcode);
         initView();
     }
 
@@ -33,9 +24,6 @@ public class QRCodeActivity extends BaseActivity {
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ivQRCode = findViewById(R.id.iv_qr_code);
-        Bitmap qrcodeBitmap = QRCodeUtils.createQRCodeBitmap("www.baidu.com", QRCODE_SIZE, QRCODE_SIZE);
-        ivQRCode.setImageBitmap(qrcodeBitmap);
     }
 
     @Override
@@ -56,6 +44,5 @@ public class QRCodeActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Logger.d(TAG, "onDestroy");
     }
 }

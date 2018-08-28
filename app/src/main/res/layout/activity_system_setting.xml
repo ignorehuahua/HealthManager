@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bg_main">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:background="@color/toolbar"
+        android:layout_height="wrap_content"
+        app:title="@string/system_setting"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <RelativeLayout
+        android:id="@+id/rl_setting"
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="20dp">
+
+    <TextView
+        android:id="@+id/tv_change_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:gravity="center_vertical"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:paddingLeft="12dp"
+        android:textColor="@color/name_color"
+        android:clickable="true"
+        android:text="@string/change_pwd"
+        android:background="?attr/selectableItemBackground"
+        android:layout_alignParentLeft="true"/>
+
+    <View
+        android:id="@+id/divider_change_pwd"
+        android:layout_below="@id/tv_change_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="@color/divider_color"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"/>
+
+    <TextView
+        android:id="@+id/exit"
+        android:layout_below="@id/divider_change_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:gravity="center_vertical"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:paddingLeft="12dp"
+        android:textColor="@color/name_color"
+        android:clickable="true"
+        android:text="@string/exit"
+        android:background="?attr/selectableItemBackground"
+        android:layout_alignParentLeft="true"/>
+
+    </RelativeLayout>
+
+    </RelativeLayout>

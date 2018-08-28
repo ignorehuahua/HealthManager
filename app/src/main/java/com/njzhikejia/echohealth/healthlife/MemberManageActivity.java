@@ -1,14 +1,22 @@
 package com.njzhikejia.echohealth.healthlife;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.CaptureActivity;
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
 import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
@@ -24,6 +32,8 @@ public class MemberManageActivity extends BaseActivity {
     private ViewPager mViewPager;
     private String[] titles;
     private Toolbar mToolbar;
+    private FloatingActionButton mFab;
+    private static final int SCAN_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,7 +49,30 @@ public class MemberManageActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mTabLayout = findViewById(R.id.tab_layout);
         mViewPager = findViewById(R.id.viewpager);
+        mFab = findViewById(R.id.floating_action_btn);
         setupViewPager(mViewPager);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 扫描二维码添加好友
+//                Intent intentScan = new Intent(MemberManageActivity.this, CaptureActivity.class);
+//                startActivityForResult(intentScan, SCAN_REQUEST_CODE);
+                initScanConfig();
+            }
+        });
+    }
+
+    private void initScanConfig() {
+        IntentIntegrator integrator = new IntentIntegrator(MemberManageActivity.this);
+
+        // 设置要扫描的条码类型，ONE_D_CODE_TYPES：一维码，QR_CODE_TYPES-二维码
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setCaptureActivity(ScanActivity.class);
+        integrator.setPrompt(getResources().getString(R.string.scan_qrcode_description)); //底部的提示文字，设为""可以置空
+        integrator.setCameraId(0); //前置或者后置摄像头
+        integrator.setBeepEnabled(true); //扫描成功的「哔哔」声，默认开启
+        integrator.setBarcodeImageEnabled(true);
+        integrator.initiateScan();
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -65,6 +98,21 @@ public class MemberManageActivity extends BaseActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Logger.d(TAG, "onActivityResult");
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "扫码取消！", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "扫描成功，条码值: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override

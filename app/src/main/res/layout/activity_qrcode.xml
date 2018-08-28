@@ -13,10 +13,35 @@
         app:title="@string/qrcode_card"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <ImageView
-        android:id="@+id/iv_qr_code"
-        android:layout_width="wrap_content"
-       android:layout_centerInParent="true"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="16dp">
+
+        <ImageView
+            android:id="@+id/iv_qr_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"/>
+
+        <TextView
+            android:layout_below="@id/iv_qr_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="30dp"
+            android:text="@string/scan_to_add_friend"
+            android:textSize="15sp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/shape_gray"/>
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>
