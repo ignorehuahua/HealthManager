@@ -4,7 +4,6 @@
     
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     //获取设备网络状态，禁用后无法获取网络状态
     <uses-permission android:name="android.permission.INTERNET"/>
     //网络权限，当禁用后，无法进行检索等相关业务
@@ -84,7 +83,6 @@
             android:name=".ScanActivity"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
-            android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden"/>
         <provider
             android:name="android.support.v4.content.FileProvider"

@@ -1,20 +1,11 @@
 package com.njzhikejia.echohealth.healthlife.util;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Base64;
-
-import com.njzhikejia.echohealth.healthlife.R;
-import com.zhihu.matisse.Matisse;
-import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.engine.impl.GlideEngine;
-import com.zhihu.matisse.internal.entity.CaptureStrategy;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,23 +15,6 @@ import java.io.InputStream;
  */
 
 public class ImageUtil {
-
-    public static void choosePhoto(Activity activity, int requestCode) {
-        Matisse
-                .from(activity)
-                .choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.GIF))
-                .countable(false)
-                .maxSelectable(1)
-                .gridExpectedSize(activity.getResources()
-                        .getDimensionPixelSize(R.dimen.grid_expected_size))
-                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                .thumbnailScale(0.85f)
-                .imageEngine(new GlideEngine())
-                .capture(true)
-                .captureStrategy(
-                        new CaptureStrategy(true, "com.njzhikejia.echohealth.healthlife.fileprovider"))
-                .forResult(requestCode);
-    }
 
     /**
      * 读取一个缩放后的图片，限定图片大小，避免OOM

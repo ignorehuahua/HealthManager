@@ -116,4 +116,5 @@
     <string name="submit">提交</string>
     <string name="feedback_input_desc">请填写您的问题和意见以便我们提供更好的帮助</string>
     <string name="scan_to_add_friend">扫一扫上面的二维码图案，加我为好友</string>
+    <string name="qrcode">二维码</string>
 </resources>
