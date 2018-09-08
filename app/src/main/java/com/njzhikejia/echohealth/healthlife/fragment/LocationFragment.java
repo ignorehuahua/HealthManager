@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +13,8 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatus;
-import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
@@ -133,7 +130,7 @@ public class LocationFragment extends BaseFragment {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
             return;
         }
-        OKHttpClientManager.getInstance().getAsync(CommonRequest.getLocation(PreferenceUtil.getUID(mContext)), new Callback() {
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getLocation(PreferenceUtil.getLoginUserUID(mContext)), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "queryLocation failure");

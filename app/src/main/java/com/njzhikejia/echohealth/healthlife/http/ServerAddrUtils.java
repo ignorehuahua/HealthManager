@@ -29,7 +29,7 @@ public class ServerAddrUtils {
      * @return
      */
     public static String getUserDetailsUrl(int uid) {
-        return ROOT_SERVER_ADDR + "/user/1?uid=" + uid + "&appid=4&t=" + System.currentTimeMillis();
+        return ROOT_SERVER_ADDR + "/user/" + uid + "?uid=" + uid + "&appid=4&t=" + System.currentTimeMillis();
     }
 
     /**
@@ -38,7 +38,7 @@ public class ServerAddrUtils {
      * @return
      */
     public static String getUserRecentMeasureData(int uid) {
-        return ROOT_SERVER_ADDR + "/user/1/measure/datas/latest?appid=4&t=" + System.currentTimeMillis() + "&uid=" + uid;
+        return ROOT_SERVER_ADDR + "/user/" + uid + "/measure/datas/latest?appid=4&t=" + System.currentTimeMillis() + "&uid=" + uid;
     }
 
     /**
@@ -47,7 +47,7 @@ public class ServerAddrUtils {
      * @return
      */
     public static String getReportUrl(int uid) {
-        return ROOT_SERVER_ADDR + "/user/1/reports/" + "?uid=" + uid + "&appid=4&t=" + System.currentTimeMillis();
+        return ROOT_SERVER_ADDR + "/user/" + uid + "/reports/" + "?uid=" + uid + "&appid=4&t=" + System.currentTimeMillis();
     }
 
     /**
@@ -56,7 +56,7 @@ public class ServerAddrUtils {
      * @return
      */
     public static String getWarnListUrl(int uid) {
-        return ROOT_SERVER_ADDR + "/user/1/alarm/notices?status=0,1,2&type=1,2,3,4" ;
+        return ROOT_SERVER_ADDR + "/user/" + uid + "/alarm/notices?status=0,1,2&type=1,2,3,4" ;
     }
 
     /**
@@ -65,7 +65,7 @@ public class ServerAddrUtils {
      * @return
      */
     public static String getLocationUrl(int uid) {
-        return ROOT_SERVER_ADDR + "/user/1/locations?page=0&count=1";
+        return ROOT_SERVER_ADDR + "/user/" + uid + "/locations?page=0&count=1";
     }
 
     /**
@@ -77,5 +77,15 @@ public class ServerAddrUtils {
      */
     public static String getReportDetailUrl(int id,int uid) {
         return ROOT_SERVER_ADDR + "/user/sleepReports?id=" + id + "&uid=" + uid;
+    }
+
+    /**
+     * 获取亲友列表
+     * http://120.55.22.117:28001/user/1/relatives?appid=4&t=1532096261&uid=1
+     * @param uid
+     * @return
+     */
+    public static String getRelativesUrl(int uid) {
+        return ROOT_SERVER_ADDR + "/user/" + uid  + "/relatives?appid=4&t=" + System.currentTimeMillis() + "&uid=" + uid;
     }
 }

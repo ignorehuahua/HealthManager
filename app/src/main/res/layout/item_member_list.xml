@@ -38,8 +38,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/name_color"
             android:layout_toRightOf="@id/iv_avatar"
-            android:text="name"
-            android:textSize="15sp"/>
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tv_member_measure_time"
@@ -48,8 +47,7 @@
             android:textColor="@color/shape_gray"
             android:layout_toRightOf="@id/iv_avatar"
             android:paddingTop="10dp"
-            android:text="time"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:layout_below="@id/tv_member_name"/>
     </RelativeLayout>
 

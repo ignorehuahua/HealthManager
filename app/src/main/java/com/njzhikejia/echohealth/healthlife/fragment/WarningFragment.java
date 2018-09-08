@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,10 +14,7 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.R;
-import com.njzhikejia.echohealth.healthlife.adapter.MeasureDataAdapter;
 import com.njzhikejia.echohealth.healthlife.adapter.WarnAdapter;
-import com.njzhikejia.echohealth.healthlife.entity.MeasureData;
-import com.njzhikejia.echohealth.healthlife.entity.WarnInfo;
 import com.njzhikejia.echohealth.healthlife.entity.WarnNoticesData;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
@@ -134,7 +129,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
             return;
         }
-        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserWarnInfo(PreferenceUtil.getUID(mContext)), new Callback() {
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserWarnInfo(PreferenceUtil.getSelectedUserUID(mContext)), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "loadWarnNotices onFailure");

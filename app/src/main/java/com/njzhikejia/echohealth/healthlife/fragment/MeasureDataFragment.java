@@ -108,7 +108,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
             return;
         }
-        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserRecentMeasureData(PreferenceUtil.getUID(mContext)), new Callback() {
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserRecentMeasureData(PreferenceUtil.getSelectedUserUID(mContext)), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure queryRecentData");

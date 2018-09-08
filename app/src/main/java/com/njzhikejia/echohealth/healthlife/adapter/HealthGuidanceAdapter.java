@@ -50,7 +50,6 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
             return;
         }
         holder.tvTime.setText(healthGuidance.getCreate_time());
-        holder.ivAvatar.setImageResource(R.drawable.blood_pressure);
         matchReportType(healthGuidance, holder);
     }
 
@@ -92,23 +91,21 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
         switch (data.getType()) {
             case BLOOD_PRESSURE_REPORT:
                 holder.tvName.setText(R.string.blood_pressure_report);
-                holder.tvResult.setVisibility(View.GONE);
                 holder.ivAvatar.setImageResource(R.drawable.ic_blood_pressure);
+                holder.tvResult.setText(context.getString(R.string.result) + context.getString(R.string.click_for_details));
                 break;
             case SLEEP_REPORT:
                 holder.tvName.setText(R.string.sleep_report);
-                holder.tvResult.setVisibility(View.GONE);
                 holder.ivAvatar.setImageResource(R.drawable.ic_sleep);
+                holder.tvResult.setText(context.getString(R.string.result) + context.getString(R.string.click_for_details));
                 break;
             case DEPRESSION_REPORT:
                 holder.tvName.setText(R.string.depression_report);
-                holder.tvResult.setVisibility(View.VISIBLE);
                 holder.tvResult.setText(context.getString(R.string.result) + data.getResult());
                 holder.ivAvatar.setImageResource(R.drawable.ic_depression);
                 break;
             case CHRONIC_PROSTATE:
                 holder.tvName.setText(R.string.chronic_prostate);
-                holder.tvResult.setVisibility(View.VISIBLE);
                 holder.ivAvatar.setImageResource(R.drawable.ic_chronic_prostate);
                 holder.tvResult.setText(context.getString(R.string.result) + data.getResult());
                 break;

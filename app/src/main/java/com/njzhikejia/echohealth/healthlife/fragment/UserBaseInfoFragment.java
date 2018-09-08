@@ -33,7 +33,6 @@ public class UserBaseInfoFragment extends BaseFragment {
     private RecyclerView mRecycleView;
     private List<UserBaseInfo> userBaseInfoList;
     private UserBaseInfoAdapter mAdapter;
-    private RelativeLayout rlQRCode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,18 +53,18 @@ public class UserBaseInfoFragment extends BaseFragment {
 
     private void initView(View view) {
         mRecycleView = view.findViewById(R.id.recycle_view_data);
-        rlQRCode = view.findViewById(R.id.rl_qr_code);
+//        rlQRCode = view.findViewById(R.id.rl_qr_code);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mRecycleView.setHasFixedSize(true);
         mRecycleView.setLayoutManager(layoutManager);
         mRecycleView.setNestedScrollingEnabled(false);
-        rlQRCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentQRCode = new Intent(mContext, QRCodeActivity.class);
-                startActivity(intentQRCode);
-            }
-        });
+//        rlQRCode.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intentQRCode = new Intent(mContext, QRCodeActivity.class);
+//                startActivity(intentQRCode);
+//            }
+//        });
     }
 
 

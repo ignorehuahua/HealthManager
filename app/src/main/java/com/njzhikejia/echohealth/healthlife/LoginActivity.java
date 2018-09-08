@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,14 +14,12 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.entity.LoginResponse;
-import com.njzhikejia.echohealth.healthlife.entity.MeasureData;
-import com.njzhikejia.echohealth.healthlife.fragment.MeasureDataFragment;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
-import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.njzhikejia.echohealth.healthlife.util.PhoneUtil;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
+import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -123,7 +121,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     }
                     break;
                 case LOGIN_FAILURE:
-
+                    handleLoginFailure();
                     break;
             }
         }
@@ -156,8 +154,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         return true;
     }
 
-    private void login(String name, String password) {
-        OKHttpClientManager.getInstance().postAsync(CommonRequest.postLoginRequest("66666666", "123456"), new Callback() {
+    private void login(final String name, String password) {
+        OKHttpClientManager.getInstance().postAsync(CommonRequest.postLoginRequest(name, password), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.d(TAG,"onFailure "+call.toString());
@@ -168,15 +166,31 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onResponse(Call call, Response response) throws IOException {
                 String content = response.body().string();
                 Logger.d(TAG, "code = "+response.code() + " content = "+content);
-                mHandler.sendEmptyMessage(LOGIN_SUCCESS);
+                if (response.code() != 200) {
+                    mHandler.sendEmptyMessage(LOGIN_FAILURE);
+                    return;
+                }
+
                 Gson gson = new Gson();
                 LoginResponse loginResponse = gson.fromJson(content, LoginResponse.class);
+                if (loginResponse.getData() == null || loginResponse.getData().getLogin() == null) {
+                    mHandler.sendEmptyMessage(LOGIN_FAILURE);
+                    return;
+                }
+                mHandler.sendEmptyMessage(LOGIN_SUCCESS);
                 int uid = loginResponse.getData().getLogin().getUid();
                 String secKey = loginResponse.getData().getLogin().getSec_key();
                 Logger.d(TAG, "UID = "+uid+" sec_key = "+secKey);
-                PreferenceUtil.putUID(LoginActivity.this, uid);
+                PreferenceUtil.putLoginUserUID(LoginActivity.this, uid);
                 PreferenceUtil.putSecKey(LoginActivity.this, secKey);
+                PreferenceUtil.putLoginUserPhone(LoginActivity.this, name);
             }
         });
+    }
+
+    private void handleLoginFailure() {
+        ToastUtil.showLongToast(LoginActivity.this, R.string.login_failure);
+        etNumber.setText("");
+        etPwd.setText("");
     }
 }

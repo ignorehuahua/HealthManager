@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -26,7 +27,11 @@ public class OKHttpClientManager {
 
 
     public OKHttpClientManager() {
-        mClient = new OkHttpClient();
+        mClient = new OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS)//设置读取超时时间
+                .writeTimeout(30,TimeUnit.SECONDS)//设置写的超时时间
+                .connectTimeout(30,TimeUnit.SECONDS)//设置连接超时时间
+                .build();
         mHandler = new Handler(Looper.getMainLooper());
         mGson = new Gson();
     }

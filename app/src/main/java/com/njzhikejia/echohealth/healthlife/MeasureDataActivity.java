@@ -7,18 +7,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
-import com.njzhikejia.echohealth.healthlife.entity.Member;
+import com.njzhikejia.echohealth.healthlife.entity.RelativesData;
 import com.njzhikejia.echohealth.healthlife.fragment.HealthGuidanceFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.LocationFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.MeasureDataFragment;
@@ -27,6 +24,7 @@ import com.njzhikejia.echohealth.healthlife.util.BottomNavigationViewHelper;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.njzhikejia.echohealth.healthlife.util.NoScrollViewPager;
+import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 
 /**
  * Created by 16222 on 2018/5/27.
@@ -39,6 +37,7 @@ public class MeasureDataActivity extends BaseActivity {
     private MenuItem mMenuItem;
     private Toolbar mToolbar;
     private String name;
+    private int uid;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavigation;
@@ -180,10 +179,12 @@ public class MeasureDataActivity extends BaseActivity {
 
         int currentPage = intentPage.getIntExtra(ConstantValues.KEY_TO_PAGE, 0);
         mViewPager.setCurrentItem(currentPage);
-        Member member = intentPage.getParcelableExtra(ConstantValues.KEY_MEMBER_INFO);
+        RelativesData.Data.Relatives member = intentPage.getParcelableExtra(ConstantValues.KEY_MEMBER_INFO);
         if (member != null) {
             name = member.getName();
-            Logger.d(TAG, "get name = "+name);
+            uid = member.getUid();
+            PreferenceUtil.putSelectedUserUID(this, uid);
+            Logger.d(TAG, "get name = "+name + "uid = "+uid);
             if (HealthLifeApplication.isMultiUser) {
                 Logger.d(TAG, "setToolbar title to "+name);
                 getSupportActionBar().setTitle(name+"-"+getString(R.string.measure_data));

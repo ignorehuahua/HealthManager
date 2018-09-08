@@ -1,23 +1,21 @@
 package com.njzhikejia.echohealth.healthlife;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.UserDetailsResponse;
-import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.UserBaseInfoFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.UserHealthInfoFragment;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
@@ -52,6 +50,7 @@ public class UserDetailsActivity extends BaseActivity {
     private static final String KEY_USER_DETAILS = "key_user_details";
     private ProgressBar mProgressBar;
     private static final int NET_ERROR = 26;
+    private TextView tvQRCard;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +66,14 @@ public class UserDetailsActivity extends BaseActivity {
     private void initView() {
         mToolbar = findViewById(R.id.toolbar);
         mProgressBar = findViewById(R.id.progress_bar);
+        tvQRCard = findViewById(R.id.tv_qr_card);
+        tvQRCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentQRCode = new Intent(UserDetailsActivity.this, QRCodeActivity.class);
+                startActivity(intentQRCode);
+            }
+        });
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mTabLayout = findViewById(R.id.tab_layout);
@@ -93,7 +100,7 @@ public class UserDetailsActivity extends BaseActivity {
             }
             return;
         }
-        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserDetailsRequest(PreferenceUtil.getUID(UserDetailsActivity.this)), new Callback() {
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserDetailsRequest(PreferenceUtil.getLoginUserUID(UserDetailsActivity.this)), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure call = "+call.toString());

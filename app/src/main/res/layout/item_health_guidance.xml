@@ -18,25 +18,15 @@
                 android:id="@+id/iv_health_guidance_avatar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"/>
-
-            <RelativeLayout
-                android:id="@+id/rl_duidanceData"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/iv_health_guidance_avatar"
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="12dp"
-                android:layout_centerHorizontal="true">
 
                 <TextView
                     android:id="@+id/tv_health_guidance_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/data_value"
+                    android:layout_toRightOf="@id/iv_health_guidance_avatar"
+                    android:textColor="@color/name_color"
                     android:textSize="16sp"
                     android:layout_marginLeft="10dp"/>
 
@@ -48,19 +38,16 @@
                     android:layout_marginLeft="10dp"
                     android:textSize="16dp"
                     android:textColor="@color/toolbar"
-                    android:layout_marginTop="4dp"
-                    />
-
-            </RelativeLayout>
+                    android:layout_marginTop="10dp" />
 
             <TextView
                 android:id="@+id/tv_health_guidance_time"
-                android:layout_below="@id/rl_duidanceData"
+                android:layout_below="@id/tv_health_guidance_result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:textSize="14sp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="14dp"
                 android:textColor="@color/shape_gray"
                 android:layout_alignParentRight="true"/>
 

@@ -1,9 +1,7 @@
 package com.njzhikejia.echohealth.healthlife.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.EventLogTags;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,7 @@ import android.widget.TextView;
 
 
 import com.njzhikejia.echohealth.healthlife.R;
-import com.njzhikejia.echohealth.healthlife.entity.Member;
+import com.njzhikejia.echohealth.healthlife.entity.RelativesData;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 
 import java.util.List;
@@ -28,9 +26,9 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
 
 
     private Context context;
-    private List<Member> list;
+    private List<RelativesData.Data.Relatives> list;
 
-    public MemberListAdapter(Context context, List<Member> list) {
+    public MemberListAdapter(Context context, List<RelativesData.Data.Relatives> list) {
         this.context = context;
         this.list = list;
     }
@@ -46,18 +44,15 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
     @Override
     public void onBindViewHolder(MemberViewHolder holder, final int position) {
         holder.itemView.setTag(position);
-        Member member = list.get(position);
+        RelativesData.Data.Relatives member = list.get(position);
         if (member == null) {
             Logger.e(TAG, "member == null!");
             return;
         }
-        if (member.getBitmap() == null) {
-            holder.ivAvatar.setImageResource(R.drawable.icon_avatar_default);
-        } else {
-            holder.ivAvatar.setImageBitmap(member.getBitmap());
-        }
+
+        holder.ivAvatar.setImageResource(R.drawable.icon_avatar_default);
         holder.tvName.setText(member.getName());
-        holder.tvTime.setText(context.getString(R.string.recent_measure_time)+" "+member.getRecentTime());
+        holder.tvTime.setText(context.getString(R.string.phone_number)+" "+member.getPhone());
     }
 
     @Override
@@ -65,7 +60,7 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
         return list.size();
     }
 
-    public void setList(List<Member> memberList) {
+    public void setList(List<RelativesData.Data.Relatives> memberList) {
         this.list = memberList;
         notifyDataSetChanged();
     }

@@ -93,4 +93,8 @@ public class CommonRequest {
    public static Request getLocation(int uid) {
        return getRequest(ServerAddrUtils.getLocationUrl(uid));
    }
+
+   public static Request getRealtivesList(int uid) {
+       return getRequest(ServerAddrUtils.getRelativesUrl(uid));
+   }
 }
