@@ -9,11 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.R;
-import com.njzhikejia.echohealth.healthlife.entity.MeasureData;
 import com.njzhikejia.echohealth.healthlife.entity.RecentMeasureData;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
-
-import org.w3c.dom.ProcessingInstruction;
 
 import java.util.List;
 

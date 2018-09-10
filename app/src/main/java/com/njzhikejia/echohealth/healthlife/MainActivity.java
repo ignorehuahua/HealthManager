@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -54,7 +55,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "MainActivity";
 
@@ -74,6 +75,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private TextView tvCancel;
     private Uri mImageUri;
     private MainHandler mHandler;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void initView() {
         Logger.d(TAG, "initView");
+        mSwipeRefreshLayout = findViewById(R.id.refresh_layout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         mToolbar = findViewById(R.id.toolbar);
         mNavigation = findViewById(R.id.bottom_navigation);
         mDrawerLayout = findViewById(R.id.drawerLayout);
@@ -174,6 +179,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+
+    @Override
+    public void onRefresh() {
+        Logger.d(TAG, "onRefresh");
+        loadRealtives();
+        mHandler.sendEmptyMessageDelayed(ConstantValues.MSG_REFRESH_TIME_OUT, ConstantValues.REFRESH_TIME_OUT);
+    }
+
+    private void stopRefresh() {
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            Logger.d(TAG, "stopRefresh!");
+        }
+    }
+
     static class MainHandler extends Handler{
 
         private WeakReference<MainActivity> weakReference;
@@ -186,9 +206,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case ConstantValues.MSG_REFRESH_TIME_OUT:
+                    if (weakReference.get() != null) {
+                        weakReference.get().stopRefresh();
+                    }
                     break;
                 case LOAD_RELATIVES:
                     if (weakReference.get() != null) {
+                        weakReference.get().stopRefresh();
                         weakReference.get().mAdapter.setList(weakReference.get().memberList);
                     }
                     break;
@@ -199,6 +223,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void loadRealtives() {
         if (!NetWorkUtils.isNetworkConnected(this)) {
             ToastUtil.showShortToast(this, R.string.net_work_error);
+            stopRefresh();
             return;
         }
 
@@ -206,6 +231,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "loadRelatives failure");
+                stopRefresh();
             }
 
             @Override
@@ -291,6 +317,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onPause() {
         super.onPause();
         closePopupWindow();
+        stopRefresh();
     }
 
 

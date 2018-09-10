@@ -127,6 +127,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     private void loadWarnNotices() {
         if (!NetWorkUtils.isNetworkConnected(mContext)) {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
+            stopRefresh();
             return;
         }
         OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserWarnInfo(PreferenceUtil.getSelectedUserUID(mContext)), new Callback() {

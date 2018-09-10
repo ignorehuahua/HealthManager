@@ -7,21 +7,18 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.AddMeasureDataActivity;
 import com.njzhikejia.echohealth.healthlife.HealthLifeApplication;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.adapter.MeasureDataAdapter;
-import com.njzhikejia.echohealth.healthlife.entity.MeasureData;
 import com.njzhikejia.echohealth.healthlife.entity.RecentMeasureData;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
@@ -31,7 +28,6 @@ import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -106,6 +102,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
     private void queryRecentData() {
         if (!NetWorkUtils.isNetworkConnected(mContext)) {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
+            stopRefresh();
             return;
         }
         OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserRecentMeasureData(PreferenceUtil.getSelectedUserUID(mContext)), new Callback() {

@@ -143,6 +143,7 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
     private void loadReports() {
         if (!NetWorkUtils.isNetworkConnected(mContext)) {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
+            stopRefresh();
             return;
         }
         OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserReports(PreferenceUtil.getSelectedUserUID(mContext)), new Callback() {
