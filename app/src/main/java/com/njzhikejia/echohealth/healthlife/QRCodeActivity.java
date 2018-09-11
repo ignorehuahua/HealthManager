@@ -7,7 +7,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 import com.njzhikejia.echohealth.healthlife.util.QRCodeUtils;
 
 /**
@@ -34,7 +36,11 @@ public class QRCodeActivity extends BaseActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ivQRCode = findViewById(R.id.iv_qr_code);
-        Bitmap qrcodeBitmap = QRCodeUtils.createQRCodeBitmap("www.baidu.com", QRCODE_SIZE, QRCODE_SIZE);
+        String number = PreferenceUtil.getLoginUserPhone(this);
+        String name = PreferenceUtil.getLoginUserName(this);
+        String content = ConstantValues.ID_FOR_HEALTH_LIFE + "&&" + name + "&&" + number;
+        Logger.d(TAG, "content = "+content);
+        Bitmap qrcodeBitmap = QRCodeUtils.createQRCodeBitmap(content, QRCODE_SIZE, QRCODE_SIZE);
         ivQRCode.setImageBitmap(qrcodeBitmap);
     }
 

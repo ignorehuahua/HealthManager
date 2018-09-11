@@ -40,4 +40,8 @@ public class ConstantValues {
 
     public static final String KEY_REPORT_DETAIL_ID = "key_report_detail_id";
 
+    public static final String ID_FOR_HEALTH_LIFE = "healthlife";
+
+    public static final String SCAN_RESULT = "scan_result";
+
 }

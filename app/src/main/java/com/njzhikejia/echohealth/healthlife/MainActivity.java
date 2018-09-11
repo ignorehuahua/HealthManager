@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.adapter.MemberListAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.RelativesData;
+import com.njzhikejia.echohealth.healthlife.entity.UserDetailsResponse;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ChineseCharComp;
@@ -68,7 +69,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private List<RelativesData.Data.Relatives> memberList;
     private ImageView ivAvatar;
     private static final int REQUEST_CODE_CHOOSE = 200;
-    private static final int LOAD_RELATIVES = 28;
+    private static final int LOAD_RELATIVES_SUCCESS = 28;
+    private static final int QUERY_USER_INFO_SUCCESS = 29;
     private PopupWindow mPopupWindow;
     private TextView tvGallery;
     private TextView tvCamera;
@@ -76,6 +78,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private Uri mImageUri;
     private MainHandler mHandler;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private TextView tvName;
+    private TextView tvNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mHandler = new MainHandler(this);
         initView();
         loadRealtives();
+        queryUserInfo();
         initPopupWindow();
     }
 
@@ -141,6 +146,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         View headerLayout = mNavigation.getHeaderView(0);
         ivAvatar= headerLayout.findViewById(R.id.iv_avatar);
+        tvName = headerLayout.findViewById(R.id.tv_header_name);
+        tvNumber = headerLayout.findViewById(R.id.tv_header_number);
+        updateNameAndNumber();
+
         ivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,16 +219,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         weakReference.get().stopRefresh();
                     }
                     break;
-                case LOAD_RELATIVES:
+                case LOAD_RELATIVES_SUCCESS:
                     if (weakReference.get() != null) {
                         weakReference.get().stopRefresh();
                         weakReference.get().mAdapter.setList(weakReference.get().memberList);
+                    }
+                    break;
+                case QUERY_USER_INFO_SUCCESS:
+                    if (weakReference.get() != null) {
+                        weakReference.get().updateNameAndNumber();
                     }
                     break;
             }
         }
     }
 
+    private void updateNameAndNumber() {
+        tvName.setText(PreferenceUtil.getLoginUserName(MainActivity.this));
+        tvNumber.setText(PreferenceUtil.getLoginUserPhone(MainActivity.this));
+    }
+
+    // 加载亲友列表
     private void loadRealtives() {
         if (!NetWorkUtils.isNetworkConnected(this)) {
             ToastUtil.showShortToast(this, R.string.net_work_error);
@@ -238,17 +258,47 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public void onResponse(Call call, Response response) throws IOException {
                 String responseContent = response.body().string();
                 Logger.d(TAG, "onResponse code = "+response.code() + "responseContent = "+responseContent);
-                Gson gson = new Gson();
-                RelativesData relativesData = gson.fromJson(responseContent, RelativesData.class);
-                memberList = relativesData.getData().getRelatives();
-                RelativesData.Data.Relatives me = new RelativesData.Data.Relatives();
-                me.setName(getString(R.string.me));
-                me.setPhone(PreferenceUtil.getLoginUserPhone(MainActivity.this));
-                me.setUid(PreferenceUtil.getLoginUserUID(MainActivity.this));
-                memberList.add(me);
-                Comparator cmp = new ChineseCharComp();
-                Collections.sort(memberList, cmp);
-                mHandler.sendEmptyMessage(LOAD_RELATIVES);
+                if (response.code() == 200) {
+                    Gson gson = new Gson();
+                    RelativesData relativesData = gson.fromJson(responseContent, RelativesData.class);
+                    memberList = relativesData.getData().getRelatives();
+                    RelativesData.Data.Relatives me = new RelativesData.Data.Relatives();
+                    me.setName(getString(R.string.me));
+                    me.setPhone(PreferenceUtil.getLoginUserPhone(MainActivity.this));
+                    me.setUid(PreferenceUtil.getLoginUserUID(MainActivity.this));
+                    memberList.add(me);
+                    Comparator cmp = new ChineseCharComp();
+                    Collections.sort(memberList, cmp);
+                    mHandler.sendEmptyMessage(LOAD_RELATIVES_SUCCESS);
+                }
+            }
+        });
+    }
+
+    // 查询用户详情
+    private void queryUserInfo() {
+        if (!NetWorkUtils.isNetworkConnected(this)) {
+            ToastUtil.showShortToast(this, R.string.net_work_error);
+            return;
+        }
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserDetailsRequest(PreferenceUtil.getLoginUserUID(MainActivity.this)), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.e(TAG, "onFailure call = "+call.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Logger.d(TAG, "getUserDetails onResponse code = "+response.code());
+                String resonseContent = response.body().string();
+                Logger.d(TAG, "responseContent = "+resonseContent);
+                if (response.code() == 200) {
+                    Gson gson = new Gson();
+                    UserDetailsResponse userDetailsResponse = gson.fromJson(resonseContent, UserDetailsResponse.class);
+                    String name = userDetailsResponse.getData().getUser().getName();
+                    PreferenceUtil.putLoginUserName(MainActivity.this, name);
+                    mHandler.sendEmptyMessage(QUERY_USER_INFO_SUCCESS);
+                }
             }
         });
     }

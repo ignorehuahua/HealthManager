@@ -19,6 +19,7 @@ import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.CaptureActivity;
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
 import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
+import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 
 /**
@@ -105,11 +106,12 @@ public class MemberManageActivity extends BaseActivity {
         Logger.d(TAG, "onActivityResult");
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
-            if(result.getContents() == null) {
-                Toast.makeText(this, "扫码取消！", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "扫描成功，条码值: " + result.getContents(), Toast.LENGTH_LONG).show();
-            }
+           if (result.getContents() != null) {
+               Logger.d(TAG, "result.getContents = "+result.getContents());
+               Intent intent = new Intent(this, ScanResultActivity.class);
+               intent.putExtra(ConstantValues.SCAN_RESULT, result.getContents());
+               startActivity(intent);
+           }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }

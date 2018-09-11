@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_main"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:background="@color/toolbar"
+        android:layout_height="wrap_content"
+        app:title="@string/user_details"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:id="@+id/rl_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:layout_below="@id/toolbar"
+        android:background="@color/white"
+        android:layout_marginTop="30dp"
+        android:paddingBottom="10dp">
+
+        <com.njzhikejia.echohealth.healthlife.widget.CircleImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            app:civ_border_width="1dp"
+            app:civ_border_color="@color/light"
+            android:src="@drawable/icon_avatar_default" />
+
+        <TextView
+            android:id="@+id/tv_member_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/name_color"
+            android:layout_toRightOf="@id/iv_avatar"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/shape_gray"
+            android:layout_toRightOf="@id/iv_avatar"
+            android:paddingTop="10dp"
+            android:textSize="14sp"
+            android:layout_below="@id/tv_member_name"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_add"
+        android:layout_below="@id/rl_result"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/add_friend"
+        android:textColor="@color/white"
+        android:background="@drawable/selector_login"
+        android:textSize="16sp"/>
+</RelativeLayout>

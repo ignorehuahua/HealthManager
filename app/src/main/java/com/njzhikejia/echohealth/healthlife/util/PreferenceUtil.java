@@ -14,6 +14,7 @@ public class PreferenceUtil {
     private static final String KEY_SELECTED_USER_UID = "key_selected_uid";
     private static final String KEY_SEC_KEY = "key_sec_key";
     private static final String KEY_LOGIN_USER_PHONE = "key_login_phone";
+    private static final String KEY_LOGIN_USER_NAME = "key_login_name";
 
     public static void putString(Context context, String key, String value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -69,5 +70,13 @@ public class PreferenceUtil {
 
     public static String getLoginUserPhone(Context context) {
         return getString(context, KEY_LOGIN_USER_PHONE, "");
+    }
+
+    public static void putLoginUserName(Context context, String value) {
+        putString(context, KEY_LOGIN_USER_NAME, value);
+    }
+
+    public static String getLoginUserName(Context context) {
+        return getString(context, KEY_LOGIN_USER_NAME, "");
     }
 }
