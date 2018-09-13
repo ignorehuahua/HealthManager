@@ -3,11 +3,14 @@ package com.njzhikejia.echohealth.healthlife;
 import android.app.Application;
 import android.app.Notification;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.njzhikejia.echohealth.healthlife.greendao.DaoMaster;
+import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
 import com.njzhikejia.echohealth.healthlife.service.LoopService;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
@@ -29,6 +32,8 @@ public class HealthLifeApplication extends Application{
     private static final String TAG = "HealthLifeApplication";
     public static final String UPDATE_STATUS_ACTION = "com.umeng.message.example.action.UPDATE_STATUS";
     private Handler handler;
+    private static final String DB_NAME = "healthlife.db";
+    private DaoSession daoSession;
 
     @Override
     public void onCreate() {
@@ -38,9 +43,31 @@ public class HealthLifeApplication extends Application{
         }
         SDKInitializer.initialize(getApplicationContext());
         initUmengConfig();
+        initGreendao();
 //        LoopService.startPollingService(getApplicationContext());
     }
 
+    /**
+     * 初始化GreenDao
+     */
+    private void initGreendao() {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, DB_NAME);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+        daoSession = daoMaster.newSession();
+    }
+
+    /**
+     * 获取DaoSession
+     * @return
+     */
+    public DaoSession getDaoSession() {
+        return daoSession;
+    }
+
+    /**
+     * 初始化友盟
+     */
     private void initUmengConfig() {
         Logger.d(TAG, "initUmengConfig");
         handler = new Handler(getMainLooper());
