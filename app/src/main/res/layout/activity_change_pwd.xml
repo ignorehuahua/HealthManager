@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bg_main">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:background="@color/toolbar"
+        android:layout_height="wrap_content"
+        app:title="@string/change_pwd"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_change_pwd"
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="20dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_previous_pwd"
+            style="@style/input_layout"
+            android:layout_below="@id/iv_app_icon">
+
+            <EditText
+                android:id="@+id/et_previous_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/input_previous_pwd"
+                android:inputType="textPassword"
+                style="@style/input_et"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <View
+            android:id="@+id/divider_previous_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@color/divider_color"
+            android:layout_below="@id/input_previous_pwd"/>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_new_pwd"
+            style="@style/input_layout"
+            android:layout_below="@id/divider_previous_pwd">
+
+            <EditText
+                android:id="@+id/et_new_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/input_new_pwd"
+                android:inputType="textPassword"
+                style="@style/input_et" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <View
+            android:id="@+id/divider_new_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@color/divider_color"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_below="@id/input_new_pwd"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_confirm_pwd"
+            style="@style/input_layout"
+            android:layout_below="@id/input_new_pwd">
+
+            <EditText
+                android:id="@+id/et_confirm_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/confirm_new_pwd"
+                android:inputType="textPassword"
+                style="@style/input_et" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <View
+            android:id="@+id/divider_confirm_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@color/divider_color"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_below="@id/input_confirm_pwd"/>
+
+        <Button
+            android:id="@+id/btn_change_pwd"
+            android:layout_below="@id/divider_confirm_pwd"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/change_pwd"
+            android:textColor="@color/white"
+            android:background="@drawable/selector_login"
+            android:textSize="16sp"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

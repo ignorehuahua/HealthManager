@@ -13,8 +13,7 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_height"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            style="@style/input_layout">
 
         <EditText
             android:id="@+id/et_height"
@@ -36,8 +35,7 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_weight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/input_layout"
             android:layout_below="@id/divider_height">
 
         <EditText
@@ -105,9 +103,7 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_note"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            style="@style/input_layout"
             android:layout_below="@id/divider_measure_time">
             <EditText
                 android:id="@+id/et_note"

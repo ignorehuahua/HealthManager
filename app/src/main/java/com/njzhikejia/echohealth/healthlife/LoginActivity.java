@@ -184,6 +184,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 PreferenceUtil.putLoginUserUID(LoginActivity.this, uid);
                 PreferenceUtil.putSecKey(LoginActivity.this, secKey);
                 PreferenceUtil.putLoginUserPhone(LoginActivity.this, name);
+                PreferenceUtil.putLOginUserPwd(LoginActivity.this, etPwd.getText().toString());
             }
         });
     }

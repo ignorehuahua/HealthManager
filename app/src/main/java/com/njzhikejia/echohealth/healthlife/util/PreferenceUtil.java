@@ -15,6 +15,7 @@ public class PreferenceUtil {
     private static final String KEY_SEC_KEY = "key_sec_key";
     private static final String KEY_LOGIN_USER_PHONE = "key_login_phone";
     private static final String KEY_LOGIN_USER_NAME = "key_login_name";
+    private static final String KEY_LOGIN_USER_PWD = "key_user_pwd";
 
     public static void putString(Context context, String key, String value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -78,5 +79,21 @@ public class PreferenceUtil {
 
     public static String getLoginUserName(Context context) {
         return getString(context, KEY_LOGIN_USER_NAME, "");
+    }
+
+    public static void putLOginUserPwd(Context context, String value) {
+        putString(context, KEY_LOGIN_USER_PWD, value);
+    }
+
+    public static String getLoginUserPwd(Context context) {
+        return getString(context, KEY_LOGIN_USER_PWD, "");
+    }
+
+    // 清除缓存数据
+    public static void clear(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 }

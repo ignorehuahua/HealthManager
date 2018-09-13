@@ -232,18 +232,6 @@ public class MeasureDataActivity extends BaseActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (HealthLifeApplication.isMultiUser) {
-                    finish();
-                }
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         Logger.d(TAG, "onDestroy");

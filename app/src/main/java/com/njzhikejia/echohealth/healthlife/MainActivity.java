@@ -1,6 +1,9 @@
 package com.njzhikejia.echohealth.healthlife;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.FileProvider;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -80,6 +84,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView tvName;
     private TextView tvNumber;
+    private LocalBroadcastManager mLocalBroadcastManager;
+    private MainBroadcastReceiver mainBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +100,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void initView() {
         Logger.d(TAG, "initView");
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        mainBroadcastReceiver = new MainBroadcastReceiver();
+        mLocalBroadcastManager.registerReceiver(mainBroadcastReceiver, new IntentFilter(ConstantValues.ACTION_EXIT_LOGIN));
         mSwipeRefreshLayout = findViewById(R.id.refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -148,7 +157,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ivAvatar= headerLayout.findViewById(R.id.iv_avatar);
         tvName = headerLayout.findViewById(R.id.tv_header_name);
         tvNumber = headerLayout.findViewById(R.id.tv_header_number);
-        updateNameAndNumber();
+        updateName();
 
         ivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,6 +197,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         });
     }
 
+    class MainBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (ConstantValues.ACTION_EXIT_LOGIN.equals(intent.getAction())) {
+                finish();
+            }
+        }
+    }
 
     @Override
     public void onRefresh() {
@@ -227,16 +244,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     break;
                 case QUERY_USER_INFO_SUCCESS:
                     if (weakReference.get() != null) {
-                        weakReference.get().updateNameAndNumber();
+                        weakReference.get().updateName();
                     }
                     break;
             }
         }
     }
 
-    private void updateNameAndNumber() {
+    private void updateName() {
         tvName.setText(PreferenceUtil.getLoginUserName(MainActivity.this));
-        tvNumber.setText(PreferenceUtil.getLoginUserPhone(MainActivity.this));
+//        tvNumber.setText(PreferenceUtil.getLoginUserPhone(MainActivity.this));
     }
 
     // 加载亲友列表
@@ -464,6 +481,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onResume() {
         super.onResume();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Logger.d(TAG, "onDestroy");
+        if (mLocalBroadcastManager != null) {
+            mLocalBroadcastManager.unregisterReceiver(mainBroadcastReceiver);
+        }
     }
 }
 

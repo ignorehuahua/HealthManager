@@ -21,7 +21,7 @@ public class QRCodeActivity extends BaseActivity {
     private static final String TAG = "QRCodeActivity";
     private ImageView ivQRCode;
     private Toolbar mToolbar;
-    private static final int QRCODE_SIZE = 540;
+    private static final int QRCODE_SIZE = 800;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,16 +47,6 @@ public class QRCodeActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

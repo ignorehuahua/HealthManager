@@ -21,9 +21,7 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/input_mobile_phone_number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        style="@style/input_layout"
         android:layout_below="@id/toolbar">
     <EditText
         android:id="@+id/et_mobile_phone_number"
@@ -55,7 +53,7 @@
             android:id="@+id/input_verification_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
             android:layout_weight="8">
 
         <EditText
@@ -90,9 +88,7 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/input_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        style="@style/input_layout"
         android:layout_below="@id/divider_verification_code">
 
     <EditText

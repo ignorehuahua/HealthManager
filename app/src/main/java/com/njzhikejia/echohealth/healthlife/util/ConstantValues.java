@@ -44,4 +44,6 @@ public class ConstantValues {
 
     public static final String SCAN_RESULT = "scan_result";
 
+    public static final String ACTION_EXIT_LOGIN = "com.healthlife.ACTION_EXIT_LOGIN";
+
 }

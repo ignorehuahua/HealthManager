@@ -1,16 +1,27 @@
 package com.njzhikejia.echohealth.healthlife;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 
-public class SystemSettingActivity extends BaseActivity {
+public class SystemSettingActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "SystemSettingActivity";
     private Toolbar mToolbar;
+    private TextView tvExit;
+    private TextView tvChangePwd;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,6 +35,10 @@ public class SystemSettingActivity extends BaseActivity {
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        tvExit = findViewById(R.id.exit);
+        tvChangePwd = findViewById(R.id.tv_change_pwd);
+        tvExit.setOnClickListener(this);
+        tvChangePwd.setOnClickListener(this);
     }
 
     @Override
@@ -32,17 +47,44 @@ public class SystemSettingActivity extends BaseActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.exit:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                AlertDialog dialog = builder.setTitle(R.string.exit)
+                        .setMessage(R.string.confirm_exit_login)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // handle exit operation
+                                Logger.d(TAG, "exit login clicked");
+                                PreferenceUtil.clear(SystemSettingActivity.this);
+                                Intent exitIntent = new Intent(ConstantValues.ACTION_EXIT_LOGIN);
+                                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(exitIntent);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // cancel exit
+                                Logger.d(TAG, "cancel login clicked");
+                            }
+                        })
+                        .create();
+                dialog.show();
+
+                break;
+            case R.id.tv_change_pwd:
+                Intent intentChangePwd = new Intent(this, ChangePwdActivity.class);
+                startActivity(intentChangePwd);
+                finish();
+                break;
+        }
     }
 }
