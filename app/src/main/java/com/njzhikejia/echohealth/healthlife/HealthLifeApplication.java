@@ -9,8 +9,10 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.njzhikejia.echohealth.healthlife.entity.Message;
 import com.njzhikejia.echohealth.healthlife.greendao.DaoMaster;
 import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
+import com.njzhikejia.echohealth.healthlife.greendao.MessageDao;
 import com.njzhikejia.echohealth.healthlife.service.LoopService;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
@@ -89,7 +91,10 @@ public class HealthLifeApplication extends Application{
             public void dealWithNotificationMessage(Context context, UMessage msg) {
                 //调用super，会展示通知，不调用super，则不展示通知。
                 super.dealWithNotificationMessage(context, msg);
-                Logger.d(TAG, "dealWithNotificationMessage");
+                Logger.d(TAG, "dealWithNotificationMessage title = "+msg.title + "content = "+msg.text);
+                MessageDao messageDao = daoSession.getMessageDao();
+                Message message = new Message(msg.title, msg.text);
+                messageDao.insert(message);
             }
 
             /**

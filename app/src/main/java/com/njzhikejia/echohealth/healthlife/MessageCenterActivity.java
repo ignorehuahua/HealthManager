@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.njzhikejia.echohealth.healthlife.adapter.MessageCenterAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.Message;
+import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 
 import java.util.ArrayList;
@@ -56,11 +57,19 @@ public class MessageCenterActivity extends BaseActivity implements SwipeRefreshL
         mRecycleView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecycleView.setLayoutManager(layoutManager);
-        messageList = new ArrayList<>();
-        Message one = new Message("标题", "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容");
-        messageList.add(one);
+        loadMessages();
+//        Message one = new Message("标题", "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容");
+//        messageList.add(one);
         mAdapter = new MessageCenterAdapter(this, messageList);
+        mAdapter.setList(messageList);
         mRecycleView.setAdapter(mAdapter);
+    }
+
+    private void loadMessages() {
+        HealthLifeApplication application = (HealthLifeApplication) getApplication();
+        DaoSession daoSession = application.getDaoSession();
+        messageList = daoSession.getMessageDao().loadAll();
+
     }
 
     @Override
