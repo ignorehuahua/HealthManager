@@ -128,4 +128,5 @@
     <string name="confirm_new_pwd">确认新密码</string>
     <string name="previous_pwd_wrong">原密码输入错误</string>
     <string name="two_password_is_inconsistent">新密码输入不一致</string>
+    <string name="msg_details">消息详情</string>
 </resources>

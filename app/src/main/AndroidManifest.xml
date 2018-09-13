@@ -81,6 +81,8 @@
         <activity android:name=".FeedbackActivity" />
         <activity android:name=".ScanResultActivity" />
         <activity android:name=".ChangePwdActivity" />
+        <activity android:name=".MessageCenterActivity" />
+        <activity android:name=".MessageDetailsActivity" />
         <activity
             android:name=".ScanActivity"
             android:screenOrientation="portrait"

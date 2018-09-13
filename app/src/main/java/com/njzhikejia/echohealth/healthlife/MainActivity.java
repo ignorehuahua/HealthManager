@@ -136,6 +136,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         startActivity(intentSetting);
                         break;
 
+                    case R.id.menu_msg_center:
+                        Logger.d(TAG, "menu msg center clicked");
+                        Intent intentMsg = new Intent(MainActivity.this, MessageCenterActivity.class);
+                        startActivity(intentMsg);
+                        break;
                     case R.id.menu_feedback:
                         Logger.d(TAG, "menu feedback clicked");
                         Intent intentFeedback = new Intent(MainActivity.this, FeedbackActivity.class);
