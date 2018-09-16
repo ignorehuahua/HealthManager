@@ -88,4 +88,24 @@ public class ServerAddrUtils {
     public static String getRelativesUrl(int uid) {
         return ROOT_SERVER_ADDR + "/user/" + uid  + "/relatives?appid=4&t=" + System.currentTimeMillis() + "&uid=" + uid;
     }
+
+    /**
+     * 获取我的关注
+     *  http get 'http://120.55.22.117:28001/user/1/concerns?appid=4&t=12313123123&uid=1'
+     * @param uid
+     * @return
+     */
+    public static String getMyFollowsUrl(int uid) {
+        return ROOT_SERVER_ADDR + "/user/" + uid + "/concerns?appid=4&t=" + System.currentTimeMillis() + "&uid=" + uid;
+    }
+
+    /**
+     * 获取“关注我的”用户列表
+     http get http://120.55.22.117:28001/user/1/concerneds?appid=4&t=12313123123&uid=1'
+     * @param uid
+     * @return
+     */
+    public static String getFollowMesUrl(int uid) {
+        return ROOT_SERVER_ADDR + "/user/" + uid + "/concerneds?appid=4&t=" + System.currentTimeMillis() + "&uid=" + uid;
+    }
 }

@@ -46,4 +46,15 @@ public class ConstantValues {
 
     public static final String ACTION_EXIT_LOGIN = "com.healthlife.ACTION_EXIT_LOGIN";
 
+
+    /**
+     * 好友申请状态
+     * 0：申请处理中；1：通过；10为拒绝
+     */
+    public static final int STATUS_APPLY = 0;
+
+    public static final int STATUS_DONE = 1;
+
+    public static final int STATUS_REFUSE = 10;
+
 }

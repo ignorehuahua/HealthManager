@@ -129,4 +129,8 @@
     <string name="previous_pwd_wrong">原密码输入错误</string>
     <string name="two_password_is_inconsistent">新密码输入不一致</string>
     <string name="msg_details">消息详情</string>
+    <string name="accept">同意</string>
+    <string name="refuse">拒绝</string>
+    <string name="added_already">已添加</string>
+    <string name="refused_already">已拒绝</string>
 </resources>

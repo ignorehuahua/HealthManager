@@ -97,4 +97,12 @@ public class CommonRequest {
    public static Request getRealtivesList(int uid) {
        return getRequest(ServerAddrUtils.getRelativesUrl(uid));
    }
+
+   public static Request getMyFollows(int uid) {
+       return getRequest(ServerAddrUtils.getMyFollowsUrl(uid));
+   }
+
+   public static Request getFollowMes(int uid) {
+       return getRequest(ServerAddrUtils.getFollowMesUrl(uid));
+   }
 }

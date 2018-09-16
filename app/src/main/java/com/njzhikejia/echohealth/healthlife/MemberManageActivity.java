@@ -19,6 +19,8 @@ import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.CaptureActivity;
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
 import com.njzhikejia.echohealth.healthlife.fragment.BaseFragment;
+import com.njzhikejia.echohealth.healthlife.fragment.FollowMesFragment;
+import com.njzhikejia.echohealth.healthlife.fragment.MyFollowsFragment;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 
@@ -35,6 +37,8 @@ public class MemberManageActivity extends BaseActivity {
     private Toolbar mToolbar;
     private FloatingActionButton mFab;
     private static final int SCAN_REQUEST_CODE = 1;
+    private MyFollowsFragment myFollowsFragment;
+    private FollowMesFragment followMesFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,8 +83,10 @@ public class MemberManageActivity extends BaseActivity {
     private void setupViewPager(ViewPager viewPager) {
         titles = new String[]{getString(R.string.my_follow), getString(R.string.follow_me)};
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles);
-        adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.my_follow)));
-        adapter.addFragment(BaseFragment.newInstance(this.getString(R.string.follow_me)));
+        myFollowsFragment = new MyFollowsFragment();
+        followMesFragment = new FollowMesFragment();
+        adapter.addFragment(myFollowsFragment);
+        adapter.addFragment(followMesFragment);
         viewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
