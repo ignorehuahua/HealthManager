@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.R;
@@ -49,6 +50,7 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
     private List<ReportData.Data.Reports> healthGuidanceList;
     private HealthGuidanceHandler mHandler;
     private static final int KEY_REPORT = 21;
+    private TextView tvNoData;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +70,8 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
     }
 
     private void initView(View view) {
+        tvNoData = view.findViewById(R.id.tv_no_data);
+        tvNoData.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout = view.findViewById(R.id.refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -106,13 +110,24 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case ConstantValues.MSG_REFRESH_TIME_OUT:
-                    if (healthGuidanceFragmentWeakReference.get() != null)
+                    if (healthGuidanceFragmentWeakReference.get() != null) {
                         healthGuidanceFragmentWeakReference.get().stopRefresh();
+                        if (healthGuidanceFragmentWeakReference.get().healthGuidanceList.size() == 0) {
+                            healthGuidanceFragmentWeakReference.get().tvNoData.setVisibility(View.VISIBLE);
+                        }
+                    }
                     break;
                 case KEY_REPORT:
                     if (healthGuidanceFragmentWeakReference.get() != null) {
                         healthGuidanceFragmentWeakReference.get().stopRefresh();
-                        healthGuidanceFragmentWeakReference.get().mAdapter.setList(healthGuidanceFragmentWeakReference.get().healthGuidanceList);
+                        if (healthGuidanceFragmentWeakReference.get().healthGuidanceList.size() > 0) {
+                            healthGuidanceFragmentWeakReference.get().tvNoData.setVisibility(View.GONE);
+                            healthGuidanceFragmentWeakReference.get().mAdapter.setList(healthGuidanceFragmentWeakReference.get().healthGuidanceList);
+                        } else {
+                            healthGuidanceFragmentWeakReference.get().tvNoData.setVisibility(View.VISIBLE);
+                        }
+
+
                     }
                     break;
             }
