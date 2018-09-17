@@ -179,17 +179,21 @@ public class MeasureDataActivity extends BaseActivity {
 
         int currentPage = intentPage.getIntExtra(ConstantValues.KEY_TO_PAGE, 0);
         mViewPager.setCurrentItem(currentPage);
-        RelativesData.Data.Relatives member = intentPage.getParcelableExtra(ConstantValues.KEY_MEMBER_INFO);
-        if (member != null) {
-            name = member.getName();
-            uid = member.getUid();
+
+        Intent getIntent = getIntent();
+        if (getIntent != null && getIntent.hasExtra(MainActivity.KEY_MEMBER_NAME)) {
+            name = getIntent.getStringExtra(MainActivity.KEY_MEMBER_NAME);
+        }
+        if (getIntent != null && getIntent.hasExtra(MainActivity.KEY_MEMBER_UID)) {
+            uid = getIntent.getIntExtra(MainActivity.KEY_MEMBER_UID, 0);
+        }
             PreferenceUtil.putSelectedUserUID(this, uid);
             Logger.d(TAG, "get name = "+name + "uid = "+uid);
             if (HealthLifeApplication.isMultiUser) {
                 Logger.d(TAG, "setToolbar title to "+name);
                 getSupportActionBar().setTitle(name+"-"+getString(R.string.measure_data));
             }
-        }
+
 
     }
 

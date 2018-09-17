@@ -1,5 +1,6 @@
 package com.njzhikejia.echohealth.healthlife.util;
 
+import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
 import com.njzhikejia.echohealth.healthlife.entity.RelativesData;
 
 import java.text.Collator;
@@ -13,8 +14,8 @@ public class ChineseCharComp implements Comparator {
     @Override
     public int compare(Object o1, Object o2) {
         Collator myCollator = Collator.getInstance(java.util.Locale.CHINA);
-        RelativesData.Data.Relatives relative1 = (RelativesData.Data.Relatives) o1;
-        RelativesData.Data.Relatives relative2 = (RelativesData.Data.Relatives) o2;
+        MyFollowsData.Data.Concerns relative1 = (MyFollowsData.Data.Concerns) o1;
+        MyFollowsData.Data.Concerns relative2 = (MyFollowsData.Data.Concerns) o2;
         if (myCollator.compare(relative1.getName(), relative2.getName()) < 0)
             return -1;
         else if (myCollator.compare(relative1.getName(), relative2.getName()) > 0)

@@ -32,7 +32,7 @@ public class MyFollowsData {
         this.data = data;
     }
 
-    public class Data{
+    public static class Data{
 
         List<Concerns> concerns;
 
@@ -48,7 +48,7 @@ public class MyFollowsData {
             this.concerns = concerns;
         }
 
-        public class Concerns{
+        public static class Concerns{
             private int concern_id;
             private int uid;
             private String name;
@@ -63,6 +63,9 @@ public class MyFollowsData {
             private int status;
             private String create_time;
             private String result_time;
+
+            public Concerns() {
+            }
 
             public int getConcern_id() {
                 return concern_id;

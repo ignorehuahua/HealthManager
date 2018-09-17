@@ -71,7 +71,10 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
             Logger.e(TAG, "warnInfo is null");
         }
         matchWarnType(holder, warnInfo);
-        holder.tvMeasureTime.setText(warnInfo.getSrc_data().getMeasure().getMeasure_time());
+        if (warnInfo != null && warnInfo.getSrc_data() != null && warnInfo.getSrc_data().getMeasure() != null) {
+            holder.tvMeasureTime.setText(warnInfo.getSrc_data().getMeasure().getMeasure_time());
+
+        }
         Logger.d(TAG, "remark = "+warnInfo.getRemark());
 //        {"notice_desc":"心率疑似异常 [心率偏高]"}
         Gson gson = new Gson();

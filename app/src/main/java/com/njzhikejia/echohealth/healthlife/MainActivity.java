@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +36,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.adapter.MemberListAdapter;
-import com.njzhikejia.echohealth.healthlife.entity.RelativesData;
+import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
 import com.njzhikejia.echohealth.healthlife.entity.UserDetailsResponse;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
@@ -60,6 +61,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+
 public class MainActivity extends BaseActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "MainActivity";
@@ -70,7 +72,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private ActionBarDrawerToggle mDrawerToggle;
     private RecyclerView mRecycleView;
     private MemberListAdapter mAdapter;
-    private List<RelativesData.Data.Relatives> memberList;
+    private List<MyFollowsData.Data.Concerns> memberList;
     private ImageView ivAvatar;
     private static final int REQUEST_CODE_CHOOSE = 200;
     private static final int LOAD_RELATIVES_SUCCESS = 28;
@@ -86,6 +88,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private TextView tvNumber;
     private LocalBroadcastManager mLocalBroadcastManager;
     private MainBroadcastReceiver mainBroadcastReceiver;
+    public static final String KEY_MEMBER_NAME = "key_member_name";
+    public static final String KEY_MEMBER_UID = "key_member_uid";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,10 +197,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mAdapter.setOnItemClickListener(new MemberListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                RelativesData.Data.Relatives member = memberList.get(position);
+                MyFollowsData.Data.Concerns member = memberList.get(position);
                 Logger.d(TAG, "onItemClick member name is "+member.getName());
                 Intent intentMember = new Intent(view.getContext(), MeasureDataActivity.class);
-                intentMember.putExtra(ConstantValues.KEY_MEMBER_INFO, member);
+                intentMember.putExtra(KEY_MEMBER_NAME, member.getName());
+                intentMember.putExtra(KEY_MEMBER_UID, member.getUid());
                 startActivity(intentMember);
             }
         });
@@ -269,28 +274,57 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             return;
         }
 
-        OKHttpClientManager.getInstance().getAsync(CommonRequest.getRealtivesList(PreferenceUtil.getLoginUserUID(this)), new Callback() {
+//        OKHttpClientManager.getInstance().getAsync(CommonRequest.getRealtivesList(PreferenceUtil.getLoginUserUID(this)), new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                Logger.e(TAG, "loadRelatives failure");
+//                stopRefresh();
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                String responseContent = response.body().string();
+//                Logger.d(TAG, "onResponse code = "+response.code() + "responseContent = "+responseContent);
+//                if (response.code() == 200) {
+//                    Gson gson = new Gson();
+//                    RelativesData relativesData = gson.fromJson(responseContent, RelativesData.class);
+//                    memberList = relativesData.getData().getRelatives();
+//                    RelativesData.Data.Relatives me = new RelativesData.Data.Relatives();
+//                    me.setName(getString(R.string.me));
+//                    me.setPhone(PreferenceUtil.getLoginUserPhone(MainActivity.this));
+//                    me.setUid(PreferenceUtil.getLoginUserUID(MainActivity.this));
+//                    memberList.add(me);
+//                    Comparator cmp = new ChineseCharComp();
+//                    Collections.sort(memberList, cmp);
+//                    mHandler.sendEmptyMessage(LOAD_RELATIVES_SUCCESS);
+//                }
+//            }
+//        });
+
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getMyFollows(PreferenceUtil.getLoginUserUID(this)), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Logger.e(TAG, "loadRelatives failure");
+                Logger.e(TAG, "onFailure");
                 stopRefresh();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseContent = response.body().string();
-                Logger.d(TAG, "onResponse code = "+response.code() + "responseContent = "+responseContent);
-                if (response.code() == 200) {
+                Logger.d(TAG, "onResponse code = "+response.code() + "content = "+responseContent);
+                if (response.code() == 200 && !TextUtils.isEmpty(responseContent)) {
+                    Logger.d(TAG, "onRespone load my follows success");
                     Gson gson = new Gson();
-                    RelativesData relativesData = gson.fromJson(responseContent, RelativesData.class);
-                    memberList = relativesData.getData().getRelatives();
-                    RelativesData.Data.Relatives me = new RelativesData.Data.Relatives();
+                    MyFollowsData data = gson.fromJson(responseContent, MyFollowsData.class);
+                    memberList = data.getData().getConcerns();
+                    mHandler.sendEmptyMessage(LOAD_RELATIVES_SUCCESS);
+                    Comparator cmp = new ChineseCharComp();
+                    Collections.sort(memberList, cmp);
+                    MyFollowsData.Data.Concerns me = new MyFollowsData.Data.Concerns();
                     me.setName(getString(R.string.me));
                     me.setPhone(PreferenceUtil.getLoginUserPhone(MainActivity.this));
                     me.setUid(PreferenceUtil.getLoginUserUID(MainActivity.this));
-                    memberList.add(me);
-                    Comparator cmp = new ChineseCharComp();
-                    Collections.sort(memberList, cmp);
+                    memberList.add(0, me);
                     mHandler.sendEmptyMessage(LOAD_RELATIVES_SUCCESS);
                 }
             }
