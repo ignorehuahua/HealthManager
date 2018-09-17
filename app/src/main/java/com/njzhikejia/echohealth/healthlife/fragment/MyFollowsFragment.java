@@ -1,6 +1,7 @@
 package com.njzhikejia.echohealth.healthlife.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.R;
+import com.njzhikejia.echohealth.healthlife.UserApplyActivity;
 import com.njzhikejia.echohealth.healthlife.adapter.MyFollowsAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
@@ -80,6 +82,11 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
         mAdapter.setOnItemClickListener(new MyFollowsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+
+                Intent intentMyFollow = new Intent(mContext, UserApplyActivity.class);
+                MyFollowsData.Data.Concerns concerns = myFollowsList.get(position);
+                intentMyFollow.putExtra(ConstantValues.KEY_MY_FOLLOW_USER, concerns);
+                startActivity(intentMyFollow);
 
             }
         });

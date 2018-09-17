@@ -1,5 +1,8 @@
 package com.njzhikejia.echohealth.healthlife.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -48,7 +51,7 @@ public class MyFollowsData {
             this.concerns = concerns;
         }
 
-        public static class Concerns{
+        public static class Concerns implements Parcelable{
             private int concern_id;
             private int uid;
             private String name;
@@ -66,6 +69,35 @@ public class MyFollowsData {
 
             public Concerns() {
             }
+
+            protected Concerns(Parcel in) {
+                concern_id = in.readInt();
+                uid = in.readInt();
+                name = in.readString();
+                nickname = in.readString();
+                idcard = in.readString();
+                phone = in.readString();
+                gender = in.readInt();
+                birthday = in.readString();
+                home_addr = in.readString();
+                avatar = in.readString();
+                concern_type = in.readInt();
+                status = in.readInt();
+                create_time = in.readString();
+                result_time = in.readString();
+            }
+
+            public static final Creator<Concerns> CREATOR = new Creator<Concerns>() {
+                @Override
+                public Concerns createFromParcel(Parcel in) {
+                    return new Concerns(in);
+                }
+
+                @Override
+                public Concerns[] newArray(int size) {
+                    return new Concerns[size];
+                }
+            };
 
             public int getConcern_id() {
                 return concern_id;
@@ -177,6 +209,29 @@ public class MyFollowsData {
 
             public void setResult_time(String result_time) {
                 this.result_time = result_time;
+            }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeInt(concern_id);
+                dest.writeInt(uid);
+                dest.writeString(name);
+                dest.writeString(nickname);
+                dest.writeString(idcard);
+                dest.writeString(phone);
+                dest.writeInt(gender);
+                dest.writeString(birthday);
+                dest.writeString(home_addr);
+                dest.writeString(avatar);
+                dest.writeInt(concern_type);
+                dest.writeInt(status);
+                dest.writeString(create_time);
+                dest.writeString(result_time);
             }
         }
     }

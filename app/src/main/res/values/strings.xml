@@ -133,4 +133,7 @@
     <string name="refuse">拒绝</string>
     <string name="added_already">已添加</string>
     <string name="refused_already">已拒绝</string>
+    <string name="source">来源</string>
+    <string name="apply_time">申请时间</string>
+    <string name="scan_qr_code">扫描二维码</string>
 </resources>

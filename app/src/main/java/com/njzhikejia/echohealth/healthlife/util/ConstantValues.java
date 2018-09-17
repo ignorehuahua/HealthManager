@@ -57,4 +57,10 @@ public class ConstantValues {
 
     public static final int STATUS_REFUSE = 10;
 
+    public static final String KEY_FOLLOW_ME_USER = "key_follow_me_user";
+
+    public static final String KEY_MY_FOLLOW_USER = "key_my_follow_user";
+
+
+
 }

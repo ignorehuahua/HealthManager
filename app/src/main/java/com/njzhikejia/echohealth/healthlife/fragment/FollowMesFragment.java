@@ -1,9 +1,11 @@
 package com.njzhikejia.echohealth.healthlife.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,10 +17,9 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.R;
+import com.njzhikejia.echohealth.healthlife.UserApplyActivity;
 import com.njzhikejia.echohealth.healthlife.adapter.FollowMeAdapter;
-import com.njzhikejia.echohealth.healthlife.adapter.MyFollowsAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.FollowMeData;
-import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
@@ -83,6 +84,10 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
             @Override
             public void onItemClick(View view, int position) {
                 Logger.d(TAG, "onItemClick position = "+position);
+                Intent intentFollowMe = new Intent(mContext, UserApplyActivity.class);
+                FollowMeData.Data.Concerneds concerneds = followMesList.get(position);
+                intentFollowMe.putExtra(ConstantValues.KEY_FOLLOW_ME_USER, (Parcelable) concerneds);
+                startActivity(intentFollowMe);
             }
 
             @Override
