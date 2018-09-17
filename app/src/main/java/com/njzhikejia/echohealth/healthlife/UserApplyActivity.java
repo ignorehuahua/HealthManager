@@ -53,6 +53,13 @@ public class UserApplyActivity extends BaseActivity implements View.OnClickListe
         if (intent != null && intent.hasExtra(ConstantValues.KEY_FOLLOW_ME_USER)) {
             FollowMeData.Data.Concerneds concernd = intent.getParcelableExtra(ConstantValues.KEY_FOLLOW_ME_USER);
             if (concernd != null) {
+                if (concernd.getStatus() == ConstantValues.STATUS_APPLY) {
+                    btnRefuse.setVisibility(View.VISIBLE);
+                    btnAccept.setVisibility(View.VISIBLE);
+                } else {
+                    btnAccept.setVisibility(View.GONE);
+                    btnRefuse.setVisibility(View.GONE);
+                }
                 tvName.setText(concernd.getName());
                 tvNumber.setText(concernd.getPhone());
                 tvTime.setText(concernd.getCreate_time());
