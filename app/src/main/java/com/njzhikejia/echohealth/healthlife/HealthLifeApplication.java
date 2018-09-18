@@ -1,9 +1,15 @@
 package com.njzhikejia.echohealth.healthlife;
 
+import android.annotation.TargetApi;
 import android.app.Application;
 import android.app.Notification;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.app.job.JobService;
+import android.content.ComponentName;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Handler;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -13,9 +19,13 @@ import com.njzhikejia.echohealth.healthlife.entity.Message;
 import com.njzhikejia.echohealth.healthlife.greendao.DaoMaster;
 import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
 import com.njzhikejia.echohealth.healthlife.greendao.MessageDao;
+import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
+import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.service.LoopService;
+import com.njzhikejia.echohealth.healthlife.service.UpdateDeviceInfoService;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
@@ -23,6 +33,12 @@ import com.umeng.message.UTrack;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by 16222 on 2018/6/9.
@@ -36,6 +52,7 @@ public class HealthLifeApplication extends Application{
     private Handler handler;
     private static final String DB_NAME = "healthlife.db";
     private DaoSession daoSession;
+    private String deviceToken;
 
     @Override
     public void onCreate() {
@@ -81,7 +98,9 @@ public class HealthLifeApplication extends Application{
          */
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "47dee1bd3a3f8f2cd4963e79e3092216");
         PushAgent mPushAgent = PushAgent.getInstance(this);
-
+        deviceToken = mPushAgent.getRegistrationId();
+        PreferenceUtil.putDeviceToken(getApplicationContext(), deviceToken);
+        postDeviceInfo();
         UmengMessageHandler messageHandler = new UmengMessageHandler() {
 
             /**
@@ -203,6 +222,38 @@ public class HealthLifeApplication extends Application{
             }
         });
     }
+
+    /**
+     * 更新设备信息到server
+     */
+    private void postDeviceInfo() {
+        OKHttpClientManager.getInstance().postAsync(CommonRequest.postDeviceInfoRequest(PreferenceUtil.getLoginUserUID(getApplicationContext()),
+                deviceToken, 1), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.e(TAG, "post device info failure!!!!");
+                startUdateDeviceInfoService();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+
+                Logger.d(TAG, "onResponse code = "+response.code() + "content = "+responseContent);
+            }
+        });
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void startUdateDeviceInfoService() {
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        JobInfo.Builder builder = new JobInfo.Builder(1, new ComponentName(this, UpdateDeviceInfoService.class));
+        builder.setMinimumLatency(10 * 1000);
+        builder.setOverrideDeadline(30 * 1000);
+        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+        jobScheduler.schedule(builder.build());
+    }
+
 
     @Override
     public void onTerminate() {

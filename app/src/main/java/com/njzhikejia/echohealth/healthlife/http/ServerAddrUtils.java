@@ -108,4 +108,14 @@ public class ServerAddrUtils {
     public static String getFollowMesUrl(int uid) {
         return ROOT_SERVER_ADDR + "/user/" + uid + "/concerneds?appid=4&t=" + System.currentTimeMillis() + "&uid=" + uid;
     }
+
+    /**
+     * 用户上传设备信息
+     * post 'http://120.55.22.117:28001/user/1/devices?appid=4&t=1532007925'
+     * @param uid
+     * @return
+     */
+    public static String getUpdateDeviceTokenUrl(int uid) {
+        return ROOT_SERVER_ADDR + "/user/" + uid + "/devices?appid=4&t=" + System.currentTimeMillis();
+    }
 }

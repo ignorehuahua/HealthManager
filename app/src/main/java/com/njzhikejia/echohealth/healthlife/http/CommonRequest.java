@@ -3,6 +3,7 @@ package com.njzhikejia.echohealth.healthlife.http;
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.njzhikejia.echohealth.healthlife.util.PhoneUtil;
+import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +54,13 @@ public class CommonRequest {
        map.put("password", passwordSha1);
        return postRequest(ServerAddrUtils.getLoginUrl(), map);
    }
+
+    public static Request postDeviceInfoRequest(int uid,String device_token, int sys_type) {
+        Map<String, String> map = new HashMap<>();
+        map.put("device_token", device_token);
+        map.put("sys_type", String.valueOf(sys_type));
+        return postRequest(ServerAddrUtils.getUpdateDeviceTokenUrl(uid), map);
+    }
 
     /**
      * 获取用户详情

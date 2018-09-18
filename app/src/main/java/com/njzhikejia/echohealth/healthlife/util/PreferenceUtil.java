@@ -16,6 +16,7 @@ public class PreferenceUtil {
     private static final String KEY_LOGIN_USER_PHONE = "key_login_phone";
     private static final String KEY_LOGIN_USER_NAME = "key_login_name";
     private static final String KEY_LOGIN_USER_PWD = "key_user_pwd";
+    private static final String KEY_DEVICE_TOKEN = "key_device_token";
 
     public static void putString(Context context, String key, String value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -87,6 +88,15 @@ public class PreferenceUtil {
 
     public static String getLoginUserPwd(Context context) {
         return getString(context, KEY_LOGIN_USER_PWD, "");
+    }
+
+    public static void putDeviceToken(Context context, String value) {
+        putString(context, KEY_DEVICE_TOKEN, value);
+    }
+
+    public static String getDeviceToken(Context context) {
+        return getString(context, KEY_DEVICE_TOKEN, "");
+
     }
 
     // 清除缓存数据
