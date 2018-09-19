@@ -46,6 +46,8 @@ public class ConstantValues {
 
     public static final String ACTION_EXIT_LOGIN = "com.healthlife.ACTION_EXIT_LOGIN";
 
+    public static final String ACTION_LOAD_USER_DETAILS = "con.healthlife.ACTION_LOAD_USER_DETAILS";
+
 
     /**
      * 好友申请状态
