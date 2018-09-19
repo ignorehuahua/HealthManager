@@ -121,7 +121,6 @@
     <string name="click_for_details">点击查看详情</string>
     <string name="me">我</string>
     <string name="login_failure">登录失败，请重试</string>
-    <string name="add_friend">加为好友</string>
     <string name="confirm_exit_login">是否确认退出登录？</string>
     <string name="input_previous_pwd">请输入原密码</string>
     <string name="input_new_pwd">请输入新密码</string>
@@ -137,4 +136,8 @@
     <string name="apply_time">申请时间</string>
     <string name="scan_qr_code">扫描二维码</string>
     <string name="no_data">暂无数据</string>
+    <string name="apply_request_sent">你已经关注了该用户，请等待对方同意</string>
+    <string name="request_failure">请求失败，请重试</string>
+    <string name="follow">关注</string>
+    <string name="apply_concern">关注申请</string>
 </resources>

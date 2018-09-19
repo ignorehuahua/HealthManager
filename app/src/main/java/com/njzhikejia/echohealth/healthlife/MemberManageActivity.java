@@ -46,6 +46,7 @@ public class MemberManageActivity extends BaseActivity {
         Logger.d(TAG, "onCreate");
         setContentView(R.layout.activity_member_manage);
         initView();
+        setCurrentPage();
     }
 
     private void initView() {
@@ -65,6 +66,13 @@ public class MemberManageActivity extends BaseActivity {
                 initScanConfig();
             }
         });
+    }
+
+    private void setCurrentPage() {
+        Intent intent = getIntent();
+        if (intent.getIntExtra(HealthLifeApplication.KEY_JUMP_TO_FOLLOW_ME, 0) == 1) {
+            mViewPager.setCurrentItem(1);
+        }
     }
 
     private void initScanConfig() {

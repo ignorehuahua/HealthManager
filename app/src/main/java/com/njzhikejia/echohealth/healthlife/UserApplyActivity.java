@@ -10,8 +10,19 @@ import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.entity.FollowMeData;
 import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
+import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
+import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
+import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
+import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class UserApplyActivity extends BaseActivity implements View.OnClickListener {
 
@@ -24,6 +35,7 @@ public class UserApplyActivity extends BaseActivity implements View.OnClickListe
     private Button btnAccept;
     private Button btnRefuse;
     public static final int CONCERN_TYPE_QR_CODE = 1;
+    private int concernId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +78,7 @@ public class UserApplyActivity extends BaseActivity implements View.OnClickListe
                 if (concernd.getConcern_type() == CONCERN_TYPE_QR_CODE) {
                     tvSource.setText(R.string.scan_qr_code);
                 }
+                concernId = concernd.getConcern_id();
             }
         } else if (intent != null && intent.hasExtra(ConstantValues.KEY_MY_FOLLOW_USER)) {
             MyFollowsData.Data.Concerns concern = intent.getParcelableExtra(ConstantValues.KEY_MY_FOLLOW_USER);
@@ -82,12 +95,36 @@ public class UserApplyActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    private void handleConcern(int userId, int concernId, int status) {
+
+        if (!NetWorkUtils.isNetworkConnected(UserApplyActivity.this)) {
+            ToastUtil.showShortToast(UserApplyActivity.this, R.string.net_work_error);
+            return;
+        }
+        OKHttpClientManager.getInstance().postAsync(CommonRequest.postHandleConcernRequest(userId, concernId, status), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.e(TAG, "handle concern failure !!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+
+                Logger.d(TAG, "onResponse code = "+response.code() + "content = "+responseContent);
+                setResult(RESULT_OK);
+            }
+        });
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_accept:
+                handleConcern(PreferenceUtil.getLoginUserUID(this), concernId, ConstantValues.STATUS_DONE);
                 break;
             case R.id.btn_refuse:
+                handleConcern(PreferenceUtil.getLoginUserUID(this), concernId, ConstantValues.STATUS_REFUSE);
                 break;
         }
     }

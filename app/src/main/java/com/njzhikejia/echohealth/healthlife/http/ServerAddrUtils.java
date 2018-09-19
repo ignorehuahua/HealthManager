@@ -118,4 +118,27 @@ public class ServerAddrUtils {
     public static String getUpdateDeviceTokenUrl(int uid) {
         return ROOT_SERVER_ADDR + "/user/" + uid + "/devices?appid=4&t=" + System.currentTimeMillis();
     }
+
+    /**
+     * 用户发起关注申请
+     * http://120.55.22.117:28001/user/5/concerns/1?appid=4&t=1532007925
+     * @param userId
+     * @param concernedUid
+     * @return
+     */
+    public static String getStartConcrensUrl(int userId, int concernedUid) {
+        return ROOT_SERVER_ADDR + "/user/" + userId + "/concerns/" + concernedUid + "?appid=4&t=" + System.currentTimeMillis();
+    }
+
+
+    /**
+     * 处理关注申请
+     * http://120.55.22.117:28001/user/1/handle/concerns/9?appid=4&t=1532007925
+     * @param userId
+     * @param concernId
+     * @return
+     */
+    public static String getHandleConcrensUrl(int userId, int concernId) {
+        return ROOT_SERVER_ADDR + "/user/" + userId + "/handle/concerns/" + concernId + "?appid=4&t=" + System.currentTimeMillis();
+    }
 }

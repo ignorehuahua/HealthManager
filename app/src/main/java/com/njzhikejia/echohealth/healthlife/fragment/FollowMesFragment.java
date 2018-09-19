@@ -51,6 +51,8 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
     private List<FollowMeData.Data.Concerneds> followMesList;
     private FollowMeHandler mHandler;
     private static final int LOAD_SUCCESS = 30;
+    private static final int RESULT_SUCCESS = 31;
+    private static final int RESULT_FAILURE = 32;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,6 +95,34 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
             @Override
             public void onBtnAccpetOnClick(int position) {
                 Logger.d(TAG, "onBtnAcceptOnClick position = "+position);
+                FollowMeData.Data.Concerneds concerneds = followMesList.get(position);
+                handleConcern(PreferenceUtil.getLoginUserUID(mContext), concerneds.getConcern_id(), ConstantValues.STATUS_DONE);
+
+            }
+        });
+    }
+
+    private void handleConcern(int userId, int concernId, int status) {
+
+        if (!NetWorkUtils.isNetworkConnected(mContext)) {
+            ToastUtil.showShortToast(mContext, R.string.net_work_error);
+            return;
+        }
+
+        OKHttpClientManager.getInstance().postAsync(CommonRequest.postHandleConcernRequest(userId, concernId, status), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.e(TAG, "handle concern failure !!!");
+                mHandler.sendEmptyMessage(RESULT_FAILURE);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+                Logger.d(TAG, "onResponse code = "+response.code() + "content = "+responseContent);
+                if (response.code() == 200) {
+                    mHandler.sendEmptyMessage(RESULT_SUCCESS);
+                }
 
             }
         });
@@ -154,6 +184,14 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
                     if (weakReference.get() != null) {
                         weakReference.get().stopRefresh();
                     }
+                    break;
+                case RESULT_SUCCESS:
+                    if (weakReference.get() != null) {
+                        weakReference.get().loadFollowMes();
+                    }
+                    break;
+                case RESULT_FAILURE:
+                    ToastUtil.showShortToast(mContext, R.string.request_failure);
                     break;
             }
         }

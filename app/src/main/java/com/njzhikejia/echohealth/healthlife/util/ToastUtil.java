@@ -37,4 +37,22 @@ public class ToastUtil {
         mToast.show();
     }
 
+    public static void showShortToast(Context context, String value) {
+        if (mToast == null) {
+            mToast = Toast.makeText(context, value, Toast.LENGTH_SHORT);
+        } else {
+            mToast.setText(value);
+        }
+        mToast.show();
+    }
+
+    public static void showLongToast(Context context, String value) {
+        if (mToast == null) {
+            mToast = Toast.makeText(context, value, Toast.LENGTH_LONG);
+        } else {
+            mToast.setText(value);
+        }
+        mToast.show();
+    }
+
 }

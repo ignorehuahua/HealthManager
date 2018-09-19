@@ -8,6 +8,7 @@ import android.app.job.JobScheduler;
 import android.app.job.JobService;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Handler;
@@ -53,6 +54,7 @@ public class HealthLifeApplication extends Application{
     private static final String DB_NAME = "healthlife.db";
     private DaoSession daoSession;
     private String deviceToken;
+    public static final String KEY_JUMP_TO_FOLLOW_ME = "jump_to_follow_me";
 
     @Override
     public void onCreate() {
@@ -182,8 +184,18 @@ public class HealthLifeApplication extends Application{
 
             @Override
             public void launchApp(Context context, UMessage msg) {
-                super.launchApp(context, msg);
                 Logger.d(TAG, "launchApp");
+                if (msg.title.equals(getString(R.string.apply_concern))) {
+                    Intent intent = new Intent();
+                    intent.setClassName("com.njzhikejia.echohealth.healthlife", "com.njzhikejia.echohealth.healthlife.MemberManageActivity");
+                    intent.putExtra(KEY_JUMP_TO_FOLLOW_ME, 1);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
+                    super.launchApp(context, msg);
+                }
+
+
             }
 
             @Override

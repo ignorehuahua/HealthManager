@@ -1,5 +1,6 @@
 package com.njzhikejia.echohealth.healthlife.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -50,6 +51,7 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
     private static final String TAG = "MyFollowsFragment";
     private MyFollowsHandler mHandler;
     private static final int LOAD_SUCCESS = 30;
+    private static final int HANDLE_CONCERN_CODE = 40;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,7 +88,7 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
                 Intent intentMyFollow = new Intent(mContext, UserApplyActivity.class);
                 MyFollowsData.Data.Concerns concerns = myFollowsList.get(position);
                 intentMyFollow.putExtra(ConstantValues.KEY_MY_FOLLOW_USER, concerns);
-                startActivity(intentMyFollow);
+                startActivityForResult(intentMyFollow, HANDLE_CONCERN_CODE);
 
             }
         });
@@ -158,5 +160,12 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
     public void onRefresh() {
         loadMyFollows();
         mHandler.sendEmptyMessageDelayed(ConstantValues.MSG_REFRESH_TIME_OUT, ConstantValues.REFRESH_TIME_OUT);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == HANDLE_CONCERN_CODE && resultCode == Activity.RESULT_OK) {
+            loadMyFollows();
+        }
     }
 }

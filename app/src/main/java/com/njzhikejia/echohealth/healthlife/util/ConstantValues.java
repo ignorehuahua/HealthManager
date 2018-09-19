@@ -61,6 +61,6 @@ public class ConstantValues {
 
     public static final String KEY_MY_FOLLOW_USER = "key_my_follow_user";
 
-
+    public static final int WAY_OF_QR_CODE = 1;
 
 }

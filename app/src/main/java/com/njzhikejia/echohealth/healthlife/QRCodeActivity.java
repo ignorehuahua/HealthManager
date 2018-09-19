@@ -38,7 +38,8 @@ public class QRCodeActivity extends BaseActivity {
         ivQRCode = findViewById(R.id.iv_qr_code);
         String number = PreferenceUtil.getLoginUserPhone(this);
         String name = PreferenceUtil.getLoginUserName(this);
-        String content = ConstantValues.ID_FOR_HEALTH_LIFE + "&&" + name + "&&" + number;
+        int uid = PreferenceUtil.getLoginUserUID(this);
+        String content = ConstantValues.ID_FOR_HEALTH_LIFE + "&&" + name + "&&" + number + "&&" + uid;
         Logger.d(TAG, "content = "+content);
         Bitmap qrcodeBitmap = QRCodeUtils.createQRCodeBitmap(content, QRCODE_SIZE, QRCODE_SIZE);
         ivQRCode.setImageBitmap(qrcodeBitmap);

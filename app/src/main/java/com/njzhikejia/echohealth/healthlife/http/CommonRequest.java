@@ -3,7 +3,6 @@ package com.njzhikejia.echohealth.healthlife.http;
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.njzhikejia.echohealth.healthlife.util.PhoneUtil;
-import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,11 +54,44 @@ public class CommonRequest {
        return postRequest(ServerAddrUtils.getLoginUrl(), map);
    }
 
+    /**
+     * 用户上传设备信息
+     * @param uid
+     * @param device_token
+     * @param sys_type
+     * @return
+     */
     public static Request postDeviceInfoRequest(int uid,String device_token, int sys_type) {
         Map<String, String> map = new HashMap<>();
         map.put("device_token", device_token);
         map.put("sys_type", String.valueOf(sys_type));
         return postRequest(ServerAddrUtils.getUpdateDeviceTokenUrl(uid), map);
+    }
+
+    /**
+     * 用户发起关注申请
+     * @param userId
+     * @param concernedUid
+     * @param concern_type
+     * @return
+     */
+    public static Request postStartConcernRequest(int userId, int concernedUid, int concern_type) {
+        Map<String, String> map = new HashMap<>();
+        map.put("concern_type", String.valueOf(concern_type));
+        return postRequest(ServerAddrUtils.getStartConcrensUrl(userId, concernedUid), map);
+    }
+
+    /**
+     * 处理关注申请
+     * @param userId
+     * @param concernId
+     * @param status
+     * @return
+     */
+    public static Request postHandleConcernRequest(int userId, int concernId, int status) {
+        Map<String, String> map = new HashMap<>();
+        map.put("status", String.valueOf(status));
+        return postRequest(ServerAddrUtils.getHandleConcrensUrl(userId, concernId), map);
     }
 
     /**
