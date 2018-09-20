@@ -1,7 +1,13 @@
 package com.njzhikejia.echohealth.healthlife.entity;
 
+import com.google.gson.Gson;
+
+import org.greenrobot.greendao.annotation.Convert;
+import org.greenrobot.greendao.converter.PropertyConverter;
 import org.w3c.dom.ProcessingInstruction;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,8 +34,9 @@ public class ReportData {
         this.data = data;
     }
 
-    public class Data{
+    public static class Data{
 
+        @Convert(columnType = String.class, converter = ReportDataConverter.class)
         private List<Reports> reports;
 
         public List<Reports> getReports() {
@@ -40,88 +47,36 @@ public class ReportData {
             this.reports = reports;
         }
 
-        public class Reports{
-            private int id;
-            private int user_id;
-            private int type;
-            private int src_id;
-            private int status;
-            private String create_time;
-            private int result_id;
-            private String result;
-            private String remark;
-
-            public int getId() {
-                return id;
-            }
-
-            public void setId(int id) {
-                this.id = id;
-            }
-
-            public int getUser_id() {
-                return user_id;
-            }
-
-            public void setUser_id(int user_id) {
-                this.user_id = user_id;
-            }
-
-            public int getType() {
-                return type;
-            }
-
-            public void setType(int type) {
-                this.type = type;
-            }
-
-            public int getSrc_id() {
-                return src_id;
-            }
-
-            public void setSrc_id(int src_id) {
-                this.src_id = src_id;
-            }
-
-            public int getStatus() {
-                return status;
-            }
-
-            public void setStatus(int status) {
-                this.status = status;
-            }
-
-            public String getCreate_time() {
-                return create_time;
-            }
-
-            public void setCreate_time(String create_time) {
-                this.create_time = create_time;
-            }
-
-            public int getResult_id() {
-                return result_id;
-            }
-
-            public void setResult_id(int result_id) {
-                this.result_id = result_id;
-            }
-
-            public String getResult() {
-                return result;
-            }
-
-            public void setResult(String result) {
-                this.result = result;
-            }
-
-            public String getRemark() {
-                return remark;
-            }
-
-            public void setRemark(String remark) {
-                this.remark = remark;
-            }
-        }
     }
+
+   public static class ReportDataConverter implements PropertyConverter<List<ReportData>, String> {
+
+       @Override
+       public List<ReportData> convertToEntityProperty(String databaseValue) {
+           if (databaseValue == null) {
+               return null;
+           }
+           List<String> list_str = Arrays.asList(databaseValue.split(","));
+           List<ReportData> list_transport = new ArrayList<>();
+           for (String s : list_str) {
+               list_transport.add(new Gson().fromJson(s, ReportData.class));
+           }
+           return list_transport;
+       }
+
+       @Override
+       public String convertToDatabaseValue(List<ReportData> entityProperty) {
+           if (entityProperty == null) {
+               return null;
+           } else {
+               StringBuilder sb = new StringBuilder();
+               for (ReportData array : entityProperty) {
+                   String str = new Gson().toJson(array);
+                   sb.append(str);
+                   sb.append(",");
+               }
+               return sb.toString();
+           }
+       }
+   }
 }

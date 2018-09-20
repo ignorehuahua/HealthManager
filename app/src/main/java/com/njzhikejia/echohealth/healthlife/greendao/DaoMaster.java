@@ -21,22 +21,24 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
-        MessageDao.createTable(db, ifNotExists);
-        ExtendDao.createTable(db, ifNotExists);
-        UserDao.createTable(db, ifNotExists);
-        ConcernsDao.createTable(db, ifNotExists);
         ConcernedsDao.createTable(db, ifNotExists);
+        ConcernsDao.createTable(db, ifNotExists);
+        ExtendDao.createTable(db, ifNotExists);
+        MessageDao.createTable(db, ifNotExists);
+        ReportsDao.createTable(db, ifNotExists);
         SpecificDataDao.createTable(db, ifNotExists);
+        UserDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
-        MessageDao.dropTable(db, ifExists);
-        ExtendDao.dropTable(db, ifExists);
-        UserDao.dropTable(db, ifExists);
-        ConcernsDao.dropTable(db, ifExists);
         ConcernedsDao.dropTable(db, ifExists);
+        ConcernsDao.dropTable(db, ifExists);
+        ExtendDao.dropTable(db, ifExists);
+        MessageDao.dropTable(db, ifExists);
+        ReportsDao.dropTable(db, ifExists);
         SpecificDataDao.dropTable(db, ifExists);
+        UserDao.dropTable(db, ifExists);
     }
 
     /**
@@ -55,12 +57,13 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(MessageDao.class);
-        registerDaoClass(ExtendDao.class);
-        registerDaoClass(UserDao.class);
-        registerDaoClass(ConcernsDao.class);
         registerDaoClass(ConcernedsDao.class);
+        registerDaoClass(ConcernsDao.class);
+        registerDaoClass(ExtendDao.class);
+        registerDaoClass(MessageDao.class);
+        registerDaoClass(ReportsDao.class);
         registerDaoClass(SpecificDataDao.class);
+        registerDaoClass(UserDao.class);
     }
 
     public DaoSession newSession() {

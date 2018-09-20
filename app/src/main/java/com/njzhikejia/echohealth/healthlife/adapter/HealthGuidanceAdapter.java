@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.entity.ReportData;
+import com.njzhikejia.echohealth.healthlife.entity.Reports;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 
 import java.util.List;
@@ -22,13 +23,13 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
 
     private static final String TAG = "HealthGuidanceAdapter";
     private Context context;
-    private List<ReportData.Data.Reports> list;
+    private List<Reports> list;
     private static final int BLOOD_PRESSURE_REPORT = 1;
     public static final int SLEEP_REPORT = 2;
     public static final int DEPRESSION_REPORT = 4;
     private static final int CHRONIC_PROSTATE = 5;
 
-    public HealthGuidanceAdapter(Context context, List<ReportData.Data.Reports> list) {
+    public HealthGuidanceAdapter(Context context, List<Reports> list) {
         this.context = context;
         this.list = list;
     }
@@ -44,7 +45,7 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
     @Override
     public void onBindViewHolder(HealthGuidanceViewHolder holder, int position) {
         holder.itemView.setTag(position);
-        ReportData.Data.Reports healthGuidance = list.get(position);
+        Reports healthGuidance = list.get(position);
         if (healthGuidance == null) {
             Logger.e(TAG, "healthGuidance == null!");
             return;
@@ -53,7 +54,7 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
         matchReportType(healthGuidance, holder);
     }
 
-    public void setList(List<ReportData.Data.Reports> list) {
+    public void setList(List<Reports> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -87,7 +88,7 @@ public class HealthGuidanceAdapter extends RecyclerView.Adapter<HealthGuidanceAd
         }
     }
 
-    private void matchReportType(ReportData.Data.Reports data, HealthGuidanceViewHolder holder) {
+    private void matchReportType(Reports data, HealthGuidanceViewHolder holder) {
         switch (data.getType()) {
             case BLOOD_PRESSURE_REPORT:
                 holder.tvName.setText(R.string.blood_pressure_report);

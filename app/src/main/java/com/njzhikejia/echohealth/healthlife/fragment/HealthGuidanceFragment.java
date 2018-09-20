@@ -15,10 +15,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.njzhikejia.echohealth.healthlife.HealthLifeApplication;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.ReportDetailsActivity;
 import com.njzhikejia.echohealth.healthlife.adapter.HealthGuidanceAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.ReportData;
+import com.njzhikejia.echohealth.healthlife.entity.Reports;
+import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
+import com.njzhikejia.echohealth.healthlife.greendao.ReportsDao;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
@@ -47,10 +51,12 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecycleView;
     private HealthGuidanceAdapter mAdapter;
-    private List<ReportData.Data.Reports> healthGuidanceList;
+    private List<Reports> healthGuidanceList;
     private HealthGuidanceHandler mHandler;
     private static final int KEY_REPORT = 21;
     private TextView tvNoData;
+    private DaoSession mDaoSession;
+    private ReportsDao reportsDao;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,9 +70,16 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
         Logger.d(TAG, "onCreateView");
         mContext = getActivity();
         View view = inflater.inflate(R.layout.fragment_health_guidance, null);
+        initSession();
         initView(view);
         mHandler = new HealthGuidanceHandler(this);
         return view;
+    }
+
+    private void initSession() {
+        HealthLifeApplication mApplication = (HealthLifeApplication) getActivity().getApplication();
+        mDaoSession = mApplication.getDaoSession();
+        reportsDao = mDaoSession.getReportsDao();
     }
 
     private void initView(View view) {
@@ -85,7 +98,7 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
         mAdapter.setOnItemClickListener(new HealthGuidanceAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ReportData.Data.Reports report = healthGuidanceList.get(position);
+                Reports report = healthGuidanceList.get(position);
                 int reportType = report.getType();
                 Logger.d(TAG, "onItemClick reportType = "+reportType);
                 if (reportType == HealthGuidanceAdapter.DEPRESSION_REPORT || reportType == HealthGuidanceAdapter.SLEEP_REPORT) {
@@ -155,10 +168,21 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
         }
     }
 
+    private void loadDataFromDb() {
+        healthGuidanceList = reportsDao.loadAll();
+        if (healthGuidanceList.size() > 0) {
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
+        }
+        mAdapter.setList(healthGuidanceList);
+    }
+
     private void loadReports() {
         if (!NetWorkUtils.isNetworkConnected(mContext)) {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
             stopRefresh();
+            loadDataFromDb();
             return;
         }
         OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserReports(PreferenceUtil.getSelectedUserUID(mContext)), new Callback() {
@@ -166,6 +190,7 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure");
                 stopRefresh();
+                loadDataFromDb();
             }
 
             @Override
@@ -175,6 +200,10 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
                 Gson gson = new Gson();
                 ReportData reportData = gson.fromJson(responseContent, ReportData.class);
                 healthGuidanceList = reportData.getData().getReports();
+                reportsDao.deleteAll();
+                for (Reports reports : healthGuidanceList) {
+                    reportsDao.insert(reports);
+                }
                 mHandler.sendEmptyMessage(KEY_REPORT);
             }
         });
