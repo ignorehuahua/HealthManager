@@ -55,6 +55,7 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
     private static final String TAG = "MyFollowsFragment";
     private MyFollowsHandler mHandler;
     private static final int LOAD_SUCCESS = 30;
+    private static final int LOAD_FAILURE = 31;
     private static final int HANDLE_CONCERN_CODE = 40;
     private DaoSession mDaoSession;
     private ConcernsDao concernsDao;
@@ -129,6 +130,12 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
                         weakReference.get().stopRefresh();
                     }
                     break;
+                case LOAD_FAILURE:
+                    if (weakReference.get() != null) {
+                        weakReference.get().stopRefresh();
+                        weakReference.get().loadDataFromDb();
+                    }
+                    break;
             }
         }
     }
@@ -145,8 +152,7 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure");
-                stopRefresh();
-                loadDataFromDb();
+                mHandler.sendEmptyMessage(LOAD_FAILURE);
             }
 
             @Override

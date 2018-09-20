@@ -54,6 +54,7 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
     private List<Reports> healthGuidanceList;
     private HealthGuidanceHandler mHandler;
     private static final int KEY_REPORT = 21;
+    private static final int KEY_FAILURE = 23;
     private TextView tvNoData;
     private DaoSession mDaoSession;
     private ReportsDao reportsDao;
@@ -143,6 +144,12 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
 
                     }
                     break;
+                case KEY_FAILURE:
+                    if (healthGuidanceFragmentWeakReference.get() != null) {
+                        healthGuidanceFragmentWeakReference.get().stopRefresh();
+                        healthGuidanceFragmentWeakReference.get().loadDataFromDb();
+                    }
+                    break;
             }
         }
     }
@@ -189,8 +196,8 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure");
-                stopRefresh();
-                loadDataFromDb();
+                mHandler.sendEmptyMessage(KEY_FAILURE);
+
             }
 
             @Override

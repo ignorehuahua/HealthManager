@@ -13,9 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
+import com.njzhikejia.echohealth.healthlife.HealthLifeApplication;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.adapter.WarnAdapter;
-import com.njzhikejia.echohealth.healthlife.entity.WarnNoticesData;
+import com.njzhikejia.echohealth.healthlife.entity.warn.Notices;
+import com.njzhikejia.echohealth.healthlife.entity.warn.WarnNoticesData;
+import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
+import com.njzhikejia.echohealth.healthlife.greendao.NoticesDao;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
@@ -43,10 +47,13 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecycleView;
     private WarnAdapter mAdapter;
-    private List<WarnNoticesData.Data.Notices> warnInfoList;
+    private List<Notices> warnInfoList;
     private Context mContext;
     private WarnHandler mHandler;
     private static final int KEY_WARN = 22;
+    private static final int KEY_FAILURE = 23;
+    private DaoSession mDaoSession;
+    private NoticesDao noticesDao;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,9 +66,16 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         Logger.d(TAG, "onCrateView");
         mContext = getActivity();
         View view = inflater.inflate(R.layout.fragment_warning, null);
+        initSession();
         initView(view);
         mHandler = new WarnHandler(this);
         return view;
+    }
+
+    private void initSession() {
+        HealthLifeApplication mApplication = (HealthLifeApplication) getActivity().getApplication();
+        mDaoSession = mApplication.getDaoSession();
+        noticesDao = mDaoSession.getNoticesDao();
     }
 
     private void initView(View view) {
@@ -113,6 +127,12 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
                         warningFragmentWeakReference.get().mAdapter.setlist(warningFragmentWeakReference.get().warnInfoList);
                     }
                     break;
+                case KEY_FAILURE:
+                    if (warningFragmentWeakReference.get() != null) {
+                        warningFragmentWeakReference.get().stopRefresh();
+                        warningFragmentWeakReference.get().loadDataFromDb();
+                    }
+                    break;
             }
         }
     }
@@ -124,17 +144,23 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         }
     }
 
+    private void loadDataFromDb() {
+        warnInfoList = noticesDao.loadAll();
+        mAdapter.setlist(warnInfoList);
+    }
+
     private void loadWarnNotices() {
         if (!NetWorkUtils.isNetworkConnected(mContext)) {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
             stopRefresh();
+            loadDataFromDb();
             return;
         }
         OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserWarnInfo(PreferenceUtil.getSelectedUserUID(mContext)), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "loadWarnNotices onFailure");
-                stopRefresh();
+                mHandler.sendEmptyMessage(KEY_FAILURE);
             }
 
             @Override
@@ -144,6 +170,10 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
                 Gson gson = new Gson();
                 WarnNoticesData warnNoticesData = gson.fromJson(responseContent, WarnNoticesData.class);
                 warnInfoList = warnNoticesData.getData().getNotices();
+                noticesDao.deleteAll();
+                for (Notices notices : warnInfoList) {
+                    noticesDao.insert(notices);
+                }
                 mHandler.sendEmptyMessage(KEY_WARN);
             }
         });

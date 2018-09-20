@@ -14,7 +14,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.R;
-import com.njzhikejia.echohealth.healthlife.entity.WarnNoticesData;
+import com.njzhikejia.echohealth.healthlife.entity.warn.Notices;
+import com.njzhikejia.echohealth.healthlife.entity.warn.WarnNoticesData;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
 
     private static final String TAG = "WarnAdapter";
     private Context mContext;
-    private List<WarnNoticesData.Data.Notices> list;
+    private List<Notices> list;
 
     // 告警类型；1：数据指标告警；2：围栏告警；3：SOS告警；4：跌倒告警。
     private static final int MEASURE_DATA_WARN = 1;
@@ -47,12 +48,12 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
     private static final int BLOOD_OXYGEN_WARN = 7;
 
 
-    public WarnAdapter(Context context, List<WarnNoticesData.Data.Notices> list) {
+    public WarnAdapter(Context context, List<Notices> list) {
         this.mContext = context;
         this.list = list;
     }
 
-    public void setlist(List<WarnNoticesData.Data.Notices> list) {
+    public void setlist(List<Notices> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -66,7 +67,7 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
 
     @Override
     public void onBindViewHolder(WarnViewHolder holder, int position) {
-        WarnNoticesData.Data.Notices warnInfo = list.get(position);
+        Notices warnInfo = list.get(position);
         if (warnInfo == null) {
             Logger.e(TAG, "warnInfo is null");
         }
@@ -126,7 +127,7 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
         }
     }
 
-    private void matchWarnType(WarnViewHolder holder, WarnNoticesData.Data.Notices notice) {
+    private void matchWarnType(WarnViewHolder holder, Notices notice) {
         switch (notice.getType()) {
             case MEASURE_DATA_WARN:
                 float value1 = notice.getSrc_data().getMeasure().getValue1();

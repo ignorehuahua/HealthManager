@@ -55,6 +55,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
     private FloatingActionButton mFabBtn;
     private MeasureDataHandler mHandler;
     private static final int KEY_RECENT_DATA = 20;
+    private static final int KEY_FAILURE = 21;
     private DaoSession mDaoSession;
     private SpecificDataDao specificDataDao;
 
@@ -121,8 +122,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure queryRecentData");
-                stopRefresh();
-                loadDataFomDb();
+                mHandler.sendEmptyMessage(KEY_FAILURE);
             }
 
             @Override
@@ -197,6 +197,12 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
                     if (measureDataFragmentWeakReference.get() != null) {
                         measureDataFragmentWeakReference.get().stopRefresh();
                         measureDataFragmentWeakReference.get().mAdapter.setList(measureDataFragmentWeakReference.get().measureDataList);
+                    }
+                    break;
+                case KEY_FAILURE:
+                    if (measureDataFragmentWeakReference.get() != null) {
+                        measureDataFragmentWeakReference.get().stopRefresh();
+                        measureDataFragmentWeakReference.get().loadDataFomDb();
                     }
                     break;
             }
