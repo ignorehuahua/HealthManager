@@ -19,7 +19,7 @@ public class CommonRequest {
 
     private static final String TAG = "CommonRequest";
 
-   public static Request postRequest(String url, Map<String, String> params) {
+   public static Request postRequest(String url, Map<String, Object> params) {
        Gson gson = new Gson();
        String jsonStr = gson.toJson(params);
        Logger.d(TAG, "postRequest jsonStr = "+jsonStr);
@@ -47,7 +47,7 @@ public class CommonRequest {
      * @return
      */
    public static Request postLoginRequest(String name, String password) {
-       Map<String, String> map = new HashMap<>();
+       Map<String, Object> map = new HashMap<>();
        map.put("name", name);
        String passwordSha1 = PhoneUtil.shaEncrypt(password);
        map.put("password", passwordSha1);
@@ -62,9 +62,9 @@ public class CommonRequest {
      * @return
      */
     public static Request postDeviceInfoRequest(int uid,String device_token, int sys_type) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("device_token", device_token);
-        map.put("sys_type", String.valueOf(sys_type));
+        map.put("sys_type", sys_type);
         return postRequest(ServerAddrUtils.getUpdateDeviceTokenUrl(uid), map);
     }
 
@@ -76,8 +76,8 @@ public class CommonRequest {
      * @return
      */
     public static Request postStartConcernRequest(int userId, int concernedUid, int concern_type) {
-        Map<String, String> map = new HashMap<>();
-        map.put("concern_type", String.valueOf(concern_type));
+        Map<String, Object> map = new HashMap<>();
+        map.put("concern_type", concern_type);
         return postRequest(ServerAddrUtils.getStartConcrensUrl(userId, concernedUid), map);
     }
 
@@ -89,8 +89,8 @@ public class CommonRequest {
      * @return
      */
     public static Request postHandleConcernRequest(int userId, int concernId, int status) {
-        Map<String, String> map = new HashMap<>();
-        map.put("status", String.valueOf(status));
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", status);
         return postRequest(ServerAddrUtils.getHandleConcrensUrl(userId, concernId), map);
     }
 

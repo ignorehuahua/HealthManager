@@ -58,11 +58,10 @@ public class MessageCenterActivity extends BaseActivity implements SwipeRefreshL
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecycleView.setLayoutManager(layoutManager);
         loadMessages();
-        if (messageList != null && messageList.size() > 0) {
-            mAdapter = new MessageCenterAdapter(this, messageList);
-        } else {
+        if (messageList == null ) {
             messageList = new ArrayList<>();
         }
+        mAdapter = new MessageCenterAdapter(this, messageList);
         mAdapter.setList(messageList);
         mRecycleView.setAdapter(mAdapter);
     }
