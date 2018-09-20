@@ -24,7 +24,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +38,11 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.adapter.MemberListAdapter;
+import com.njzhikejia.echohealth.healthlife.entity.Concerns;
 import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
 import com.njzhikejia.echohealth.healthlife.entity.UserDetailsResponse;
+import com.njzhikejia.echohealth.healthlife.greendao.ConcernsDao;
+import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ChineseCharComp;
@@ -47,6 +52,7 @@ import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
+import com.njzhikejia.echohealth.healthlife.widget.BadgeView;
 import com.njzhikejia.echohealth.healthlife.widget.banner.CycleViewPager;
 import com.njzhikejia.echohealth.healthlife.widget.banner.ViewUtil;
 import java.io.File;
@@ -72,7 +78,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private ActionBarDrawerToggle mDrawerToggle;
     private RecyclerView mRecycleView;
     private MemberListAdapter mAdapter;
-    private List<MyFollowsData.Data.Concerns> memberList;
+    private List<Concerns> memberList;
     private ImageView ivAvatar;
     private static final int REQUEST_CODE_CHOOSE = 200;
     private static final int LOAD_RELATIVES_SUCCESS = 28;
@@ -90,16 +96,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private MainBroadcastReceiver mainBroadcastReceiver;
     public static final String KEY_MEMBER_NAME = "key_member_name";
     public static final String KEY_MEMBER_UID = "key_member_uid";
+    private DaoSession mDaoSession;
+    private ConcernsDao concernsDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mHandler = new MainHandler(this);
+        initDaoSession();
         initView();
         loadRealtives();
         queryUserInfo();
         initPopupWindow();
+    }
+
+    private void initDaoSession() {
+        HealthLifeApplication mApplication = (HealthLifeApplication) getApplication();
+        mDaoSession = mApplication.getDaoSession();
+        concernsDao = mDaoSession.getConcernsDao();
     }
 
     private void initView() {
@@ -166,6 +181,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ivAvatar= headerLayout.findViewById(R.id.iv_avatar);
         tvName = headerLayout.findViewById(R.id.tv_header_name);
         tvNumber = headerLayout.findViewById(R.id.tv_header_number);
+
+
         updateName();
 
         ivAvatar.setOnClickListener(new View.OnClickListener() {
@@ -197,7 +214,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mAdapter.setOnItemClickListener(new MemberListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                MyFollowsData.Data.Concerns member = memberList.get(position);
+                Concerns member = memberList.get(position);
                 Logger.d(TAG, "onItemClick member name is "+member.getName());
                 Intent intentMember = new Intent(view.getContext(), MeasureDataActivity.class);
                 intentMember.putExtra(KEY_MEMBER_NAME, member.getName());
@@ -215,6 +232,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         }
     }
+
 
     @Override
     public void onRefresh() {
@@ -271,6 +289,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (!NetWorkUtils.isNetworkConnected(this)) {
             ToastUtil.showShortToast(this, R.string.net_work_error);
             stopRefresh();
+            loadDataFromDb();
             return;
         }
 
@@ -306,6 +325,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure");
                 stopRefresh();
+                loadDataFromDb();
             }
 
             @Override
@@ -317,18 +337,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Gson gson = new Gson();
                     MyFollowsData data = gson.fromJson(responseContent, MyFollowsData.class);
                     memberList = data.getData().getConcerns();
-                    mHandler.sendEmptyMessage(LOAD_RELATIVES_SUCCESS);
                     Comparator cmp = new ChineseCharComp();
                     Collections.sort(memberList, cmp);
-                    MyFollowsData.Data.Concerns me = new MyFollowsData.Data.Concerns();
+                    Concerns me = new Concerns();
                     me.setName(getString(R.string.me));
                     me.setPhone(PreferenceUtil.getLoginUserPhone(MainActivity.this));
                     me.setUid(PreferenceUtil.getLoginUserUID(MainActivity.this));
                     memberList.add(0, me);
                     mHandler.sendEmptyMessage(LOAD_RELATIVES_SUCCESS);
+                    concernsDao.deleteAll();
+                    for (Concerns concerns : memberList) {
+                        concernsDao.insert(concerns);
+                    }
+
                 }
             }
         });
+    }
+
+    private void loadDataFromDb() {
+        memberList = concernsDao.loadAll();
+        mAdapter.setList(memberList);
     }
 
     // 查询用户详情

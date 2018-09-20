@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.njzhikejia.echohealth.healthlife.entity.Concerns;
 import com.njzhikejia.echohealth.healthlife.entity.FollowMeData;
 import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
@@ -81,7 +82,7 @@ public class UserApplyActivity extends BaseActivity implements View.OnClickListe
                 concernId = concernd.getConcern_id();
             }
         } else if (intent != null && intent.hasExtra(ConstantValues.KEY_MY_FOLLOW_USER)) {
-            MyFollowsData.Data.Concerns concern = intent.getParcelableExtra(ConstantValues.KEY_MY_FOLLOW_USER);
+            Concerns concern = intent.getParcelableExtra(ConstantValues.KEY_MY_FOLLOW_USER);
             btnAccept.setVisibility(View.GONE);
             btnRefuse.setVisibility(View.GONE);
             if (concern != null) {

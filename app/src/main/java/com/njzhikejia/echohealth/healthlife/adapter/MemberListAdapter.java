@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 
 import com.njzhikejia.echohealth.healthlife.R;
+import com.njzhikejia.echohealth.healthlife.entity.Concerns;
 import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
 import com.njzhikejia.echohealth.healthlife.entity.RelativesData;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
@@ -27,9 +28,9 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
 
 
     private Context context;
-    private List<MyFollowsData.Data.Concerns> list;
+    private List<Concerns> list;
 
-    public MemberListAdapter(Context context, List<MyFollowsData.Data.Concerns> list) {
+    public MemberListAdapter(Context context, List<Concerns> list) {
         this.context = context;
         this.list = list;
     }
@@ -45,7 +46,7 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
     @Override
     public void onBindViewHolder(MemberViewHolder holder, final int position) {
         holder.itemView.setTag(position);
-        MyFollowsData.Data.Concerns member = list.get(position);
+        Concerns member = list.get(position);
         if (member == null) {
             Logger.e(TAG, "member == null!");
             return;
@@ -61,7 +62,7 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
         return list.size();
     }
 
-    public void setList(List<MyFollowsData.Data.Concerns> memberList) {
+    public void setList(List<Concerns> memberList) {
         this.list = memberList;
         notifyDataSetChanged();
     }

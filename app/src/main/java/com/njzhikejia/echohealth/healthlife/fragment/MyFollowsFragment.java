@@ -16,10 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
+import com.njzhikejia.echohealth.healthlife.HealthLifeApplication;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.UserApplyActivity;
 import com.njzhikejia.echohealth.healthlife.adapter.MyFollowsAdapter;
+import com.njzhikejia.echohealth.healthlife.entity.Concerns;
 import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
+import com.njzhikejia.echohealth.healthlife.greendao.ConcernsDao;
+import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
@@ -47,11 +51,13 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecycleView;
     private MyFollowsAdapter mAdapter;
-    private List<MyFollowsData.Data.Concerns> myFollowsList;
+    private List<Concerns> myFollowsList;
     private static final String TAG = "MyFollowsFragment";
     private MyFollowsHandler mHandler;
     private static final int LOAD_SUCCESS = 30;
     private static final int HANDLE_CONCERN_CODE = 40;
+    private DaoSession mDaoSession;
+    private ConcernsDao concernsDao;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,8 +70,15 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_my_follows, null);
+        initDaoSession();
         initView(view);
         return view;
+    }
+
+    private void initDaoSession() {
+        HealthLifeApplication mApplication = (HealthLifeApplication) getActivity().getApplication();
+        mDaoSession = mApplication.getDaoSession();
+        concernsDao = mDaoSession.getConcernsDao();
     }
 
     private void initView(View view) {
@@ -86,7 +99,7 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
             public void onItemClick(View view, int position) {
 
                 Intent intentMyFollow = new Intent(mContext, UserApplyActivity.class);
-                MyFollowsData.Data.Concerns concerns = myFollowsList.get(position);
+                Concerns concerns = myFollowsList.get(position);
                 intentMyFollow.putExtra(ConstantValues.KEY_MY_FOLLOW_USER, concerns);
                 startActivityForResult(intentMyFollow, HANDLE_CONCERN_CODE);
 
@@ -124,6 +137,7 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
         if (!NetWorkUtils.isNetworkConnected(mContext)) {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
             stopRefresh();
+            loadDataFromDb();
             return;
         }
 
@@ -132,6 +146,7 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure");
                 stopRefresh();
+                loadDataFromDb();
             }
 
             @Override
@@ -144,9 +159,18 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
                     MyFollowsData data = gson.fromJson(responseContent, MyFollowsData.class);
                     myFollowsList = data.getData().getConcerns();
                     mHandler.sendEmptyMessage(LOAD_SUCCESS);
+                    concernsDao.deleteAll();
+                    for (Concerns concerns : myFollowsList) {
+                        concernsDao.insert(concerns);
+                    }
                 }
             }
         });
+    }
+
+    private void loadDataFromDb() {
+        myFollowsList = concernsDao.loadAll();
+        mAdapter.setList(myFollowsList);
     }
 
     private void stopRefresh() {

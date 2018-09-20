@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.R;
+import com.njzhikejia.echohealth.healthlife.entity.Concerns;
 import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
 import com.njzhikejia.echohealth.healthlife.widget.CircleImageView;
 
@@ -21,14 +22,14 @@ import java.util.List;
 public class MyFollowsAdapter extends RecyclerView.Adapter<MyFollowsAdapter.FollowsViewHolder> implements View.OnClickListener {
 
     private Context context;
-    private List<MyFollowsData.Data.Concerns> list;
+    private List<Concerns> list;
 
-    public MyFollowsAdapter(Context context, List<MyFollowsData.Data.Concerns> list) {
+    public MyFollowsAdapter(Context context, List<Concerns> list) {
         this.context = context;
         this.list = list;
     }
 
-    public void setList(List<MyFollowsData.Data.Concerns> list) {
+    public void setList(List<Concerns> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -45,7 +46,7 @@ public class MyFollowsAdapter extends RecyclerView.Adapter<MyFollowsAdapter.Foll
     public void onBindViewHolder(FollowsViewHolder holder, int position) {
         holder.itemView.setTag(position);
 
-        MyFollowsData.Data.Concerns concerns  = (MyFollowsData.Data.Concerns) list.get(position);
+        Concerns concerns  = (Concerns) list.get(position);
         holder.tvName.setText(concerns.getName());
         holder.tvNumber.setText(concerns.getPhone());
         holder.btnAccept.setVisibility(View.GONE);
