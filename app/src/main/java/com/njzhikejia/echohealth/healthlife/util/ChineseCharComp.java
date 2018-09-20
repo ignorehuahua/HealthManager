@@ -1,8 +1,6 @@
 package com.njzhikejia.echohealth.healthlife.util;
 
-import com.njzhikejia.echohealth.healthlife.entity.Concerns;
-import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
-import com.njzhikejia.echohealth.healthlife.entity.RelativesData;
+import com.njzhikejia.echohealth.healthlife.entity.concern.Concerns;
 
 import java.text.Collator;
 import java.util.Comparator;

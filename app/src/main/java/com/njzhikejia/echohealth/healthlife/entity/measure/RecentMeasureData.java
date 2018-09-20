@@ -1,4 +1,4 @@
-package com.njzhikejia.echohealth.healthlife.entity;
+package com.njzhikejia.echohealth.healthlife.entity.measure;
 
 import com.google.gson.Gson;
 

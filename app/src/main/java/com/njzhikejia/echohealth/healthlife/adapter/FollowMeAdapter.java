@@ -9,9 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.R;
-import com.njzhikejia.echohealth.healthlife.entity.Concerneds;
-import com.njzhikejia.echohealth.healthlife.entity.FollowMeData;
-import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
+import com.njzhikejia.echohealth.healthlife.entity.concern.Concerneds;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.widget.CircleImageView;
 

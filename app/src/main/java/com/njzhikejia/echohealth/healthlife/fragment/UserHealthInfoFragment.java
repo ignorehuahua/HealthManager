@@ -16,10 +16,10 @@ import android.view.ViewGroup;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.UserDetailsActivity;
 import com.njzhikejia.echohealth.healthlife.adapter.UserBaseInfoAdapter;
-import com.njzhikejia.echohealth.healthlife.entity.Extend;
-import com.njzhikejia.echohealth.healthlife.entity.User;
+import com.njzhikejia.echohealth.healthlife.entity.user.Extend;
+import com.njzhikejia.echohealth.healthlife.entity.user.User;
 import com.njzhikejia.echohealth.healthlife.entity.UserBaseInfo;
-import com.njzhikejia.echohealth.healthlife.entity.UserDetailsResponse;
+import com.njzhikejia.echohealth.healthlife.entity.user.UserDetailsResponse;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 

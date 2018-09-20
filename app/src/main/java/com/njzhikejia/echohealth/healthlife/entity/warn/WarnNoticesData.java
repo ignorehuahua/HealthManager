@@ -1,11 +1,8 @@
 package com.njzhikejia.echohealth.healthlife.entity.warn;
 
 import com.google.gson.Gson;
-import com.njzhikejia.echohealth.healthlife.entity.Concerneds;
-import com.njzhikejia.echohealth.healthlife.entity.FollowMeData;
 
 import org.greenrobot.greendao.annotation.Convert;
-import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.converter.PropertyConverter;
 
 import java.util.ArrayList;

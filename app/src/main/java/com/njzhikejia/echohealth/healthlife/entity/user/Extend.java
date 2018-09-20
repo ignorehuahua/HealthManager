@@ -1,4 +1,4 @@
-package com.njzhikejia.echohealth.healthlife.entity;
+package com.njzhikejia.echohealth.healthlife.entity.user;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;

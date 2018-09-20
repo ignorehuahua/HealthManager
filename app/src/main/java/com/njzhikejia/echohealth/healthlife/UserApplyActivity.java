@@ -8,10 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.njzhikejia.echohealth.healthlife.entity.Concerneds;
-import com.njzhikejia.echohealth.healthlife.entity.Concerns;
-import com.njzhikejia.echohealth.healthlife.entity.FollowMeData;
-import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
+import com.njzhikejia.echohealth.healthlife.entity.concern.Concerneds;
+import com.njzhikejia.echohealth.healthlife.entity.concern.Concerns;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;

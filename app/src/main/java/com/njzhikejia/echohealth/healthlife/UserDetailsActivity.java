@@ -15,9 +15,9 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
-import com.njzhikejia.echohealth.healthlife.entity.Extend;
-import com.njzhikejia.echohealth.healthlife.entity.User;
-import com.njzhikejia.echohealth.healthlife.entity.UserDetailsResponse;
+import com.njzhikejia.echohealth.healthlife.entity.user.Extend;
+import com.njzhikejia.echohealth.healthlife.entity.user.User;
+import com.njzhikejia.echohealth.healthlife.entity.user.UserDetailsResponse;
 import com.njzhikejia.echohealth.healthlife.fragment.UserBaseInfoFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.UserHealthInfoFragment;
 import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;

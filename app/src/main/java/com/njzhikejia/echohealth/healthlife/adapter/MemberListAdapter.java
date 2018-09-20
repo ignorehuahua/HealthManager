@@ -11,9 +11,7 @@ import android.widget.TextView;
 
 
 import com.njzhikejia.echohealth.healthlife.R;
-import com.njzhikejia.echohealth.healthlife.entity.Concerns;
-import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
-import com.njzhikejia.echohealth.healthlife.entity.RelativesData;
+import com.njzhikejia.echohealth.healthlife.entity.concern.Concerns;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 
 import java.util.List;

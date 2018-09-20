@@ -1,10 +1,9 @@
-package com.njzhikejia.echohealth.healthlife.entity;
+package com.njzhikejia.echohealth.healthlife.entity.report;
 
 import com.google.gson.Gson;
 
 import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.converter.PropertyConverter;
-import org.w3c.dom.ProcessingInstruction;
 
 import java.util.ArrayList;
 import java.util.Arrays;

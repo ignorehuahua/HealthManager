@@ -9,8 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.R;
-import com.njzhikejia.echohealth.healthlife.entity.ReportData;
-import com.njzhikejia.echohealth.healthlife.entity.Reports;
+import com.njzhikejia.echohealth.healthlife.entity.report.Reports;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 
 import java.util.List;

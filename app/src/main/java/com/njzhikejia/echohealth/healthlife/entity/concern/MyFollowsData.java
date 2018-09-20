@@ -1,9 +1,7 @@
-package com.njzhikejia.echohealth.healthlife.entity;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.njzhikejia.echohealth.healthlife.entity.concern;
 
 import com.google.gson.Gson;
+import com.njzhikejia.echohealth.healthlife.entity.concern.Concerns;
 
 import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.converter.PropertyConverter;

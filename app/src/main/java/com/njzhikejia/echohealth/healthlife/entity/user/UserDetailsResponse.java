@@ -1,4 +1,4 @@
-package com.njzhikejia.echohealth.healthlife.entity;
+package com.njzhikejia.echohealth.healthlife.entity.user;
 
 import android.os.Parcel;
 import android.os.Parcelable;

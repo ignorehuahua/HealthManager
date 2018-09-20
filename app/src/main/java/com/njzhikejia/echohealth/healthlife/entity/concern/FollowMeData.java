@@ -1,7 +1,4 @@
-package com.njzhikejia.echohealth.healthlife.entity;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.njzhikejia.echohealth.healthlife.entity.concern;
 
 import com.google.gson.Gson;
 

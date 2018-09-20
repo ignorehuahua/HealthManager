@@ -12,16 +12,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
-import com.njzhikejia.echohealth.healthlife.QRCodeActivity;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.UserDetailsActivity;
 import com.njzhikejia.echohealth.healthlife.adapter.UserBaseInfoAdapter;
-import com.njzhikejia.echohealth.healthlife.entity.Extend;
-import com.njzhikejia.echohealth.healthlife.entity.User;
+import com.njzhikejia.echohealth.healthlife.entity.user.Extend;
+import com.njzhikejia.echohealth.healthlife.entity.user.User;
 import com.njzhikejia.echohealth.healthlife.entity.UserBaseInfo;
-import com.njzhikejia.echohealth.healthlife.entity.UserDetailsResponse;
+import com.njzhikejia.echohealth.healthlife.entity.user.UserDetailsResponse;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 
