@@ -20,6 +20,9 @@ import com.njzhikejia.echohealth.healthlife.HealthLifeApplication;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.adapter.MeasureDataAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.RecentMeasureData;
+import com.njzhikejia.echohealth.healthlife.entity.SpecificData;
+import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
+import com.njzhikejia.echohealth.healthlife.greendao.SpecificDataDao;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
@@ -47,12 +50,13 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecycleView;
     private MeasureDataAdapter mAdapter;
-    private List<RecentMeasureData.AllData.SpecificData> measureDataList;
+    private List<SpecificData> measureDataList;
     private Context mContext;
     private FloatingActionButton mFabBtn;
     private MeasureDataHandler mHandler;
     private static final int KEY_RECENT_DATA = 20;
-
+    private DaoSession mDaoSession;
+    private SpecificDataDao specificDataDao;
 
 
     @Override
@@ -67,11 +71,18 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
         Logger.d(TAG, "onCreateView");
         mContext = getActivity();
         View view = inflater.inflate(R.layout.fragment_measure_data, null);
+        initDaoSession();
         initView(view);
         mHandler = new MeasureDataHandler(this);
         queryRecentData();
         return view;
 
+    }
+
+    private void initDaoSession() {
+        HealthLifeApplication mApplication = (HealthLifeApplication) getActivity().getApplication();
+        mDaoSession = mApplication.getDaoSession();
+        specificDataDao = mDaoSession.getSpecificDataDao();
     }
 
     private void initView(View view) {
@@ -103,6 +114,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
         if (!NetWorkUtils.isNetworkConnected(mContext)) {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
             stopRefresh();
+            loadDataFomDb();
             return;
         }
         OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserRecentMeasureData(PreferenceUtil.getSelectedUserUID(mContext)), new Callback() {
@@ -110,6 +122,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure queryRecentData");
                 stopRefresh();
+                loadDataFomDb();
             }
 
             @Override
@@ -119,16 +132,16 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
                 Gson gson = new Gson();
                 RecentMeasureData recentMeasureData = gson.fromJson(responseContent, RecentMeasureData.class);
                 measureDataList = recentMeasureData.getData().getData();
-                for (RecentMeasureData.AllData.SpecificData data : measureDataList) {
+                for (SpecificData data : measureDataList) {
                     if (data.getType() == MeasureDataAdapter.BLOOD_PRESSURE) {
-                        RecentMeasureData.AllData.SpecificData diastolicData = new RecentMeasureData.AllData.SpecificData();
+                        SpecificData diastolicData = new SpecificData();
                         diastolicData.setBlood_pressure_type(MeasureDataAdapter.DIASTOLIC_PRESSURE);
                         diastolicData.setMeasure_time(data.getMeasure_time());
                         diastolicData.setType(data.getType());
                         diastolicData.setValue1(data.getValue1());
                         diastolicData.setValue2(data.getValue2());
 
-                        RecentMeasureData.AllData.SpecificData systolicData = new RecentMeasureData.AllData.SpecificData();
+                        SpecificData systolicData = new SpecificData();
                         systolicData.setBlood_pressure_type(MeasureDataAdapter.SYSTOLIC_PRESSURE);
                         systolicData.setMeasure_time(data.getMeasure_time());
                         systolicData.setType(data.getType());
@@ -138,12 +151,21 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
                         measureDataList.remove(data);
                         measureDataList.add(diastolicData);
                         measureDataList.add(systolicData);
+                        specificDataDao.deleteAll();
+                        for (SpecificData specificData : measureDataList) {
+                            specificDataDao.insert(specificData);
+                        }
                         break;
                     }
                 }
                 mHandler.sendEmptyMessage(KEY_RECENT_DATA);
             }
         });
+    }
+
+    private void loadDataFomDb() {
+        measureDataList = specificDataDao.loadAll();
+        mAdapter.setList(measureDataList);
     }
 
     @Override

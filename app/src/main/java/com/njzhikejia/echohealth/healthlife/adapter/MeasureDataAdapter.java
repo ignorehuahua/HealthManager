@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.entity.RecentMeasureData;
+import com.njzhikejia.echohealth.healthlife.entity.SpecificData;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class MeasureDataAdapter extends RecyclerView.Adapter<MeasureDataAdapter.
 
     private static final String TAG = "MeasureDataAdapter";
     private Context context;
-    private List<RecentMeasureData.AllData.SpecificData> list;
+    private List<SpecificData> list;
     public static final int BLOOD_PRESSURE = 1;
     private static final int HEART_RATE = 2;
     private static final int BLOOD_SUGAR = 3;
@@ -31,12 +32,12 @@ public class MeasureDataAdapter extends RecyclerView.Adapter<MeasureDataAdapter.
     public static final int SYSTOLIC_PRESSURE = 12;  //收缩压
 
 
-    public MeasureDataAdapter(Context context, List<RecentMeasureData.AllData.SpecificData> list) {
+    public MeasureDataAdapter(Context context, List<SpecificData> list) {
         this.context = context;
         this.list = list;
     }
 
-    public void setList(List<RecentMeasureData.AllData.SpecificData> recentlist){
+    public void setList(List<SpecificData> recentlist){
         this.list = recentlist;
         notifyDataSetChanged();
     }
@@ -50,7 +51,7 @@ public class MeasureDataAdapter extends RecyclerView.Adapter<MeasureDataAdapter.
 
     @Override
     public void onBindViewHolder(MeasureDataViewHolder holder, int position) {
-        RecentMeasureData.AllData.SpecificData measureData = list.get(position);
+        SpecificData measureData = list.get(position);
         if (measureData == null) {
             Logger.e(TAG, "measureData == null!");
             return;
@@ -65,7 +66,7 @@ public class MeasureDataAdapter extends RecyclerView.Adapter<MeasureDataAdapter.
         return list.size();
     }
 
-    private void matchMeasureType(RecentMeasureData.AllData.SpecificData measureData, MeasureDataViewHolder holder) {
+    private void matchMeasureType(SpecificData measureData, MeasureDataViewHolder holder) {
         switch (measureData.getType()) {
             case BLOOD_PRESSURE:
                 if (measureData.getBlood_pressure_type() == DIASTOLIC_PRESSURE) {
@@ -100,7 +101,7 @@ public class MeasureDataAdapter extends RecyclerView.Adapter<MeasureDataAdapter.
         }
     }
 
-    private void calculateHealthRate(RecentMeasureData.AllData.SpecificData measureData, MeasureDataViewHolder viewHolder) {
+    private void calculateHealthRate(SpecificData measureData, MeasureDataViewHolder viewHolder) {
         switch (measureData.getType()) {
             case HEART_RATE:
                     if (measureData.getValue1() > 100) {

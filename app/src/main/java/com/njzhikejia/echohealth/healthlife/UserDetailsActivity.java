@@ -165,6 +165,9 @@ public class UserDetailsActivity extends BaseActivity {
         List<User> userList = userDao.loadAll();
         List<Extend> extendList = extendDao.loadAll();
         Logger.d(TAG, "userList.size = "+userList.size()+ "extendList.size = "+extendList.size());
+        if (userList.size() == 0 || extendList.size() == 0) {
+            return;
+        }
         User user = new User();
         Extend extend = new Extend();
         if (userList != null && userList.size() > 0) {
