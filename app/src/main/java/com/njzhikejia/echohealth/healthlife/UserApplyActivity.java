@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.njzhikejia.echohealth.healthlife.entity.Concerneds;
 import com.njzhikejia.echohealth.healthlife.entity.Concerns;
 import com.njzhikejia.echohealth.healthlife.entity.FollowMeData;
 import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
@@ -64,7 +65,7 @@ public class UserApplyActivity extends BaseActivity implements View.OnClickListe
     private void setInfo() {
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(ConstantValues.KEY_FOLLOW_ME_USER)) {
-            FollowMeData.Data.Concerneds concernd = intent.getParcelableExtra(ConstantValues.KEY_FOLLOW_ME_USER);
+            Concerneds concernd = intent.getParcelableExtra(ConstantValues.KEY_FOLLOW_ME_USER);
             if (concernd != null) {
                 if (concernd.getStatus() == ConstantValues.STATUS_APPLY) {
                     btnRefuse.setVisibility(View.VISIBLE);

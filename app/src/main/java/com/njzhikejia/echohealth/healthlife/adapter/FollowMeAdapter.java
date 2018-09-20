@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.R;
+import com.njzhikejia.echohealth.healthlife.entity.Concerneds;
 import com.njzhikejia.echohealth.healthlife.entity.FollowMeData;
 import com.njzhikejia.echohealth.healthlife.entity.MyFollowsData;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
@@ -23,14 +24,14 @@ import java.util.List;
 public class FollowMeAdapter extends RecyclerView.Adapter<FollowMeAdapter.FollowsViewHolder> implements View.OnClickListener {
 
     private Context context;
-    private List<FollowMeData.Data.Concerneds> list;
+    private List<Concerneds> list;
 
-    public FollowMeAdapter(Context context, List<FollowMeData.Data.Concerneds> list) {
+    public FollowMeAdapter(Context context, List<Concerneds> list) {
         this.context = context;
         this.list = list;
     }
 
-    public void setList(List<FollowMeData.Data.Concerneds> list) {
+    public void setList(List<Concerneds> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -56,7 +57,7 @@ public class FollowMeAdapter extends RecyclerView.Adapter<FollowMeAdapter.Follow
     public void onBindViewHolder(FollowsViewHolder holder, int position) {
         holder.itemView.setTag(position);
 
-        FollowMeData.Data.Concerneds concerns = list.get(position);
+        Concerneds concerns = list.get(position);
         holder.tvName.setText(concerns.getName());
         holder.tvNumber.setText(concerns.getPhone());
         matchStatus(concerns, holder, position);
@@ -86,7 +87,7 @@ public class FollowMeAdapter extends RecyclerView.Adapter<FollowMeAdapter.Follow
         }
     }
 
-    private void matchStatus(final FollowMeData.Data.Concerneds concerneds, FollowsViewHolder viewHolder, final int position) {
+    private void matchStatus(final Concerneds concerneds, FollowsViewHolder viewHolder, final int position) {
         switch (concerneds.getStatus()) {
             case ConstantValues.STATUS_APPLY:
                 viewHolder.btnAccept.setVisibility(View.VISIBLE);

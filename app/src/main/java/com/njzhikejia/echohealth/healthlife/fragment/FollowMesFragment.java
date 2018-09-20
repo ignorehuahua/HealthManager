@@ -16,10 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
+import com.njzhikejia.echohealth.healthlife.HealthLifeApplication;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.UserApplyActivity;
 import com.njzhikejia.echohealth.healthlife.adapter.FollowMeAdapter;
+import com.njzhikejia.echohealth.healthlife.entity.Concerneds;
 import com.njzhikejia.echohealth.healthlife.entity.FollowMeData;
+import com.njzhikejia.echohealth.healthlife.greendao.ConcernedsDao;
+import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
@@ -48,11 +52,13 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecycleView;
     private FollowMeAdapter mAdapter;
-    private List<FollowMeData.Data.Concerneds> followMesList;
+    private List<Concerneds> followMesList;
     private FollowMeHandler mHandler;
     private static final int LOAD_SUCCESS = 30;
     private static final int RESULT_SUCCESS = 31;
     private static final int RESULT_FAILURE = 32;
+    private DaoSession mDaoSession;
+    private ConcernedsDao concernedsDao;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,8 +71,15 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_follow_me, null);
+        initDaoSession();
         initView(view);
         return view;
+    }
+
+    private void initDaoSession() {
+        HealthLifeApplication mApplication = (HealthLifeApplication) getActivity().getApplication();
+        mDaoSession = mApplication.getDaoSession();
+        concernedsDao = mDaoSession.getConcernedsDao();
     }
 
     private void initView(View view) {
@@ -87,7 +100,7 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
             public void onItemClick(View view, int position) {
                 Logger.d(TAG, "onItemClick position = "+position);
                 Intent intentFollowMe = new Intent(mContext, UserApplyActivity.class);
-                FollowMeData.Data.Concerneds concerneds = followMesList.get(position);
+                Concerneds concerneds = followMesList.get(position);
                 intentFollowMe.putExtra(ConstantValues.KEY_FOLLOW_ME_USER, (Parcelable) concerneds);
                 startActivity(intentFollowMe);
             }
@@ -95,7 +108,7 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
             @Override
             public void onBtnAccpetOnClick(int position) {
                 Logger.d(TAG, "onBtnAcceptOnClick position = "+position);
-                FollowMeData.Data.Concerneds concerneds = followMesList.get(position);
+                Concerneds concerneds = followMesList.get(position);
                 handleConcern(PreferenceUtil.getLoginUserUID(mContext), concerneds.getConcern_id(), ConstantValues.STATUS_DONE);
 
             }
@@ -132,6 +145,7 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
         if (!NetWorkUtils.isNetworkConnected(mContext)) {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
             stopRefresh();
+            loadDataFromDb();
             return;
         }
 
@@ -140,6 +154,7 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "load follow me onFailure");
                 stopRefresh();
+                loadDataFromDb();
             }
 
             @Override
@@ -152,9 +167,18 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
                     FollowMeData data = gson.fromJson(responseContent, FollowMeData.class);
                     followMesList = data.getData().getConcerns();
                     mHandler.sendEmptyMessage(LOAD_SUCCESS);
+                    concernedsDao.deleteAll();
+                    for (Concerneds concerneds : followMesList) {
+                        concernedsDao.insert(concerneds);
+                    }
                 }
             }
         });
+    }
+
+    private void loadDataFromDb() {
+        followMesList = concernedsDao.loadAll();
+        mAdapter.setList(followMesList);
     }
 
     @Override
