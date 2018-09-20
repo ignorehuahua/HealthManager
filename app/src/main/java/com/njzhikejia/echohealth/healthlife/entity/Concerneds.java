@@ -1,10 +1,13 @@
 package com.njzhikejia.echohealth.healthlife.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
-public class Concerneds {
+public class Concerneds implements Parcelable{
 
     private int concern_id;
     private int uid;
@@ -43,6 +46,36 @@ public class Concerneds {
     @Generated(hash = 1531998959)
     public Concerneds() {
     }
+
+    protected Concerneds(Parcel in) {
+        concern_id = in.readInt();
+        uid = in.readInt();
+        name = in.readString();
+        nickname = in.readString();
+        idcard = in.readString();
+        phone = in.readString();
+        gender = in.readInt();
+        birthday = in.readString();
+        home_addr = in.readString();
+        avatar = in.readString();
+        concern_type = in.readInt();
+        status = in.readInt();
+        create_time = in.readString();
+        result_time = in.readString();
+    }
+
+    public static final Creator<Concerneds> CREATOR = new Creator<Concerneds>() {
+        @Override
+        public Concerneds createFromParcel(Parcel in) {
+            return new Concerneds(in);
+        }
+
+        @Override
+        public Concerneds[] newArray(int size) {
+            return new Concerneds[size];
+        }
+    };
+
     public int getConcern_id() {
         return this.concern_id;
     }
@@ -126,5 +159,28 @@ public class Concerneds {
     }
     public void setResult_time(String result_time) {
         this.result_time = result_time;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(concern_id);
+        dest.writeInt(uid);
+        dest.writeString(name);
+        dest.writeString(nickname);
+        dest.writeString(idcard);
+        dest.writeString(phone);
+        dest.writeInt(gender);
+        dest.writeString(birthday);
+        dest.writeString(home_addr);
+        dest.writeString(avatar);
+        dest.writeInt(concern_type);
+        dest.writeInt(status);
+        dest.writeString(create_time);
+        dest.writeString(result_time);
     }
 }
