@@ -48,6 +48,10 @@ public class ConstantValues {
 
     public static final String ACTION_LOAD_USER_DETAILS = "con.healthlife.ACTION_LOAD_USER_DETAILS";
 
+    public static final String ACTION_CONCERN_REQUEST_RECEIVED = "com.healthlife.ACTION_CONCERN_REQUEST_RECEIVED";
+
+    public static final String ACTION_CONCERN_REQUEST_FINISHED = "com.healthlife.ACTION_CONCERN_REQUEST_FINISHED";
+
 
     /**
      * 好友申请状态

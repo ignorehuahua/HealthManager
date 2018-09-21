@@ -63,7 +63,7 @@ public class MeasureDataActivity extends BaseActivity {
             mNavigation.setVisibility(View.GONE);
         } else {
             mNavigation.setVisibility(View.VISIBLE);
-            mToolbar.setNavigationIcon(R.drawable.ic_menu);
+            mToolbar.setNavigationIcon(R.drawable.ic_fall);
             mDrawerToggle = new ActionBarDrawerToggle(
                     this,
                     mDrawerLayout,

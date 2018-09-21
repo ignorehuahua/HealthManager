@@ -20,17 +20,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
+import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -50,6 +55,8 @@ import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
+import com.njzhikejia.echohealth.healthlife.widget.BadgeDrawerArrowDrawable;
+import com.njzhikejia.echohealth.healthlife.widget.BadgeView;
 import com.njzhikejia.echohealth.healthlife.widget.banner.CycleViewPager;
 import com.njzhikejia.echohealth.healthlife.widget.banner.ViewUtil;
 import java.io.File;
@@ -95,6 +102,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public static final String KEY_MEMBER_UID = "key_member_uid";
     private DaoSession mDaoSession;
     private ConcernsDao concernsDao;
+    private BadgeDrawerArrowDrawable badgeDrawerArrowDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +111,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mHandler = new MainHandler(this);
         initDaoSession();
         initView();
+        judgeNewConcerns();
         loadRealtives();
         queryUserInfo();
         initPopupWindow();
@@ -118,14 +127,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Logger.d(TAG, "initView");
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
         mainBroadcastReceiver = new MainBroadcastReceiver();
-        mLocalBroadcastManager.registerReceiver(mainBroadcastReceiver, new IntentFilter(ConstantValues.ACTION_EXIT_LOGIN));
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConstantValues.ACTION_EXIT_LOGIN);
+        intentFilter.addAction(ConstantValues.ACTION_CONCERN_REQUEST_RECEIVED);
+        intentFilter.addAction(ConstantValues.ACTION_CONCERN_REQUEST_FINISHED);
+        mLocalBroadcastManager.registerReceiver(mainBroadcastReceiver, intentFilter);
         mSwipeRefreshLayout = findViewById(R.id.refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mNavigation = findViewById(R.id.bottom_navigation);
         mDrawerLayout = findViewById(R.id.drawerLayout);
-
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,
@@ -178,10 +192,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ivAvatar= headerLayout.findViewById(R.id.iv_avatar);
         tvName = headerLayout.findViewById(R.id.tv_header_name);
         tvNumber = headerLayout.findViewById(R.id.tv_header_number);
-
-
         updateName();
-
         ivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,11 +232,117 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         });
     }
 
+    private void judgeNewConcerns() {
+        if (PreferenceUtil.getNewConcern(this)) {
+            showSideUnread();
+            showMemberMenuUnread();
+        } else {
+            hideSideUnread();
+            hideMemberMenuUnread();
+        }
+    }
+
+    /**
+     * 显示成员管理小红点
+     */
+    private void showMemberMenuUnread() {
+        if (mNavigation == null) {
+            mNavigation =findViewById(R.id.bottom_navigation);
+        }
+            LinearLayout linearLayout = (LinearLayout) mNavigation.getMenu().findItem(R.id.menu_meember_manager).getActionView();
+            if (linearLayout != null) {
+                TextView tv = linearLayout.findViewById(R.id.tv_unread);
+                tv.setVisibility(View.VISIBLE);
+            } else {
+                Logger.e(TAG, "LinearLayout == null");
+            }
+    }
+
+    /**
+     * 隐藏成员管理小红点
+     */
+    private void hideMemberMenuUnread() {
+        if (mNavigation == null) {
+            mNavigation =findViewById(R.id.bottom_navigation);
+        }
+        LinearLayout linearLayout = (LinearLayout) mNavigation.getMenu().findItem(R.id.menu_meember_manager).getActionView();
+        if (linearLayout != null) {
+            TextView tv = linearLayout.findViewById(R.id.tv_unread);
+            tv.setVisibility(View.GONE);
+        } else {
+            Logger.e(TAG, "LinearLayout == null");
+        }
+    }
+
+    /**
+     * 显示消息中心小红点
+     */
+    private void showMsgCenterMenuUnread() {
+        if (mNavigation == null) {
+            mNavigation =findViewById(R.id.bottom_navigation);
+        }
+            LinearLayout linearLayout = (LinearLayout) mNavigation.getMenu().findItem(R.id.menu_msg_center).getActionView();
+            if (linearLayout != null) {
+                TextView tv = linearLayout.findViewById(R.id.tv_unread);
+                tv.setVisibility(View.VISIBLE);
+            } else {
+                Logger.e(TAG, "LinearLayout == null");
+            }
+    }
+
+    /**
+     * 隐藏消息中心小红点
+     */
+    private void hideMsgCenterMenuUnread() {
+        if (mNavigation == null) {
+            mNavigation =findViewById(R.id.bottom_navigation);
+        }
+        LinearLayout linearLayout = (LinearLayout) mNavigation.getMenu().findItem(R.id.menu_msg_center).getActionView();
+        if (linearLayout != null) {
+            TextView tv = linearLayout.findViewById(R.id.tv_unread);
+            tv.setVisibility(View.GONE);
+        } else {
+            Logger.e(TAG, "LinearLayout == null");
+        }
+    }
+
+    /**
+     * 显示toolbar左侧菜单键小红点
+     */
+    private void showSideUnread() {
+        if (mDrawerToggle != null) {
+            if (badgeDrawerArrowDrawable == null) {
+                badgeDrawerArrowDrawable = new BadgeDrawerArrowDrawable(getSupportActionBar().getThemedContext());
+            }
+            mDrawerToggle.setDrawerArrowDrawable(badgeDrawerArrowDrawable);
+        }
+    }
+
+    /**
+     * 隐藏toolbar左侧菜单键小红点
+     */
+    private void hideSideUnread() {
+        if (mDrawerToggle != null) {
+            mDrawerToggle.setDrawerArrowDrawable(new DrawerArrowDrawable(getSupportActionBar().getThemedContext()));
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
     class MainBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (ConstantValues.ACTION_EXIT_LOGIN.equals(intent.getAction())) {
                 finish();
+            } else if (ConstantValues.ACTION_CONCERN_REQUEST_RECEIVED.equals(intent.getAction())) {
+                showSideUnread();
+                showMemberMenuUnread();
+            } else if (ConstantValues.ACTION_CONCERN_REQUEST_FINISHED.equals(intent.getAction())) {
+                hideSideUnread();
+                hideMemberMenuUnread();
             }
         }
     }

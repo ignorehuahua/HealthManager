@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -219,6 +220,14 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
                     break;
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Logger.d(TAG, "onResume");
+        PreferenceUtil.setNewConcern(mContext, false);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(ConstantValues.ACTION_CONCERN_REQUEST_FINISHED));
     }
 
     private void stopRefresh() {

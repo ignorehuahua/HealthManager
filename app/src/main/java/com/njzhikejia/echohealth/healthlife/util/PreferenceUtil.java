@@ -17,6 +17,7 @@ public class PreferenceUtil {
     private static final String KEY_LOGIN_USER_NAME = "key_login_name";
     private static final String KEY_LOGIN_USER_PWD = "key_user_pwd";
     private static final String KEY_DEVICE_TOKEN = "key_device_token";
+    private static final String KEY_NEW_CONCERN = "key_new_concern";
 
     public static void putString(Context context, String key, String value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -40,6 +41,18 @@ public class PreferenceUtil {
     public static int getInt(Context context, String key, int defaultValue) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(key, defaultValue);
+    }
+
+    public static void putBoolean(Context context, String key, boolean value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+
+    public static boolean getBoolean(Context context, String key, boolean defaultValue) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(key, defaultValue);
     }
 
     public static void putLoginUserUID(Context context, int value) {
@@ -97,6 +110,14 @@ public class PreferenceUtil {
     public static String getDeviceToken(Context context) {
         return getString(context, KEY_DEVICE_TOKEN, "");
 
+    }
+
+    public static void setNewConcern(Context concext, boolean value) {
+        putBoolean(concext, KEY_NEW_CONCERN, value);
+    }
+
+    public static Boolean getNewConcern(Context context) {
+        return getBoolean(context, KEY_NEW_CONCERN, false);
     }
 
     // 清除缓存数据

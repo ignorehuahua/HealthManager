@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -113,6 +114,11 @@ public class HealthLifeApplication extends Application{
                 //调用super，会展示通知，不调用super，则不展示通知。
                 super.dealWithNotificationMessage(context, msg);
                 Logger.d(TAG, "dealWithNotificationMessage title = "+msg.title + "content = "+msg.text);
+                if (msg.title.equals(getString(R.string.apply_concern))) {
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(ConstantValues.ACTION_CONCERN_REQUEST_RECEIVED));
+                    PreferenceUtil.setNewConcern(getApplicationContext(), true);
+                    return;
+                }
                 MessageDao messageDao = daoSession.getMessageDao();
                 Message message = new Message(msg.title, msg.text);
                 messageDao.insert(message);
