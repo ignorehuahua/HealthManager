@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -184,7 +183,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 PreferenceUtil.putLoginUserUID(LoginActivity.this, uid);
                 PreferenceUtil.putSecKey(LoginActivity.this, secKey);
                 PreferenceUtil.putLoginUserPhone(LoginActivity.this, name);
-                PreferenceUtil.putLOginUserPwd(LoginActivity.this, etPwd.getText().toString());
+                PreferenceUtil.putLoginUserPwd(LoginActivity.this, etPwd.getText().toString());
             }
         });
     }

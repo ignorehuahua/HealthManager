@@ -95,7 +95,7 @@ public class PreferenceUtil {
         return getString(context, KEY_LOGIN_USER_NAME, "");
     }
 
-    public static void putLOginUserPwd(Context context, String value) {
+    public static void putLoginUserPwd(Context context, String value) {
         putString(context, KEY_LOGIN_USER_PWD, value);
     }
 

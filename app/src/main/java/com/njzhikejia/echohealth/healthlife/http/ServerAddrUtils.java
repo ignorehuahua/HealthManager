@@ -141,4 +141,14 @@ public class ServerAddrUtils {
     public static String getHandleConcrensUrl(int userId, int concernId) {
         return ROOT_SERVER_ADDR + "/user/" + userId + "/handle/concerns/" + concernId + "?appid=4&t=" + System.currentTimeMillis();
     }
+
+    /**
+     * 重置密码
+     * http://120.55.22.117:28001/user/1/password?appid=4&t=1532007925
+     * @param uid
+     * @return
+     */
+    public static String getResetPwdUrl(int uid) {
+        return ROOT_SERVER_ADDR + "/user/" + uid + "/password?appid=4&t=" + System.currentTimeMillis();
+    }
 }

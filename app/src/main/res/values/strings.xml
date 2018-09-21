@@ -140,4 +140,6 @@
     <string name="request_failure">请求失败，请重试</string>
     <string name="follow">关注</string>
     <string name="apply_concern">关注申请</string>
+    <string name="reset_pwd_success">密码修改成功</string>
+    <string name="reset_pwd_failure">密码修改失败</string>
 </resources>

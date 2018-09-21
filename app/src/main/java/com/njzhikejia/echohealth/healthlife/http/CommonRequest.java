@@ -94,6 +94,15 @@ public class CommonRequest {
         return postRequest(ServerAddrUtils.getHandleConcrensUrl(userId, concernId), map);
     }
 
+    public static Request postResetPwdRequest(int uid, String old_password, String new_password) {
+        Map<String, Object> map = new HashMap<>();
+        String oldPasswordSha1 = PhoneUtil.shaEncrypt(old_password);
+        String newPasswordSha1 = PhoneUtil.shaEncrypt(new_password);
+        map.put("old_password", oldPasswordSha1);
+        map.put("new_password", newPasswordSha1);
+        return postRequest(ServerAddrUtils.getResetPwdUrl(uid), map);
+    }
+
     /**
      * 获取用户详情
      * @param uid

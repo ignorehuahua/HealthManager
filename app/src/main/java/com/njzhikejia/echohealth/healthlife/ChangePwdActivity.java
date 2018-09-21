@@ -1,6 +1,8 @@
 package com.njzhikejia.echohealth.healthlife;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -10,9 +12,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
+import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
+
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class ChangePwdActivity extends BaseActivity implements TextWatcher {
 
@@ -22,12 +34,16 @@ public class ChangePwdActivity extends BaseActivity implements TextWatcher {
     private EditText etNewPwd;
     private EditText etConfirmPwd;
     private Button btnChangePwd;
+    private ResetHandler mHandler;
+    private static final int RESET_FAILURE = 40;
+    private static final int RESET_SUCCESS = 41;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_pwd);
         Logger.d(TAG, "onCreate");
+        mHandler = new ResetHandler(this);
         initView();
     }
 
@@ -68,12 +84,40 @@ public class ChangePwdActivity extends BaseActivity implements TextWatcher {
             clearEditText();
             return;
         }
+        resetPwd();
     }
 
     private void clearEditText() {
         etOldPwd.setText("");
         etNewPwd.setText("");
         etConfirmPwd.setText("");
+    }
+
+    private void resetPwd() {
+        if (!NetWorkUtils.isNetworkConnected(this)) {
+            ToastUtil.showShortToast(this, R.string.net_work_error);
+            return;
+        }
+        OKHttpClientManager.getInstance().postAsync(CommonRequest.postResetPwdRequest(PreferenceUtil.getLoginUserUID(this),
+                etOldPwd.getText().toString(), etNewPwd.getText().toString()), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.d(TAG, "reset pwd failure");
+                mHandler.sendEmptyMessage(RESET_FAILURE);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+                Logger.d(TAG, "onRespnse code = "+response.code() + "content = "+responseContent);
+                if (response.code() == 200) {
+                    mHandler.sendEmptyMessage(RESET_SUCCESS);
+                    PreferenceUtil.putLoginUserPwd(ChangePwdActivity.this, etNewPwd.getText().toString());
+                } else {
+                    mHandler.sendEmptyMessage(RESET_FAILURE);
+                }
+            }
+        });
     }
 
     @Override
@@ -94,5 +138,32 @@ public class ChangePwdActivity extends BaseActivity implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
 
+    }
+
+   class ResetHandler extends Handler{
+
+        private WeakReference<ChangePwdActivity> weakReference;
+
+        public ResetHandler(ChangePwdActivity activity) {
+            weakReference = new WeakReference<ChangePwdActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case RESET_SUCCESS:
+                    if (weakReference.get() != null) {
+                        ToastUtil.showShortToast(ChangePwdActivity.this, R.string.reset_pwd_success);
+                        finish();
+                    }
+                    break;
+                case RESET_FAILURE:
+                    if (weakReference.get() != null) {
+                        ToastUtil.showShortToast(ChangePwdActivity.this, R.string.reset_pwd_failure);
+                    }
+                    break;
+            }
+        }
     }
 }
