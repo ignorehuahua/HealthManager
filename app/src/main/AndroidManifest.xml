@@ -84,6 +84,7 @@
         <activity android:name=".MessageCenterActivity" />
         <activity android:name=".MessageDetailsActivity" />
         <activity android:name=".UserApplyActivity" />
+        <activity android:name=".AboutActivity" />
         <activity
             android:name=".ScanActivity"
             android:screenOrientation="portrait"
