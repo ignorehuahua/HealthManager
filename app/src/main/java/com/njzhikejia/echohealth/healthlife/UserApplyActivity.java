@@ -36,6 +36,7 @@ public class UserApplyActivity extends BaseActivity implements View.OnClickListe
     private Button btnRefuse;
     public static final int CONCERN_TYPE_QR_CODE = 1;
     private int concernId;
+    private TextView tvResult;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class UserApplyActivity extends BaseActivity implements View.OnClickListe
         tvTime = findViewById(R.id.tv_time_value);
         btnAccept = findViewById(R.id.btn_accept);
         btnRefuse = findViewById(R.id.btn_refuse);
+        tvResult = findViewById(R.id.tv_result);
         btnAccept.setOnClickListener(this);
         btnRefuse.setOnClickListener(this);
         setInfo();
@@ -95,7 +97,7 @@ public class UserApplyActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    private void handleConcern(int userId, int concernId, int status) {
+    private void handleConcern(int userId, int concernId, final int status) {
 
         if (!NetWorkUtils.isNetworkConnected(UserApplyActivity.this)) {
             ToastUtil.showShortToast(UserApplyActivity.this, R.string.net_work_error);
@@ -112,7 +114,25 @@ public class UserApplyActivity extends BaseActivity implements View.OnClickListe
                 String responseContent = response.body().string();
 
                 Logger.d(TAG, "onResponse code = "+response.code() + "content = "+responseContent);
-                setResult(RESULT_OK);
+                if (response.code() == 200) {
+                    setResult(RESULT_OK);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            btnAccept.setVisibility(View.GONE);
+                            btnRefuse.setVisibility(View.GONE);
+                            if (status == ConstantValues.STATUS_DONE) {
+                                tvResult.setVisibility(View.VISIBLE);
+                                tvResult.setText(R.string.added_already);
+                            } else {
+                                tvResult.setVisibility(View.VISIBLE);
+                                tvResult.setText(R.string.refused_already);
+                            }
+                        }
+                    });
+
+
+                }
             }
         });
     }

@@ -118,6 +118,9 @@ public class HealthLifeApplication extends Application{
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(ConstantValues.ACTION_CONCERN_REQUEST_RECEIVED));
                     PreferenceUtil.setNewConcern(getApplicationContext(), true);
                     return;
+                } else if (msg.title.equals(getString(R.string.apply_pass))) {
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(ConstantValues.ACTION_CONCERN_REQUEST_RECEIVED));
+                    return;
                 }
                 MessageDao messageDao = daoSession.getMessageDao();
                 Message message = new Message(msg.title, msg.text);
@@ -260,8 +263,11 @@ public class HealthLifeApplication extends Application{
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseContent = response.body().string();
-
-                Logger.d(TAG, "onResponse code = "+response.code() + "content = "+responseContent);
+                if (response.code() == 200) {
+                    Logger.d(TAG, "onResponse code = "+response.code() + "content = "+responseContent);
+                } else {
+                    startUdateDeviceInfoService();
+                }
             }
         });
     }

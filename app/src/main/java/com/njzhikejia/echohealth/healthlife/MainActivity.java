@@ -131,6 +131,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         intentFilter.addAction(ConstantValues.ACTION_EXIT_LOGIN);
         intentFilter.addAction(ConstantValues.ACTION_CONCERN_REQUEST_RECEIVED);
         intentFilter.addAction(ConstantValues.ACTION_CONCERN_REQUEST_FINISHED);
+        intentFilter.addAction(ConstantValues.ACTION_CONCERN_REQUEST_ACCEPTED);
         mLocalBroadcastManager.registerReceiver(mainBroadcastReceiver, intentFilter);
         mSwipeRefreshLayout = findViewById(R.id.refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar);
@@ -343,6 +344,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             } else if (ConstantValues.ACTION_CONCERN_REQUEST_FINISHED.equals(intent.getAction())) {
                 hideSideUnread();
                 hideMemberMenuUnread();
+            } else if (ConstantValues.ACTION_CONCERN_REQUEST_ACCEPTED.equals(intent.getAction())) {
+                loadRealtives();
             }
         }
     }

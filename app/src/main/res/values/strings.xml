@@ -130,7 +130,7 @@
     <string name="msg_details">消息详情</string>
     <string name="accept">同意</string>
     <string name="refuse">拒绝</string>
-    <string name="added_already">已添加</string>
+    <string name="added_already">已通过</string>
     <string name="refused_already">已拒绝</string>
     <string name="source">来源</string>
     <string name="apply_time">申请时间</string>

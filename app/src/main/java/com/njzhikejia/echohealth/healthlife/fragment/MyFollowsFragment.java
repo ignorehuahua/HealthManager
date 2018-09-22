@@ -1,12 +1,15 @@
 package com.njzhikejia.echohealth.healthlife.fragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -61,6 +64,8 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
     private DaoSession mDaoSession;
     private ConcernsDao concernsDao;
     private TextView tvNoData;
+    private LocalBroadcastManager mLocalBroadcastManager;
+    private FollowBroadcastReceiver mReceiver;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +90,10 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
     }
 
     private void initView(View view) {
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
+        mReceiver = new FollowBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter(ConstantValues.ACTION_CONCERN_REQUEST_ACCEPTED);
+        mLocalBroadcastManager.registerReceiver(mReceiver, intentFilter);
         tvNoData = view.findViewById(R.id.tv_no_data);
         tvNoData.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout = view.findViewById(R.id.refresh_layout);
@@ -110,6 +119,16 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
 
             }
         });
+    }
+
+    class FollowBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ConstantValues.ACTION_CONCERN_REQUEST_ACCEPTED)) {
+                loadMyFollows();
+            }
+        }
     }
 
     class MyFollowsHandler extends Handler{
@@ -211,6 +230,14 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == HANDLE_CONCERN_CODE && resultCode == Activity.RESULT_OK) {
             loadMyFollows();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mLocalBroadcastManager != null) {
+            mLocalBroadcastManager.unregisterReceiver(mReceiver);
         }
     }
 }

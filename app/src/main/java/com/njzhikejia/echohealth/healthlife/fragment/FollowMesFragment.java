@@ -44,6 +44,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by 16222 on 2018/9/16.
  */
@@ -63,6 +65,7 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
     private DaoSession mDaoSession;
     private ConcernedsDao concernedsDao;
     private RelativeLayout rlEmpty;
+    private static final int HANDLE_CONCERN_QUEST_CODE = 50;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,7 +110,7 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
                 Intent intentFollowMe = new Intent(mContext, UserApplyActivity.class);
                 Concerneds concerneds = followMesList.get(position);
                 intentFollowMe.putExtra(ConstantValues.KEY_FOLLOW_ME_USER, (Parcelable) concerneds);
-                startActivity(intentFollowMe);
+                startActivityForResult(intentFollowMe, HANDLE_CONCERN_QUEST_CODE);
             }
 
             @Override
@@ -118,6 +121,15 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
 
             }
         });
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == HANDLE_CONCERN_QUEST_CODE) {
+            loadFollowMes();
+        }
     }
 
     private void checkEmptyData() {

@@ -2,6 +2,7 @@ package com.njzhikejia.echohealth.healthlife;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
@@ -30,8 +31,9 @@ public class AboutActivity extends BaseActivity {
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Logger.d(TAG, "versionCode = "+BuildConfig.VERSION_NAME);
         tvVerionCode = findViewById(R.id.tv_app_version);
-        tvVerionCode.setText(R.string.version_code + BuildConfig.VERSION_CODE);
+        tvVerionCode.setText(getString(R.string.version_code) + BuildConfig.VERSION_NAME);
         tvUpdate = findViewById(R.id.tv_update);
         tvUpdate.setOnClickListener(new View.OnClickListener() {
             @Override

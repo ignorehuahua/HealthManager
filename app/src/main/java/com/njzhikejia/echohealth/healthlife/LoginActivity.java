@@ -1,6 +1,11 @@
 package com.njzhikejia.echohealth.healthlife;
 
+import android.annotation.TargetApi;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +20,7 @@ import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.entity.LoginResponse;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
+import com.njzhikejia.echohealth.healthlife.service.UpdateDeviceInfoService;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.njzhikejia.echohealth.healthlife.util.PhoneUtil;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
@@ -184,8 +190,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 PreferenceUtil.putSecKey(LoginActivity.this, secKey);
                 PreferenceUtil.putLoginUserPhone(LoginActivity.this, name);
                 PreferenceUtil.putLoginUserPwd(LoginActivity.this, etPwd.getText().toString());
+                startUdateDeviceInfoService();
             }
         });
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void startUdateDeviceInfoService() {
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        JobInfo.Builder builder = new JobInfo.Builder(1, new ComponentName(this, UpdateDeviceInfoService.class));
+        builder.setMinimumLatency(10 * 1000);
+        builder.setOverrideDeadline(30 * 1000);
+        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+        jobScheduler.schedule(builder.build());
     }
 
     private void handleLoginFailure() {
