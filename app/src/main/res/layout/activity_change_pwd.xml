@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bg_main">
+    android:background="@color/white">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -94,20 +94,19 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_below="@id/input_confirm_pwd"/>
-
-        <Button
-            android:id="@+id/btn_change_pwd"
-            android:layout_below="@id/divider_confirm_pwd"
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:text="@string/change_pwd"
-            android:textColor="@color/white"
-            android:background="@drawable/selector_login"
-            android:textSize="16sp"/>
-
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_change_pwd"
+        android:layout_below="@id/rl_change_pwd"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/change_pwd"
+        android:textColor="@color/white"
+        android:background="@drawable/selector_login"
+        android:textSize="16sp"/>
 
 </RelativeLayout>

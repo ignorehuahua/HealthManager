@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">健康管家</string>
+    <string name="app_name">康养管家</string>
     <string name="apply_for_visit">随访申请</string>
     <string name="evaluation_guide">评估报告</string>
     <string name="msg_center">消息中心</string>

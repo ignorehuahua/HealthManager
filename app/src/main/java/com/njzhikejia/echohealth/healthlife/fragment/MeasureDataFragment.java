@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.AddMeasureDataActivity;
@@ -58,7 +59,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
     private static final int KEY_FAILURE = 21;
     private DaoSession mDaoSession;
     private SpecificDataDao specificDataDao;
-
+    private TextView tvNoData;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,6 +88,8 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
     }
 
     private void initView(View view) {
+        tvNoData = view.findViewById(R.id.tv_no_data);
+        tvNoData.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout = view.findViewById(R.id.refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -111,6 +114,15 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
             }
         });
     }
+
+    private void checkEmptyData() {
+        if (measureDataList != null && measureDataList.size() > 0) {
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void queryRecentData() {
         if (!NetWorkUtils.isNetworkConnected(mContext)) {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
@@ -165,6 +177,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
 
     private void loadDataFomDb() {
         measureDataList = specificDataDao.loadAll();
+        checkEmptyData();
         mAdapter.setList(measureDataList);
     }
 
@@ -190,12 +203,14 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
                 case ConstantValues.MSG_REFRESH_TIME_OUT:
                     if (measureDataFragmentWeakReference.get() != null) {
                         measureDataFragmentWeakReference.get().stopRefresh();
+                        measureDataFragmentWeakReference.get().checkEmptyData();
                     }
                     break;
                 case KEY_RECENT_DATA:
                     Logger.d(TAG, "getRecentData");
                     if (measureDataFragmentWeakReference.get() != null) {
                         measureDataFragmentWeakReference.get().stopRefresh();
+                        measureDataFragmentWeakReference.get().checkEmptyData();
                         measureDataFragmentWeakReference.get().mAdapter.setList(measureDataFragmentWeakReference.get().measureDataList);
                     }
                     break;

@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.HealthLifeApplication;
@@ -59,6 +60,7 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
     private static final int HANDLE_CONCERN_CODE = 40;
     private DaoSession mDaoSession;
     private ConcernsDao concernsDao;
+    private TextView tvNoData;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +85,8 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
     }
 
     private void initView(View view) {
+        tvNoData = view.findViewById(R.id.tv_no_data);
+        tvNoData.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout = view.findViewById(R.id.refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -122,12 +126,14 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
                 case LOAD_SUCCESS:
                     if (weakReference.get() != null) {
                         weakReference.get().stopRefresh();
+                        weakReference.get().checkEmptyData();
                         weakReference.get().mAdapter.setList(myFollowsList);
                     }
                     break;
                 case ConstantValues.MSG_REFRESH_TIME_OUT:
                     if (weakReference.get() != null) {
                         weakReference.get().stopRefresh();
+                        weakReference.get().checkEmptyData();
                     }
                     break;
                 case LOAD_FAILURE:
@@ -137,6 +143,14 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
                     }
                     break;
             }
+        }
+    }
+
+    private void checkEmptyData() {
+        if (myFollowsList != null && myFollowsList.size() > 0) {
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
         }
     }
 
@@ -177,6 +191,7 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
     private void loadDataFromDb() {
         myFollowsList = concernsDao.loadAll();
         mAdapter.setList(myFollowsList);
+        checkEmptyData();
     }
 
     private void stopRefresh() {

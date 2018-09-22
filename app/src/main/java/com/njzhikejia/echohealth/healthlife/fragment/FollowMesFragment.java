@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.HealthLifeApplication;
@@ -60,6 +61,7 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
     private static final int RESULT_FAILURE = 32;
     private DaoSession mDaoSession;
     private ConcernedsDao concernedsDao;
+    private TextView tvNoData;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,6 +86,8 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
     }
 
     private void initView(View view) {
+        tvNoData = view.findViewById(R.id.tv_no_data);
+        tvNoData.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout = view.findViewById(R.id.refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -116,10 +120,20 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
         });
     }
 
+    private void checkEmptyData() {
+        if (followMesList != null && followMesList.size() > 0) {
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
+        }
+    }
+
+
     private void handleConcern(int userId, int concernId, int status) {
 
         if (!NetWorkUtils.isNetworkConnected(mContext)) {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
+            loadDataFromDb();
             return;
         }
 
@@ -180,6 +194,7 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
     private void loadDataFromDb() {
         followMesList = concernedsDao.loadAll();
         mAdapter.setList(followMesList);
+        checkEmptyData();
     }
 
     @Override
@@ -202,12 +217,14 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
                 case LOAD_SUCCESS:
                     if (weakReference.get() != null) {
                         weakReference.get().stopRefresh();
+                        weakReference.get().checkEmptyData();
                         weakReference.get().mAdapter.setList(followMesList);
                     }
                     break;
                 case ConstantValues.MSG_REFRESH_TIME_OUT:
                     if (weakReference.get() != null) {
                         weakReference.get().stopRefresh();
+                        weakReference.get().checkEmptyData();
                     }
                     break;
                 case RESULT_SUCCESS:

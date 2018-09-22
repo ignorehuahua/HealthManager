@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.HealthLifeApplication;
@@ -54,6 +55,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     private static final int KEY_FAILURE = 23;
     private DaoSession mDaoSession;
     private NoticesDao noticesDao;
+    private TextView tvNoData;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +81,8 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     }
 
     private void initView(View view) {
+        tvNoData = view.findViewById(R.id.tv_no_data);
+        tvNoData.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout = view.findViewById(R.id.refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -90,6 +94,14 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         mAdapter = new WarnAdapter(mContext, warnInfoList);
         mRecycleView.setAdapter(mAdapter);
         loadWarnNotices();
+    }
+
+    private void checkEmptyData() {
+        if (warnInfoList != null && warnInfoList.size() > 0) {
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -118,12 +130,15 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case ConstantValues.MSG_REFRESH_TIME_OUT:
-                    if (warningFragmentWeakReference.get() != null)
+                    if (warningFragmentWeakReference.get() != null) {
                         warningFragmentWeakReference.get().stopRefresh();
+                        warningFragmentWeakReference.get().checkEmptyData();
+                    }
                     break;
                 case KEY_WARN:
                     if (warningFragmentWeakReference.get() != null) {
                         warningFragmentWeakReference.get().stopRefresh();
+                        warningFragmentWeakReference.get().checkEmptyData();
                         warningFragmentWeakReference.get().mAdapter.setlist(warningFragmentWeakReference.get().warnInfoList);
                     }
                     break;
@@ -146,6 +161,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
 
     private void loadDataFromDb() {
         warnInfoList = noticesDao.loadAll();
+        checkEmptyData();
         mAdapter.setlist(warnInfoList);
     }
 
