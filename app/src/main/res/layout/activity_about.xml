@@ -20,7 +20,8 @@
         android:gravity="center"
         android:text="@string/version_code"
         android:drawableTop="@mipmap/ic_launcher"
-        android:textSize="16sp"
+        android:drawablePadding="12dp"
+        android:textSize="14sp"
         android:textColor="@color/name_color"
         android:layout_marginTop="40dp"
         android:layout_height="wrap_content" />
