@@ -64,8 +64,8 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                                 // handle exit operation
                                 Logger.d(TAG, "exit login clicked");
                                 PreferenceUtil.clear(SystemSettingActivity.this);
-                                Intent exitIntent = new Intent(ConstantValues.ACTION_EXIT_LOGIN);
-                                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(exitIntent);
+                                Intent intentLogin = new Intent(SystemSettingActivity.this, LoginActivity.class);
+                                startActivity(intentLogin);
                                 finish();
                             }
                         })
