@@ -3,7 +3,7 @@
 <string-array name="base_info_label">
     <item>姓名</item>
     <item>电话</item>
-    <item>身证</item>
+    <item>身份证</item>
     <item>出生日期</item>
     <item>性别</item>
     <item>民族</item>

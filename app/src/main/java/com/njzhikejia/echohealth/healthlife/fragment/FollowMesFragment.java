@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -61,7 +62,7 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
     private static final int RESULT_FAILURE = 32;
     private DaoSession mDaoSession;
     private ConcernedsDao concernedsDao;
-    private TextView tvNoData;
+    private RelativeLayout rlEmpty;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,8 +87,7 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
     }
 
     private void initView(View view) {
-        tvNoData = view.findViewById(R.id.tv_no_data);
-        tvNoData.setVisibility(View.VISIBLE);
+        rlEmpty = view.findViewById(R.id.rl_empty);
         mSwipeRefreshLayout = view.findViewById(R.id.refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -122,9 +122,9 @@ public class FollowMesFragment extends BaseFragment implements SwipeRefreshLayou
 
     private void checkEmptyData() {
         if (followMesList != null && followMesList.size() > 0) {
-            tvNoData.setVisibility(View.GONE);
+            rlEmpty.setVisibility(View.GONE);
         } else {
-            tvNoData.setVisibility(View.VISIBLE);
+            rlEmpty.setVisibility(View.VISIBLE);
         }
     }
 

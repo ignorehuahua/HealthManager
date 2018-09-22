@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import com.njzhikejia.echohealth.healthlife.adapter.MessageCenterAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.Message;
@@ -20,12 +21,12 @@ import java.util.List;
 public class MessageCenterActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "MessageCenterActivity";
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecycleView;
     private MessageCenterAdapter mAdapter;
     private List<Message> messageList;
     private Toolbar mToolbar;
     public static final String KEY_MSG_CONTENT = "key_msg_content";
+    private TextView tvNoData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,12 +48,11 @@ public class MessageCenterActivity extends BaseActivity implements SwipeRefreshL
     }
 
     private void initView() {
+        tvNoData = findViewById(R.id.tv_no_data);
+        tvNoData.setVisibility(View.VISIBLE);
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mSwipeRefreshLayout =findViewById(R.id.refresh_layout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
         mRecycleView = findViewById(R.id.recycle_view_data);
         mRecycleView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -66,22 +66,25 @@ public class MessageCenterActivity extends BaseActivity implements SwipeRefreshL
         mRecycleView.setAdapter(mAdapter);
     }
 
+    private void checkEmptyData() {
+        if (messageList != null && messageList.size() > 0) {
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void loadMessages() {
         HealthLifeApplication application = (HealthLifeApplication) getApplication();
         DaoSession daoSession = application.getDaoSession();
         messageList = daoSession.getMessageDao().loadAll();
+        checkEmptyData();
 
     }
 
     @Override
     public void onRefresh() {
         Logger.d(TAG, "onRefresh");
-    }
-
-    private void stopRefresh() {
-        if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setRefreshing(false);
-            Logger.d(TAG, "stopRefresh!");
-        }
+        loadMessages();
     }
 }
