@@ -1,6 +1,7 @@
 package com.njzhikejia.echohealth.healthlife.http;
 
 import com.google.gson.Gson;
+import com.njzhikejia.echohealth.healthlife.MainActivity;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.njzhikejia.echohealth.healthlife.util.PhoneUtil;
 
@@ -101,6 +102,18 @@ public class CommonRequest {
         map.put("old_password", oldPasswordSha1);
         map.put("new_password", newPasswordSha1);
         return postRequest(ServerAddrUtils.getResetPwdUrl(uid), map);
+    }
+
+    public static Request postFeedbackRequest(int uid, String content, String img1, String img2, String img3, int type, int contact_type, String contact_info) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("content", content);
+        map.put("img1", img1);
+        map.put("img2", img2);
+        map.put("img3", img3);
+        map.put("type", type);
+        map.put("contact_type", contact_type);
+        map.put("contact_info", contact_info);
+        return postRequest(ServerAddrUtils.getFeedbackUrl(uid), map);
     }
 
     /**

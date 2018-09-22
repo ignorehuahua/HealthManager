@@ -151,4 +151,14 @@ public class ServerAddrUtils {
     public static String getResetPwdUrl(int uid) {
         return ROOT_SERVER_ADDR + "/user/" + uid + "/password?appid=4&t=" + System.currentTimeMillis();
     }
+
+    /**
+     * 用户意见反馈
+     * http://120.55.22.117:28001/user/1/feebback?appid=4&t=1532007925
+     * @param uid
+     * @return
+     */
+    public static String getFeedbackUrl(int uid) {
+        return ROOT_SERVER_ADDR + "/user/" + uid + "/feedback?appid=4&t="  + System.currentTimeMillis();
+    }
 }
