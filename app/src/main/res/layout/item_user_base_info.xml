@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:gravity="center"
-        android:paddingBottom="14dp"
-        android:paddingTop="14dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
         android:textColor="@color/name_color"
         android:layout_alignParentLeft="true"/>
 
@@ -25,8 +25,8 @@
         android:layout_alignParentRight="true"
         android:gravity="center"
         android:textSize="16sp"
-        android:paddingBottom="14dp"
-        android:paddingTop="14dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
         android:textColor="@color/shape_gray" />
 
     <View

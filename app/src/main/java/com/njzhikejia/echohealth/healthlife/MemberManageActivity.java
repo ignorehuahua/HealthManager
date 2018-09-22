@@ -23,6 +23,7 @@ import com.njzhikejia.echohealth.healthlife.fragment.FollowMesFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.MyFollowsFragment;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
+import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 
 /**
  * Created by 16222 on 2018/6/1.
@@ -72,6 +73,8 @@ public class MemberManageActivity extends BaseActivity {
         Intent intent = getIntent();
         if (intent.getIntExtra(HealthLifeApplication.KEY_JUMP_TO_FOLLOW_ME, 0) == 1) {
             mViewPager.setCurrentItem(1);
+        } else if (PreferenceUtil.getNewConcern(this)) {
+
         }
     }
 

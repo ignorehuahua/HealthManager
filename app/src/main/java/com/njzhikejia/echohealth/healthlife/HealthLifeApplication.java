@@ -191,10 +191,14 @@ public class HealthLifeApplication extends Application{
             @Override
             public void launchApp(Context context, UMessage msg) {
                 Logger.d(TAG, "launchApp");
-                if (msg.title.equals(getString(R.string.apply_concern))) {
+                if (msg.title.equals(getString(R.string.apply_concern)) || msg.title.equals(getString(R.string.apply_pass))) {
                     Intent intent = new Intent();
                     intent.setClassName("com.njzhikejia.echohealth.healthlife", "com.njzhikejia.echohealth.healthlife.MemberManageActivity");
-                    intent.putExtra(KEY_JUMP_TO_FOLLOW_ME, 1);
+                    int position = 0;
+                    if (msg.title.equals(getString(R.string.apply_concern))) {
+                        position = 1;
+                    }
+                    intent.putExtra(KEY_JUMP_TO_FOLLOW_ME, position);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } else {
