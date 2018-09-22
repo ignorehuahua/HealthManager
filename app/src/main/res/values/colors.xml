@@ -23,4 +23,5 @@
     <color name="status_low">#C8BC05</color>
     <color name="status_high">#E51C23</color>
     <color name="bg_main">#EBEBEB</color>
+    <color name="deep_grey">#D3D3D3</color>
 </resources>

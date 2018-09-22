@@ -178,7 +178,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         break;
 
                     case R.id.menu_about:
-                        Intent intentAbout = new Intent(MainActivity.this, LoginActivity.class);
+                        Intent intentAbout = new Intent(MainActivity.this, AboutActivity.class);
                         startActivity(intentAbout);
                         break;
                 }
