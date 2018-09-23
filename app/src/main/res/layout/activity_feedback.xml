@@ -37,7 +37,7 @@
         android:id="@+id/et_feedback"
         android:layout_below="@id/divider_feedback_label"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="120dp"
         android:padding="12dp"
         android:textSize="16sp"
         android:hint="@string/feedback_input_desc"
@@ -51,9 +51,56 @@
         android:layout_height="2px"
         android:background="@color/divider_color" />
 
+    <RelativeLayout
+        android:id="@+id/rl_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider_input_label"
+        android:layout_marginTop="20dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/iv_img_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/name_color"
+            android:textSize="16sp"
+            android:layout_alignParentLeft="true"
+            android:padding="12dp"
+            android:text="@string/feedback_img"/>
+
+        <TextView
+            android:id="@+id/tv_img_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:textColor="@color/shape_gray"
+            android:textSize="16sp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@id/iv_img_label"
+            android:layout_marginTop="12dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="12dp"
+            android:id="@+id/recycle_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider_img"
+        android:layout_below="@id/rl_img"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="@color/divider_color" />
+
     <Button
         android:id="@+id/btn_submit"
-        android:layout_below="@id/divider_input_label"
+        android:layout_below="@id/divider_img"
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

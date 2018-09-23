@@ -1,9 +1,14 @@
 package com.njzhikejia.echohealth.healthlife;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -13,8 +18,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.njzhikejia.echohealth.healthlife.adapter.ShowImageAdapter;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
+import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
+import com.njzhikejia.echohealth.healthlife.util.ImageUtil;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
@@ -24,6 +32,8 @@ import org.w3c.dom.ProcessingInstruction;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -38,7 +48,9 @@ public class FeedbackActivity extends BaseActivity {
     private FeedbackHandler mHandler;
     private static final int RESULT_SUCCESS = 50;
     private static final int RESULT_FAILURE = 51;
-
+    private RecyclerView mRecycleView;
+    private ShowImageAdapter mAdapter;
+    private List<Uri> imgList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +97,30 @@ public class FeedbackActivity extends BaseActivity {
                 submitFeedback();
             }
         });
+
+        mRecycleView = findViewById(R.id.recycle_view);
+        mRecycleView.setLayoutManager(new GridLayoutManager(this, 3));
+        imgList = new ArrayList<>();
+        mAdapter = new ShowImageAdapter(this, imgList);
+        mRecycleView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new ShowImageAdapter.OnItemClickListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                Logger.d(TAG, "onDeleteClick position = "+position);
+            }
+
+            @Override
+            public void onPicker(int position) {
+                Logger.d(TAG, "onPicker position = "+position);
+                Logger.d(TAG, "list.size = "+imgList.size());
+                if (position == imgList.size()) {
+                    if (position != ShowImageAdapter.MAX_SIZE) {
+                        // select photo
+                        choosePhoto();
+                    }
+                }
+            }
+        });
     }
 
     private void submitFeedback() {
@@ -92,8 +128,26 @@ public class FeedbackActivity extends BaseActivity {
             ToastUtil.showShortToast(this, R.string.net_work_error);
             return;
         }
+        String img1 = "";
+        String img2 = "";
+        String img3 = "";
+//        if (imgList.size() > 0) {
+//            for (int i = 0; i < imgList.size(); i++) {
+//                Bitmap bitmap = ImageUtil.decodeUri(this, imgList.get(i), 800, 800);
+//                if (i == 0) {
+//                    img1 = ImageUtil.bitmapToBase64(bitmap);
+//                } else if (i == 1) {
+//                    img2 = ImageUtil.bitmapToBase64(bitmap);
+//                } else if (i == 2) {
+//                    img3 = ImageUtil.bitmapToBase64(bitmap);
+//                }
+//            }
+//        }
+
+        Logger.d(TAG, "img1 = "+img1+ "img2 = "+img2 + "img3 = "+img3);
+
         OKHttpClientManager.getInstance().postAsync(CommonRequest.postFeedbackRequest(PreferenceUtil.getLoginUserUID(this),
-                etInput.getText().toString(), "", "", "", 0, 0, ""), new Callback() {
+                etInput.getText().toString(), img1, img2, img3, 0, 0, ""), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "submit feedback failure");
@@ -134,6 +188,25 @@ public class FeedbackActivity extends BaseActivity {
                     }
                     break;
             }
+        }
+    }
+
+    /**
+     * 从相册选取
+     */
+    private void choosePhoto() {
+        Intent intentPhoto = new Intent(Intent.ACTION_PICK);
+        intentPhoto.setType("image/*");
+        startActivityForResult(intentPhoto, ConstantValues.REQUEST_CODE_OF_GRLLERY);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == ConstantValues.REQUEST_CODE_OF_GRLLERY) {
+            Uri uri = data.getData();
+            imgList.add(uri);
+            mAdapter.setList(imgList);
         }
     }
 

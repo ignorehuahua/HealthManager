@@ -148,4 +148,5 @@
     <string name="version_code">版本号:</string>
     <string name="app_desc">康养管家是一款为用户及家人提供健康数据分析、报告、告警以及定位等丰富的健康和养生服务信息管理的客户端应用。</string>
     <string name="check_update">检查更新</string>
+    <string name="feedback_img">图片(选填，最多三张)</string>
 </resources>
