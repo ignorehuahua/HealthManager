@@ -123,8 +123,8 @@ public class HealthLifeApplication extends Application{
                     return;
                 }
                 MessageDao messageDao = daoSession.getMessageDao();
-                Message message = new Message(msg.title, msg.text);
-                messageDao.insert(message);
+//                Message message = new Message(msg.title, msg.text);
+//                messageDao.insert(message);
             }
 
             /**

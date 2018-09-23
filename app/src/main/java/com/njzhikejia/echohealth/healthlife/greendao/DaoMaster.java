@@ -21,32 +21,32 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
+        ConcernedsDao.createTable(db, ifNotExists);
+        ConcernsDao.createTable(db, ifNotExists);
+        SpecificDataDao.createTable(db, ifNotExists);
         MessageDao.createTable(db, ifNotExists);
+        ReportsDao.createTable(db, ifNotExists);
+        ExtendDao.createTable(db, ifNotExists);
+        UserDao.createTable(db, ifNotExists);
         MeasureDao.createTable(db, ifNotExists);
         NoticesDao.createTable(db, ifNotExists);
         RegionAdaminDao.createTable(db, ifNotExists);
         SrcDataDao.createTable(db, ifNotExists);
-        ConcernedsDao.createTable(db, ifNotExists);
-        ConcernsDao.createTable(db, ifNotExists);
-        SpecificDataDao.createTable(db, ifNotExists);
-        ReportsDao.createTable(db, ifNotExists);
-        ExtendDao.createTable(db, ifNotExists);
-        UserDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
+        ConcernedsDao.dropTable(db, ifExists);
+        ConcernsDao.dropTable(db, ifExists);
+        SpecificDataDao.dropTable(db, ifExists);
         MessageDao.dropTable(db, ifExists);
+        ReportsDao.dropTable(db, ifExists);
+        ExtendDao.dropTable(db, ifExists);
+        UserDao.dropTable(db, ifExists);
         MeasureDao.dropTable(db, ifExists);
         NoticesDao.dropTable(db, ifExists);
         RegionAdaminDao.dropTable(db, ifExists);
         SrcDataDao.dropTable(db, ifExists);
-        ConcernedsDao.dropTable(db, ifExists);
-        ConcernsDao.dropTable(db, ifExists);
-        SpecificDataDao.dropTable(db, ifExists);
-        ReportsDao.dropTable(db, ifExists);
-        ExtendDao.dropTable(db, ifExists);
-        UserDao.dropTable(db, ifExists);
     }
 
     /**
@@ -65,17 +65,17 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
+        registerDaoClass(ConcernedsDao.class);
+        registerDaoClass(ConcernsDao.class);
+        registerDaoClass(SpecificDataDao.class);
         registerDaoClass(MessageDao.class);
+        registerDaoClass(ReportsDao.class);
+        registerDaoClass(ExtendDao.class);
+        registerDaoClass(UserDao.class);
         registerDaoClass(MeasureDao.class);
         registerDaoClass(NoticesDao.class);
         registerDaoClass(RegionAdaminDao.class);
         registerDaoClass(SrcDataDao.class);
-        registerDaoClass(ConcernedsDao.class);
-        registerDaoClass(ConcernsDao.class);
-        registerDaoClass(SpecificDataDao.class);
-        registerDaoClass(ReportsDao.class);
-        registerDaoClass(ExtendDao.class);
-        registerDaoClass(UserDao.class);
     }
 
     public DaoSession newSession() {

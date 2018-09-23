@@ -41,6 +41,7 @@ public class MessageCenterAdapter extends RecyclerView.Adapter<MessageCenterAdap
         Message message = list.get(position);
         holder.tvTitle.setText(message.getTitle());
         holder.tvContent.setText(message.getContent());
+        holder.tvTime.setText(message.getTime());
     }
 
     @Override
@@ -61,11 +62,13 @@ public class MessageCenterAdapter extends RecyclerView.Adapter<MessageCenterAdap
 
         TextView tvTitle;
         TextView tvContent;
+        TextView tvTime;
 
         public MessageCenterViewHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_msg_title);
             tvContent = itemView.findViewById(R.id.tv_msg_content);
+            tvTime = itemView.findViewById(R.id.tv_msg_time);
         }
     }
 

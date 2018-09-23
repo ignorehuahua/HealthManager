@@ -39,9 +39,8 @@ public class MessageCenterActivity extends BaseActivity implements SwipeRefreshL
             public void onItemClick(View view, int position) {
                 Logger.d(TAG, "onItemClick");
                 Message message = messageList.get(position);
-                String content = message.getContent();
                 Intent intentMsg = new Intent(MessageCenterActivity.this, MessageDetailsActivity.class);
-                intentMsg.putExtra(KEY_MSG_CONTENT, content);
+                intentMsg.putExtra(KEY_MSG_CONTENT, message);
                 startActivity(intentMsg);
             }
         });
@@ -62,7 +61,6 @@ public class MessageCenterActivity extends BaseActivity implements SwipeRefreshL
             messageList = new ArrayList<>();
         }
         mAdapter = new MessageCenterAdapter(this, messageList);
-        mAdapter.setList(messageList);
         mRecycleView.setAdapter(mAdapter);
     }
 
@@ -78,8 +76,25 @@ public class MessageCenterActivity extends BaseActivity implements SwipeRefreshL
         HealthLifeApplication application = (HealthLifeApplication) getApplication();
         DaoSession daoSession = application.getDaoSession();
         messageList = daoSession.getMessageDao().loadAll();
+        fakeData();
         checkEmptyData();
+    }
 
+    private void fakeData() {
+
+        Message one = new Message("测试标题一", "说是古代有一个名医，医术高明，被他治好过的病人无数，这时就有三个混混，成天想着如何砸了这名医的招牌\n" +
+                "\n" +
+                "有一天，他们想出了个办法\n" +
+                "\n" +
+                "混混头儿装病去看这位名医，如果这个名医给他诊出病来，","2018-09-23 09:40");
+
+        Message two = new Message("测试标题一", "说是古代有一个名医，医术高明，被他治好过的病人无数，这时就有三个混混，成天想着如何砸了这名医的招牌\n" +
+                "\n" +
+                "有一天，他们想出了个办法\n" +
+                "\n" +
+                "混混头儿装病去看这位名医，如果这个名医给他诊出病来，","2018-09-23 09:40");
+        messageList.add(one);
+        messageList.add(two);
     }
 
     @Override
