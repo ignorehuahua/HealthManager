@@ -54,6 +54,8 @@ public class ConstantValues {
 
     public static final String ACTION_CONCERN_REQUEST_ACCEPTED = "com.healthlife.ACTION_CONCERN_REQUEST_ACCEPTED";
 
+    public static final String KEY_USER_DETAILS = "key_user_details";
+
 
     /**
      * 好友申请状态

@@ -1,5 +1,8 @@
 package com.njzhikejia.echohealth.healthlife.entity.user;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.Gson;
 
 import org.greenrobot.greendao.annotation.Convert;
@@ -12,7 +15,7 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 
 @Entity
-public class User {
+public class User implements Parcelable{
 
     private int id;
     private int tenant_id;
@@ -55,6 +58,35 @@ public class User {
     @Generated(hash = 586692638)
     public User() {
     }
+
+    protected User(Parcel in) {
+        id = in.readInt();
+        tenant_id = in.readInt();
+        house_id = in.readInt();
+        name = in.readString();
+        nickname = in.readString();
+        idcard = in.readString();
+        phone = in.readString();
+        gender = in.readInt();
+        birthday = in.readString();
+        home_addr = in.readString();
+        status = in.readInt();
+        avatar = in.readString();
+        create_time = in.readString();
+        remark = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public int getId() {
         return this.id;
@@ -174,6 +206,29 @@ public class User {
 
     public void setExtend(Extend extend) {
         this.extend = extend;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(tenant_id);
+        dest.writeInt(house_id);
+        dest.writeString(name);
+        dest.writeString(nickname);
+        dest.writeString(idcard);
+        dest.writeString(phone);
+        dest.writeInt(gender);
+        dest.writeString(birthday);
+        dest.writeString(home_addr);
+        dest.writeInt(status);
+        dest.writeString(avatar);
+        dest.writeString(create_time);
+        dest.writeString(remark);
     }
 
     public static class ExtendConverter implements PropertyConverter<Extend, String> {

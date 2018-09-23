@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
+import com.njzhikejia.echohealth.healthlife.entity.concern.Concerns;
 import com.njzhikejia.echohealth.healthlife.entity.user.Extend;
 import com.njzhikejia.echohealth.healthlife.entity.user.User;
 import com.njzhikejia.echohealth.healthlife.entity.user.UserDetailsResponse;
@@ -62,6 +63,8 @@ public class UserDetailsActivity extends BaseActivity {
     private UserDao userDao;
     private ExtendDao extendDao;
     private UserDetailsResponse userDetailsResponse;
+    public static final String USER_QR_CODE = "user_qr_code";
+    private Concerns user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,19 +82,25 @@ public class UserDetailsActivity extends BaseActivity {
         mToolbar = findViewById(R.id.toolbar);
         mProgressBar = findViewById(R.id.progress_bar);
         tvQRCard = findViewById(R.id.tv_qr_card);
-        tvQRCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentQRCode = new Intent(UserDetailsActivity.this, QRCodeActivity.class);
-                startActivity(intentQRCode);
+        Intent getIntent = getIntent();
+        if (getIntent.hasExtra(ConstantValues.KEY_USER_DETAILS)) {
+            if (getIntent.getParcelableExtra(ConstantValues.KEY_USER_DETAILS) != null) {
+                user = getIntent.getParcelableExtra(ConstantValues.KEY_USER_DETAILS);
             }
-        });
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mTabLayout = findViewById(R.id.tab_layout);
-        mViewPager = findViewById(R.id.viewpager);
-        setupViewPager(mViewPager);
-
+            tvQRCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intentQRCode = new Intent(UserDetailsActivity.this, QRCodeActivity.class);
+                    intentQRCode.putExtra(USER_QR_CODE, user);
+                    startActivity(intentQRCode);
+                }
+            });
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            mTabLayout = findViewById(R.id.tab_layout);
+            mViewPager = findViewById(R.id.viewpager);
+            setupViewPager(mViewPager);
+        }
     }
 
     public UserDetailsResponse getUserDetailsResponse() {
@@ -129,7 +138,8 @@ public class UserDetailsActivity extends BaseActivity {
             loadDataFromDb();
             return;
         }
-        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserDetailsRequest(PreferenceUtil.getLoginUserUID(UserDetailsActivity.this)), new Callback() {
+        int userId = user.getUid();
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserDetailsRequest(userId), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure call = "+call.toString());

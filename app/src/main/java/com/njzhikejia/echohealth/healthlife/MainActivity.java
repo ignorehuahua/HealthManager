@@ -43,6 +43,7 @@ import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.adapter.MemberListAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.concern.Concerns;
 import com.njzhikejia.echohealth.healthlife.entity.concern.MyFollowsData;
+import com.njzhikejia.echohealth.healthlife.entity.user.User;
 import com.njzhikejia.echohealth.healthlife.entity.user.UserDetailsResponse;
 import com.njzhikejia.echohealth.healthlife.greendao.ConcernsDao;
 import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
@@ -98,8 +99,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private TextView tvNumber;
     private LocalBroadcastManager mLocalBroadcastManager;
     private MainBroadcastReceiver mainBroadcastReceiver;
-    public static final String KEY_MEMBER_NAME = "key_member_name";
-    public static final String KEY_MEMBER_UID = "key_member_uid";
+    public static final String KEY_MEMBER = "key_member";
     private DaoSession mDaoSession;
     private ConcernsDao concernsDao;
     private BadgeDrawerArrowDrawable badgeDrawerArrowDrawable;
@@ -206,6 +206,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                    showPopupWindow();
 //                }
                 Intent intentDetails = new Intent(MainActivity.this, UserDetailsActivity.class);
+                Concerns user = new Concerns();
+                user.setUid(PreferenceUtil.getLoginUserUID(MainActivity.this));
+                user.setName(PreferenceUtil.getLoginUserName(MainActivity.this));
+                user.setPhone(PreferenceUtil.getLoginUserPhone(MainActivity.this));
+                intentDetails.putExtra(ConstantValues.KEY_USER_DETAILS, user);
                 startActivity(intentDetails);
             }
         });
@@ -226,8 +231,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Concerns member = memberList.get(position);
                 Logger.d(TAG, "onItemClick member name is "+member.getName());
                 Intent intentMember = new Intent(view.getContext(), MeasureDataActivity.class);
-                intentMember.putExtra(KEY_MEMBER_NAME, member.getName());
-                intentMember.putExtra(KEY_MEMBER_UID, member.getUid());
+                intentMember.putExtra(KEY_MEMBER, member);
                 startActivity(intentMember);
             }
         });

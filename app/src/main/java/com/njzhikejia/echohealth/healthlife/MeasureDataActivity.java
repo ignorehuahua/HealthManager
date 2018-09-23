@@ -10,12 +10,15 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.njzhikejia.echohealth.healthlife.adapter.ViewPagerAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.RelativesData;
+import com.njzhikejia.echohealth.healthlife.entity.concern.Concerns;
+import com.njzhikejia.echohealth.healthlife.entity.user.User;
 import com.njzhikejia.echohealth.healthlife.fragment.HealthGuidanceFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.LocationFragment;
 import com.njzhikejia.echohealth.healthlife.fragment.MeasureDataFragment;
@@ -38,6 +41,7 @@ public class MeasureDataActivity extends BaseActivity {
     private Toolbar mToolbar;
     private String name;
     private int uid;
+    private Concerns user;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavigation;
@@ -181,11 +185,10 @@ public class MeasureDataActivity extends BaseActivity {
         mViewPager.setCurrentItem(currentPage);
 
         Intent getIntent = getIntent();
-        if (getIntent != null && getIntent.hasExtra(MainActivity.KEY_MEMBER_NAME)) {
-            name = getIntent.getStringExtra(MainActivity.KEY_MEMBER_NAME);
-        }
-        if (getIntent != null && getIntent.hasExtra(MainActivity.KEY_MEMBER_UID)) {
-            uid = getIntent.getIntExtra(MainActivity.KEY_MEMBER_UID, 0);
+        if (getIntent != null && getIntent.hasExtra(MainActivity.KEY_MEMBER)) {
+            user = getIntent.getParcelableExtra(MainActivity.KEY_MEMBER);
+            uid = user.getUid();
+            name = user.getName();
         }
             PreferenceUtil.putSelectedUserUID(this, uid);
             Logger.d(TAG, "get name = "+name + "uid = "+uid);
@@ -228,7 +231,24 @@ public class MeasureDataActivity extends BaseActivity {
         }
     };
 
-    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_measure,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_info:
+                Intent intent = new Intent(this, UserDetailsActivity.class);
+                intent.putExtra(ConstantValues.KEY_USER_DETAILS, user);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
