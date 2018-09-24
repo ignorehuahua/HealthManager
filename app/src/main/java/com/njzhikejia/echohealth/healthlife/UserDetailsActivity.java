@@ -179,6 +179,10 @@ public class UserDetailsActivity extends BaseActivity {
     private void loadDataFromDb() {
 
         User tempUser = userDao.load(Long.valueOf(user.getUid()));
+        if (tempUser == null || tempUser.getExtend() == null) {
+            Logger.e(TAG, "no user details in db");
+            return;
+        }
         UserDetailsResponse response = new UserDetailsResponse();
         UserDetailsResponse.ResponseData responseData = new UserDetailsResponse.ResponseData();
         responseData.setUser(tempUser);
