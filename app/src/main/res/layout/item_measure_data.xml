@@ -7,6 +7,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/rl_measure_data"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:paddingLeft="16dp"
@@ -89,6 +90,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2px"
+        android:layout_below="@id/rl_measure_data"
         android:background="@color/divider_color" />
 
 </RelativeLayout>

@@ -32,6 +32,9 @@ import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
 
+import org.greenrobot.greendao.query.DeleteQuery;
+import org.greenrobot.greendao.query.QueryBuilder;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -60,6 +63,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
     private DaoSession mDaoSession;
     private SpecificDataDao specificDataDao;
     private TextView tvNoData;
+    private QueryBuilder<SpecificData> queryBuilder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +89,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
         HealthLifeApplication mApplication = (HealthLifeApplication) getActivity().getApplication();
         mDaoSession = mApplication.getDaoSession();
         specificDataDao = mDaoSession.getSpecificDataDao();
+        queryBuilder = specificDataDao.queryBuilder();
     }
 
     private void initView(View view) {
@@ -152,6 +157,7 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
                         diastolicData.setType(data.getType());
                         diastolicData.setValue1(data.getValue1());
                         diastolicData.setValue2(data.getValue2());
+                        diastolicData.setUid(PreferenceUtil.getSelectedUserUID(mContext));
 
                         SpecificData systolicData = new SpecificData();
                         systolicData.setBlood_pressure_type(MeasureDataAdapter.SYSTOLIC_PRESSURE);
@@ -159,11 +165,13 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
                         systolicData.setType(data.getType());
                         systolicData.setValue1(data.getValue1());
                         systolicData.setValue2(data.getValue2());
+                        systolicData.setUid(PreferenceUtil.getSelectedUserUID(mContext));
 
                         measureDataList.remove(data);
                         measureDataList.add(diastolicData);
                         measureDataList.add(systolicData);
-                        specificDataDao.deleteAll();
+                        DeleteQuery<SpecificData> deleteQuery = queryBuilder.where(SpecificDataDao.Properties.Uid.eq(PreferenceUtil.getSelectedUserUID(mContext))).buildDelete();
+                        deleteQuery.executeDeleteWithoutDetachingEntities();
                         for (SpecificData specificData : measureDataList) {
                             specificDataDao.insert(specificData);
                         }
@@ -176,7 +184,8 @@ public class MeasureDataFragment extends BaseFragment implements SwipeRefreshLay
     }
 
     private void loadDataFomDb() {
-        measureDataList = specificDataDao.loadAll();
+        queryBuilder.where(SpecificDataDao.Properties.Uid.eq(PreferenceUtil.getSelectedUserUID(mContext)));
+        measureDataList = queryBuilder.list();
         checkEmptyData();
         mAdapter.setList(measureDataList);
     }
