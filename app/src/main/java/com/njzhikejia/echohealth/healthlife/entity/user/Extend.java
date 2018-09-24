@@ -2,6 +2,7 @@ package com.njzhikejia.echohealth.healthlife.entity.user;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
  * Created by 16222 on 2018/9/19.
@@ -10,7 +11,8 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class Extend {
 
-    private int uid;
+    @Id
+    private Long uid;
     private int gov_flag;
     private int nation;
     private int community;
@@ -43,8 +45,9 @@ public class Extend {
     private String remark;
     private String readme;
     private int constitution_type;
-    @Generated(hash = 269011517)
-    public Extend(int uid, int gov_flag, int nation, int community, int household,
+
+    @Generated(hash = 1346464495)
+    public Extend(Long uid, int gov_flag, int nation, int community, int household,
             int marriage, int political_status, int edu_level, int health_state,
             int blood_group, String interests, int pay_type, int sport_habit,
             int meal_habit, int eat_ability, int wash_ability, int wear_ability,
@@ -90,10 +93,11 @@ public class Extend {
     @Generated(hash = 115056870)
     public Extend() {
     }
-    public int getUid() {
+
+    public Long getUid() {
         return this.uid;
     }
-    public void setUid(int uid) {
+    public void setUid(Long uid) {
         this.uid = uid;
     }
     public int getGov_flag() {

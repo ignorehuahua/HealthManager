@@ -18,7 +18,7 @@ import com.njzhikejia.echohealth.healthlife.entity.user.User;
 /** 
  * DAO for table "USER".
 */
-public class UserDao extends AbstractDao<User, Void> {
+public class UserDao extends AbstractDao<User, Long> {
 
     public static final String TABLENAME = "USER";
 
@@ -27,7 +27,7 @@ public class UserDao extends AbstractDao<User, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, int.class, "id", false, "ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Tenant_id = new Property(1, int.class, "tenant_id", false, "TENANT_ID");
         public final static Property House_id = new Property(2, int.class, "house_id", false, "HOUSE_ID");
         public final static Property Name = new Property(3, String.class, "name", false, "NAME");
@@ -58,7 +58,7 @@ public class UserDao extends AbstractDao<User, Void> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"USER\" (" + //
-                "\"ID\" INTEGER NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"TENANT_ID\" INTEGER NOT NULL ," + // 1: tenant_id
                 "\"HOUSE_ID\" INTEGER NOT NULL ," + // 2: house_id
                 "\"NAME\" TEXT," + // 3: name
@@ -84,7 +84,11 @@ public class UserDao extends AbstractDao<User, Void> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, User entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindLong(2, entity.getTenant_id());
         stmt.bindLong(3, entity.getHouse_id());
  
@@ -144,7 +148,11 @@ public class UserDao extends AbstractDao<User, Void> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, User entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindLong(2, entity.getTenant_id());
         stmt.bindLong(3, entity.getHouse_id());
  
@@ -202,14 +210,14 @@ public class UserDao extends AbstractDao<User, Void> {
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public User readEntity(Cursor cursor, int offset) {
         User entity = new User( //
-            cursor.getInt(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getInt(offset + 1), // tenant_id
             cursor.getInt(offset + 2), // house_id
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // name
@@ -230,7 +238,7 @@ public class UserDao extends AbstractDao<User, Void> {
      
     @Override
     public void readEntity(Cursor cursor, User entity, int offset) {
-        entity.setId(cursor.getInt(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setTenant_id(cursor.getInt(offset + 1));
         entity.setHouse_id(cursor.getInt(offset + 2));
         entity.setName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -248,20 +256,23 @@ public class UserDao extends AbstractDao<User, Void> {
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(User entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final Long updateKeyAfterInsert(User entity, long rowId) {
+        entity.setId(rowId);
+        return rowId;
     }
     
     @Override
-    public Void getKey(User entity) {
-        return null;
+    public Long getKey(User entity) {
+        if(entity != null) {
+            return entity.getId();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(User entity) {
-        // TODO
-        return false;
+        return entity.getId() != null;
     }
 
     @Override

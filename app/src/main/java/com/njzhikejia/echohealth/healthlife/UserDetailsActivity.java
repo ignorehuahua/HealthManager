@@ -155,10 +155,17 @@ public class UserDetailsActivity extends BaseActivity {
                 userDetailsResponse = gson.fromJson(resonseContent, UserDetailsResponse.class);
                 setUserDetailsResponse(userDetailsResponse);
                 if (userDetailsResponse != null) {
-                    userDao.deleteAll();
-                    userDao.insert(userDetailsResponse.getData().getUser());
-                    extendDao.deleteAll();
-                    extendDao.insert(userDetailsResponse.getData().getUser().getExtend());
+//                    userDao.deleteAll();
+//                    userDao.insert(userDetailsResponse.getData().getUser());
+//                    extendDao.deleteAll();
+//                    extendDao.insert(userDetailsResponse.getData().getUser().getExtend());
+                    User resultUser = userDetailsResponse.getData().getUser();
+//                    extendDao.deleteByKey(resultUser.getExtend().getUid());
+//                    extendDao.insert(resultUser.getExtend());
+                    userDao.deleteByKey(resultUser.getId());
+                    userDao.insert(resultUser);
+                    Logger.d(TAG, "user uid = "+resultUser.getId() + "extent uid = "+resultUser.getExtend().getUid());
+
                     Intent intent = new Intent(ConstantValues.ACTION_LOAD_USER_DETAILS);
                     intent.putExtra(KEY_USER_DETAILS, userDetailsResponse);
                     LocalBroadcastManager.getInstance(UserDetailsActivity.this).sendBroadcast(intent);
@@ -170,29 +177,13 @@ public class UserDetailsActivity extends BaseActivity {
     }
 
     private void loadDataFromDb() {
-        List<User> userList = userDao.loadAll();
-        List<Extend> extendList = extendDao.loadAll();
-        Logger.d(TAG, "userList.size = "+userList.size()+ "extendList.size = "+extendList.size());
-        if (userList.size() == 0 || extendList.size() == 0) {
-            return;
-        }
-        User user = new User();
-        Extend extend = new Extend();
-        if (userList != null && userList.size() > 0) {
-            user = userList.get(0);
-        }
-        if (extendList != null && extendList.size() > 0) {
-            extend = extendList.get(0);
-        }
-        user.setExtend(extend);
+
+        User tempUser = userDao.load(Long.valueOf(user.getUid()));
         UserDetailsResponse response = new UserDetailsResponse();
         UserDetailsResponse.ResponseData responseData = new UserDetailsResponse.ResponseData();
-        responseData.setUser(user);
+        responseData.setUser(tempUser);
         response.setData(responseData);
         setUserDetailsResponse(response);
-
-//        userBaseInfoFragment.initData(response);
-//        userHealthInfoFragment.initData(response);
         Intent intent = new Intent(ConstantValues.ACTION_LOAD_USER_DETAILS);
         intent.putExtra(KEY_USER_DETAILS, response);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
@@ -203,17 +194,22 @@ public class UserDetailsActivity extends BaseActivity {
         private WeakReference<UserDetailsActivity> weakReference;
 
         public UserDetailsHandler(UserDetailsActivity activity) {
-            weakReference = new WeakReference<UserDetailsActivity>(activity);
+            this.weakReference = new WeakReference<UserDetailsActivity>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == NET_ERROR) {
-                mProgressBar.setVisibility(View.GONE);
-                ToastUtil.showShortToast(UserDetailsActivity.this, R.string.net_work_error);
-                loadDataFromDb();
+                if (weakReference.get() != null) {
+                    mProgressBar.setVisibility(View.GONE);
+                    ToastUtil.showShortToast(UserDetailsActivity.this, R.string.net_work_error);
+                    loadDataFromDb();
+                }
+
             } else if (msg.what == LOAD_SUCCESS) {
-                mProgressBar.setVisibility(View.GONE);
+                if (weakReference.get() != null) {
+                    mProgressBar.setVisibility(View.GONE);
+                }
             }
 
         }

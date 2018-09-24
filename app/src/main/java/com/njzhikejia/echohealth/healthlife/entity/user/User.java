@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 
 import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.converter.PropertyConverter;
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -17,7 +18,8 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class User implements Parcelable{
 
-    private int id;
+    @Id
+    private Long id;
     private int tenant_id;
     private int house_id;
     private String name;
@@ -34,8 +36,27 @@ public class User implements Parcelable{
     @Convert(converter = ExtendConverter.class, columnType = String.class)
     private Extend extend;
 
-    @Generated(hash = 573649307)
-    public User(int id, int tenant_id, int house_id, String name, String nickname,
+
+
+    protected User(Parcel in) {
+        id = in.readLong();
+        tenant_id = in.readInt();
+        house_id = in.readInt();
+        name = in.readString();
+        nickname = in.readString();
+        idcard = in.readString();
+        phone = in.readString();
+        gender = in.readInt();
+        birthday = in.readString();
+        home_addr = in.readString();
+        status = in.readInt();
+        avatar = in.readString();
+        create_time = in.readString();
+        remark = in.readString();
+    }
+
+    @Generated(hash = 209762436)
+    public User(Long id, int tenant_id, int house_id, String name, String nickname,
             String idcard, String phone, int gender, String birthday, String home_addr,
             int status, String avatar, String create_time, String remark, Extend extend) {
         this.id = id;
@@ -59,23 +80,6 @@ public class User implements Parcelable{
     public User() {
     }
 
-    protected User(Parcel in) {
-        id = in.readInt();
-        tenant_id = in.readInt();
-        house_id = in.readInt();
-        name = in.readString();
-        nickname = in.readString();
-        idcard = in.readString();
-        phone = in.readString();
-        gender = in.readInt();
-        birthday = in.readString();
-        home_addr = in.readString();
-        status = in.readInt();
-        avatar = in.readString();
-        create_time = in.readString();
-        remark = in.readString();
-    }
-
     public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
         public User createFromParcel(Parcel in) {
@@ -88,11 +92,11 @@ public class User implements Parcelable{
         }
     };
 
-    public int getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -215,7 +219,7 @@ public class User implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeLong(id);
         dest.writeInt(tenant_id);
         dest.writeInt(house_id);
         dest.writeString(name);

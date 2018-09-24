@@ -15,7 +15,7 @@ import com.njzhikejia.echohealth.healthlife.entity.user.Extend;
 /** 
  * DAO for table "EXTEND".
 */
-public class ExtendDao extends AbstractDao<Extend, Void> {
+public class ExtendDao extends AbstractDao<Extend, Long> {
 
     public static final String TABLENAME = "EXTEND";
 
@@ -24,7 +24,7 @@ public class ExtendDao extends AbstractDao<Extend, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Uid = new Property(0, int.class, "uid", false, "UID");
+        public final static Property Uid = new Property(0, Long.class, "uid", true, "_id");
         public final static Property Gov_flag = new Property(1, int.class, "gov_flag", false, "GOV_FLAG");
         public final static Property Nation = new Property(2, int.class, "nation", false, "NATION");
         public final static Property Community = new Property(3, int.class, "community", false, "COMMUNITY");
@@ -72,7 +72,7 @@ public class ExtendDao extends AbstractDao<Extend, Void> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"EXTEND\" (" + //
-                "\"UID\" INTEGER NOT NULL ," + // 0: uid
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: uid
                 "\"GOV_FLAG\" INTEGER NOT NULL ," + // 1: gov_flag
                 "\"NATION\" INTEGER NOT NULL ," + // 2: nation
                 "\"COMMUNITY\" INTEGER NOT NULL ," + // 3: community
@@ -116,7 +116,11 @@ public class ExtendDao extends AbstractDao<Extend, Void> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Extend entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getUid());
+ 
+        Long uid = entity.getUid();
+        if (uid != null) {
+            stmt.bindLong(1, uid);
+        }
         stmt.bindLong(2, entity.getGov_flag());
         stmt.bindLong(3, entity.getNation());
         stmt.bindLong(4, entity.getCommunity());
@@ -206,7 +210,11 @@ public class ExtendDao extends AbstractDao<Extend, Void> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, Extend entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getUid());
+ 
+        Long uid = entity.getUid();
+        if (uid != null) {
+            stmt.bindLong(1, uid);
+        }
         stmt.bindLong(2, entity.getGov_flag());
         stmt.bindLong(3, entity.getNation());
         stmt.bindLong(4, entity.getCommunity());
@@ -294,14 +302,14 @@ public class ExtendDao extends AbstractDao<Extend, Void> {
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public Extend readEntity(Cursor cursor, int offset) {
         Extend entity = new Extend( //
-            cursor.getInt(offset + 0), // uid
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // uid
             cursor.getInt(offset + 1), // gov_flag
             cursor.getInt(offset + 2), // nation
             cursor.getInt(offset + 3), // community
@@ -340,7 +348,7 @@ public class ExtendDao extends AbstractDao<Extend, Void> {
      
     @Override
     public void readEntity(Cursor cursor, Extend entity, int offset) {
-        entity.setUid(cursor.getInt(offset + 0));
+        entity.setUid(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setGov_flag(cursor.getInt(offset + 1));
         entity.setNation(cursor.getInt(offset + 2));
         entity.setCommunity(cursor.getInt(offset + 3));
@@ -376,20 +384,23 @@ public class ExtendDao extends AbstractDao<Extend, Void> {
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(Extend entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final Long updateKeyAfterInsert(Extend entity, long rowId) {
+        entity.setUid(rowId);
+        return rowId;
     }
     
     @Override
-    public Void getKey(Extend entity) {
-        return null;
+    public Long getKey(Extend entity) {
+        if(entity != null) {
+            return entity.getUid();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(Extend entity) {
-        // TODO
-        return false;
+        return entity.getUid() != null;
     }
 
     @Override
