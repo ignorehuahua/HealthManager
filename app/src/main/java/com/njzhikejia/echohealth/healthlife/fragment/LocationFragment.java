@@ -130,7 +130,7 @@ public class LocationFragment extends BaseFragment {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
             return;
         }
-        OKHttpClientManager.getInstance().getAsync(CommonRequest.getLocation(PreferenceUtil.getLoginUserUID(mContext)), new Callback() {
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getLocation(PreferenceUtil.getSelectedUserUID(mContext)), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "queryLocation failure");
