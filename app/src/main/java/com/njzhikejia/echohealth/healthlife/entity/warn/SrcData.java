@@ -1,6 +1,8 @@
 package com.njzhikejia.echohealth.healthlife.entity.warn;
 
 import com.google.gson.Gson;
+import com.njzhikejia.echohealth.healthlife.greendao.ReportsDao;
+
 import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.converter.PropertyConverter;
@@ -16,12 +18,20 @@ public class SrcData {
     @Convert(converter = MeasureConverter.class, columnType = String.class)
     private Measure measure;
 
+    @Convert(converter = LocationConverter.class, columnType = String.class)
+    private Location location;
+
+    @Convert(converter = FalldownConverter.class, columnType = String.class)
+    private Falldown falldown;
+
     @Convert(converter = RegionAdaminConverter.class, columnType = String.class)
     private RegionAdamin region_adamin;
 
-    @Generated(hash = 1237367777)
-    public SrcData(Measure measure, RegionAdamin region_adamin) {
+    @Generated(hash = 388766062)
+    public SrcData(Measure measure, Location location, Falldown falldown, RegionAdamin region_adamin) {
         this.measure = measure;
+        this.location = location;
+        this.falldown = falldown;
         this.region_adamin = region_adamin;
     }
 
@@ -35,6 +45,22 @@ public class SrcData {
 
     public void setMeasure(Measure measure) {
         this.measure = measure;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public Falldown getFalldown() {
+        return falldown;
+    }
+
+    public void setFalldown(Falldown falldown) {
+        this.falldown = falldown;
     }
 
     public RegionAdamin getRegion_adamin() {
@@ -64,6 +90,25 @@ public class SrcData {
         }
     }
 
+    public static class LocationConverter implements PropertyConverter<Location, String> {
+
+        @Override
+        public Location convertToEntityProperty(String databaseValue) {
+            if (databaseValue == null) {
+                return null;
+            }
+            return new Gson().fromJson(databaseValue, Location.class);
+        }
+
+        @Override
+        public String convertToDatabaseValue(Location entityProperty) {
+            if (entityProperty == null) {
+                return null;
+            }
+            return new Gson().toJson(entityProperty);
+        }
+    }
+
     public static class RegionAdaminConverter implements PropertyConverter<RegionAdamin, String> {
 
         @Override
@@ -76,6 +121,25 @@ public class SrcData {
 
         @Override
         public String convertToDatabaseValue(RegionAdamin entityProperty) {
+            if (entityProperty == null) {
+                return null;
+            }
+            return new Gson().toJson(entityProperty);
+        }
+    }
+
+    public static class FalldownConverter implements PropertyConverter<Falldown, String> {
+
+        @Override
+        public Falldown convertToEntityProperty(String databaseValue) {
+            if (databaseValue == null) {
+                return null;
+            }
+            return new Gson().fromJson(databaseValue, Falldown.class);
+        }
+
+        @Override
+        public String convertToDatabaseValue(Falldown entityProperty) {
             if (entityProperty == null) {
                 return null;
             }

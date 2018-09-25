@@ -21,6 +21,7 @@ import com.njzhikejia.echohealth.healthlife.entity.warn.Notices;
 import com.njzhikejia.echohealth.healthlife.entity.warn.WarnNoticesData;
 import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
 import com.njzhikejia.echohealth.healthlife.greendao.NoticesDao;
+import com.njzhikejia.echohealth.healthlife.greendao.ReportsDao;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
@@ -28,6 +29,9 @@ import com.njzhikejia.echohealth.healthlife.util.Logger;
 import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
+
+import org.greenrobot.greendao.query.DeleteQuery;
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -56,6 +60,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     private DaoSession mDaoSession;
     private NoticesDao noticesDao;
     private TextView tvNoData;
+    private QueryBuilder<Notices> queryBuilder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +83,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         HealthLifeApplication mApplication = (HealthLifeApplication) getActivity().getApplication();
         mDaoSession = mApplication.getDaoSession();
         noticesDao = mDaoSession.getNoticesDao();
+        queryBuilder = noticesDao.queryBuilder();
     }
 
     private void initView(View view) {
@@ -160,7 +166,8 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     }
 
     private void loadDataFromDb() {
-        warnInfoList = noticesDao.loadAll();
+        queryBuilder.where(NoticesDao.Properties.Uid.eq(PreferenceUtil.getSelectedUserUID(mContext)));
+        warnInfoList = queryBuilder.list();
         checkEmptyData();
         mAdapter.setlist(warnInfoList);
     }
@@ -186,7 +193,8 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
                 Gson gson = new Gson();
                 WarnNoticesData warnNoticesData = gson.fromJson(responseContent, WarnNoticesData.class);
                 warnInfoList = warnNoticesData.getData().getNotices();
-                noticesDao.deleteAll();
+                DeleteQuery<Notices> deleteQuery = queryBuilder.where(NoticesDao.Properties.Uid.eq(PreferenceUtil.getSelectedUserUID(mContext))).buildDelete();
+                deleteQuery.executeDeleteWithoutDetachingEntities();
                 for (Notices notices : warnInfoList) {
                     noticesDao.insert(notices);
                 }

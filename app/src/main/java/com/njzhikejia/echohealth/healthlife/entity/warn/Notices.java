@@ -15,6 +15,7 @@ import org.greenrobot.greendao.annotation.Generated;
 public class Notices {
 
     private int id;
+    private int uid;
     private int type;
     private int status;
     private String create_time;
@@ -26,11 +27,12 @@ public class Notices {
     @Convert(converter = SrcDataConverter.class, columnType = String.class)
     private SrcData src_data;
 
-    @Generated(hash = 780257809)
-    public Notices(int id, int type, int status, String create_time,
-            String dispatch_time, int dispatch_operator, int screen_flag,
-            String remark, SrcData src_data) {
+    @Generated(hash = 632249427)
+    public Notices(int id, int uid, int type, int status, String create_time,
+            String dispatch_time, int dispatch_operator, int screen_flag, String remark,
+            SrcData src_data) {
         this.id = id;
+        this.uid = uid;
         this.type = type;
         this.status = status;
         this.create_time = create_time;
@@ -51,6 +53,14 @@ public class Notices {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 
     public int getType() {

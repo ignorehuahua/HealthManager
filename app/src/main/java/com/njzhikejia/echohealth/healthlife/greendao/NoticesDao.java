@@ -28,14 +28,15 @@ public class NoticesDao extends AbstractDao<Notices, Void> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, int.class, "id", false, "ID");
-        public final static Property Type = new Property(1, int.class, "type", false, "TYPE");
-        public final static Property Status = new Property(2, int.class, "status", false, "STATUS");
-        public final static Property Create_time = new Property(3, String.class, "create_time", false, "CREATE_TIME");
-        public final static Property Dispatch_time = new Property(4, String.class, "dispatch_time", false, "DISPATCH_TIME");
-        public final static Property Dispatch_operator = new Property(5, int.class, "dispatch_operator", false, "DISPATCH_OPERATOR");
-        public final static Property Screen_flag = new Property(6, int.class, "screen_flag", false, "SCREEN_FLAG");
-        public final static Property Remark = new Property(7, String.class, "remark", false, "REMARK");
-        public final static Property Src_data = new Property(8, String.class, "src_data", false, "SRC_DATA");
+        public final static Property Uid = new Property(1, int.class, "uid", false, "UID");
+        public final static Property Type = new Property(2, int.class, "type", false, "TYPE");
+        public final static Property Status = new Property(3, int.class, "status", false, "STATUS");
+        public final static Property Create_time = new Property(4, String.class, "create_time", false, "CREATE_TIME");
+        public final static Property Dispatch_time = new Property(5, String.class, "dispatch_time", false, "DISPATCH_TIME");
+        public final static Property Dispatch_operator = new Property(6, int.class, "dispatch_operator", false, "DISPATCH_OPERATOR");
+        public final static Property Screen_flag = new Property(7, int.class, "screen_flag", false, "SCREEN_FLAG");
+        public final static Property Remark = new Property(8, String.class, "remark", false, "REMARK");
+        public final static Property Src_data = new Property(9, String.class, "src_data", false, "SRC_DATA");
     }
 
     private final SrcDataConverter src_dataConverter = new SrcDataConverter();
@@ -53,14 +54,15 @@ public class NoticesDao extends AbstractDao<Notices, Void> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"NOTICES\" (" + //
                 "\"ID\" INTEGER NOT NULL ," + // 0: id
-                "\"TYPE\" INTEGER NOT NULL ," + // 1: type
-                "\"STATUS\" INTEGER NOT NULL ," + // 2: status
-                "\"CREATE_TIME\" TEXT," + // 3: create_time
-                "\"DISPATCH_TIME\" TEXT," + // 4: dispatch_time
-                "\"DISPATCH_OPERATOR\" INTEGER NOT NULL ," + // 5: dispatch_operator
-                "\"SCREEN_FLAG\" INTEGER NOT NULL ," + // 6: screen_flag
-                "\"REMARK\" TEXT," + // 7: remark
-                "\"SRC_DATA\" TEXT);"); // 8: src_data
+                "\"UID\" INTEGER NOT NULL ," + // 1: uid
+                "\"TYPE\" INTEGER NOT NULL ," + // 2: type
+                "\"STATUS\" INTEGER NOT NULL ," + // 3: status
+                "\"CREATE_TIME\" TEXT," + // 4: create_time
+                "\"DISPATCH_TIME\" TEXT," + // 5: dispatch_time
+                "\"DISPATCH_OPERATOR\" INTEGER NOT NULL ," + // 6: dispatch_operator
+                "\"SCREEN_FLAG\" INTEGER NOT NULL ," + // 7: screen_flag
+                "\"REMARK\" TEXT," + // 8: remark
+                "\"SRC_DATA\" TEXT);"); // 9: src_data
     }
 
     /** Drops the underlying database table. */
@@ -73,29 +75,30 @@ public class NoticesDao extends AbstractDao<Notices, Void> {
     protected final void bindValues(DatabaseStatement stmt, Notices entity) {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
-        stmt.bindLong(2, entity.getType());
-        stmt.bindLong(3, entity.getStatus());
+        stmt.bindLong(2, entity.getUid());
+        stmt.bindLong(3, entity.getType());
+        stmt.bindLong(4, entity.getStatus());
  
         String create_time = entity.getCreate_time();
         if (create_time != null) {
-            stmt.bindString(4, create_time);
+            stmt.bindString(5, create_time);
         }
  
         String dispatch_time = entity.getDispatch_time();
         if (dispatch_time != null) {
-            stmt.bindString(5, dispatch_time);
+            stmt.bindString(6, dispatch_time);
         }
-        stmt.bindLong(6, entity.getDispatch_operator());
-        stmt.bindLong(7, entity.getScreen_flag());
+        stmt.bindLong(7, entity.getDispatch_operator());
+        stmt.bindLong(8, entity.getScreen_flag());
  
         String remark = entity.getRemark();
         if (remark != null) {
-            stmt.bindString(8, remark);
+            stmt.bindString(9, remark);
         }
  
         SrcData src_data = entity.getSrc_data();
         if (src_data != null) {
-            stmt.bindString(9, src_dataConverter.convertToDatabaseValue(src_data));
+            stmt.bindString(10, src_dataConverter.convertToDatabaseValue(src_data));
         }
     }
 
@@ -103,29 +106,30 @@ public class NoticesDao extends AbstractDao<Notices, Void> {
     protected final void bindValues(SQLiteStatement stmt, Notices entity) {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
-        stmt.bindLong(2, entity.getType());
-        stmt.bindLong(3, entity.getStatus());
+        stmt.bindLong(2, entity.getUid());
+        stmt.bindLong(3, entity.getType());
+        stmt.bindLong(4, entity.getStatus());
  
         String create_time = entity.getCreate_time();
         if (create_time != null) {
-            stmt.bindString(4, create_time);
+            stmt.bindString(5, create_time);
         }
  
         String dispatch_time = entity.getDispatch_time();
         if (dispatch_time != null) {
-            stmt.bindString(5, dispatch_time);
+            stmt.bindString(6, dispatch_time);
         }
-        stmt.bindLong(6, entity.getDispatch_operator());
-        stmt.bindLong(7, entity.getScreen_flag());
+        stmt.bindLong(7, entity.getDispatch_operator());
+        stmt.bindLong(8, entity.getScreen_flag());
  
         String remark = entity.getRemark();
         if (remark != null) {
-            stmt.bindString(8, remark);
+            stmt.bindString(9, remark);
         }
  
         SrcData src_data = entity.getSrc_data();
         if (src_data != null) {
-            stmt.bindString(9, src_dataConverter.convertToDatabaseValue(src_data));
+            stmt.bindString(10, src_dataConverter.convertToDatabaseValue(src_data));
         }
     }
 
@@ -138,14 +142,15 @@ public class NoticesDao extends AbstractDao<Notices, Void> {
     public Notices readEntity(Cursor cursor, int offset) {
         Notices entity = new Notices( //
             cursor.getInt(offset + 0), // id
-            cursor.getInt(offset + 1), // type
-            cursor.getInt(offset + 2), // status
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // create_time
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // dispatch_time
-            cursor.getInt(offset + 5), // dispatch_operator
-            cursor.getInt(offset + 6), // screen_flag
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // remark
-            cursor.isNull(offset + 8) ? null : src_dataConverter.convertToEntityProperty(cursor.getString(offset + 8)) // src_data
+            cursor.getInt(offset + 1), // uid
+            cursor.getInt(offset + 2), // type
+            cursor.getInt(offset + 3), // status
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // create_time
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // dispatch_time
+            cursor.getInt(offset + 6), // dispatch_operator
+            cursor.getInt(offset + 7), // screen_flag
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // remark
+            cursor.isNull(offset + 9) ? null : src_dataConverter.convertToEntityProperty(cursor.getString(offset + 9)) // src_data
         );
         return entity;
     }
@@ -153,14 +158,15 @@ public class NoticesDao extends AbstractDao<Notices, Void> {
     @Override
     public void readEntity(Cursor cursor, Notices entity, int offset) {
         entity.setId(cursor.getInt(offset + 0));
-        entity.setType(cursor.getInt(offset + 1));
-        entity.setStatus(cursor.getInt(offset + 2));
-        entity.setCreate_time(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setDispatch_time(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setDispatch_operator(cursor.getInt(offset + 5));
-        entity.setScreen_flag(cursor.getInt(offset + 6));
-        entity.setRemark(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setSrc_data(cursor.isNull(offset + 8) ? null : src_dataConverter.convertToEntityProperty(cursor.getString(offset + 8)));
+        entity.setUid(cursor.getInt(offset + 1));
+        entity.setType(cursor.getInt(offset + 2));
+        entity.setStatus(cursor.getInt(offset + 3));
+        entity.setCreate_time(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setDispatch_time(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setDispatch_operator(cursor.getInt(offset + 6));
+        entity.setScreen_flag(cursor.getInt(offset + 7));
+        entity.setRemark(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setSrc_data(cursor.isNull(offset + 9) ? null : src_dataConverter.convertToEntityProperty(cursor.getString(offset + 9)));
      }
     
     @Override

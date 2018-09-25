@@ -9,8 +9,12 @@ import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
 
+import com.njzhikejia.echohealth.healthlife.entity.warn.Falldown;
+import com.njzhikejia.echohealth.healthlife.entity.warn.Location;
 import com.njzhikejia.echohealth.healthlife.entity.warn.Measure;
 import com.njzhikejia.echohealth.healthlife.entity.warn.RegionAdamin;
+import com.njzhikejia.echohealth.healthlife.entity.warn.SrcData.FalldownConverter;
+import com.njzhikejia.echohealth.healthlife.entity.warn.SrcData.LocationConverter;
 import com.njzhikejia.echohealth.healthlife.entity.warn.SrcData.MeasureConverter;
 import com.njzhikejia.echohealth.healthlife.entity.warn.SrcData.RegionAdaminConverter;
 
@@ -30,10 +34,14 @@ public class SrcDataDao extends AbstractDao<SrcData, Void> {
      */
     public static class Properties {
         public final static Property Measure = new Property(0, String.class, "measure", false, "MEASURE");
-        public final static Property Region_adamin = new Property(1, String.class, "region_adamin", false, "REGION_ADAMIN");
+        public final static Property Location = new Property(1, String.class, "location", false, "LOCATION");
+        public final static Property Falldown = new Property(2, String.class, "falldown", false, "FALLDOWN");
+        public final static Property Region_adamin = new Property(3, String.class, "region_adamin", false, "REGION_ADAMIN");
     }
 
     private final MeasureConverter measureConverter = new MeasureConverter();
+    private final LocationConverter locationConverter = new LocationConverter();
+    private final FalldownConverter falldownConverter = new FalldownConverter();
     private final RegionAdaminConverter region_adaminConverter = new RegionAdaminConverter();
 
     public SrcDataDao(DaoConfig config) {
@@ -49,7 +57,9 @@ public class SrcDataDao extends AbstractDao<SrcData, Void> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"SRC_DATA\" (" + //
                 "\"MEASURE\" TEXT," + // 0: measure
-                "\"REGION_ADAMIN\" TEXT);"); // 1: region_adamin
+                "\"LOCATION\" TEXT," + // 1: location
+                "\"FALLDOWN\" TEXT," + // 2: falldown
+                "\"REGION_ADAMIN\" TEXT);"); // 3: region_adamin
     }
 
     /** Drops the underlying database table. */
@@ -67,9 +77,19 @@ public class SrcDataDao extends AbstractDao<SrcData, Void> {
             stmt.bindString(1, measureConverter.convertToDatabaseValue(measure));
         }
  
+        Location location = entity.getLocation();
+        if (location != null) {
+            stmt.bindString(2, locationConverter.convertToDatabaseValue(location));
+        }
+ 
+        Falldown falldown = entity.getFalldown();
+        if (falldown != null) {
+            stmt.bindString(3, falldownConverter.convertToDatabaseValue(falldown));
+        }
+ 
         RegionAdamin region_adamin = entity.getRegion_adamin();
         if (region_adamin != null) {
-            stmt.bindString(2, region_adaminConverter.convertToDatabaseValue(region_adamin));
+            stmt.bindString(4, region_adaminConverter.convertToDatabaseValue(region_adamin));
         }
     }
 
@@ -82,9 +102,19 @@ public class SrcDataDao extends AbstractDao<SrcData, Void> {
             stmt.bindString(1, measureConverter.convertToDatabaseValue(measure));
         }
  
+        Location location = entity.getLocation();
+        if (location != null) {
+            stmt.bindString(2, locationConverter.convertToDatabaseValue(location));
+        }
+ 
+        Falldown falldown = entity.getFalldown();
+        if (falldown != null) {
+            stmt.bindString(3, falldownConverter.convertToDatabaseValue(falldown));
+        }
+ 
         RegionAdamin region_adamin = entity.getRegion_adamin();
         if (region_adamin != null) {
-            stmt.bindString(2, region_adaminConverter.convertToDatabaseValue(region_adamin));
+            stmt.bindString(4, region_adaminConverter.convertToDatabaseValue(region_adamin));
         }
     }
 
@@ -97,7 +127,9 @@ public class SrcDataDao extends AbstractDao<SrcData, Void> {
     public SrcData readEntity(Cursor cursor, int offset) {
         SrcData entity = new SrcData( //
             cursor.isNull(offset + 0) ? null : measureConverter.convertToEntityProperty(cursor.getString(offset + 0)), // measure
-            cursor.isNull(offset + 1) ? null : region_adaminConverter.convertToEntityProperty(cursor.getString(offset + 1)) // region_adamin
+            cursor.isNull(offset + 1) ? null : locationConverter.convertToEntityProperty(cursor.getString(offset + 1)), // location
+            cursor.isNull(offset + 2) ? null : falldownConverter.convertToEntityProperty(cursor.getString(offset + 2)), // falldown
+            cursor.isNull(offset + 3) ? null : region_adaminConverter.convertToEntityProperty(cursor.getString(offset + 3)) // region_adamin
         );
         return entity;
     }
@@ -105,7 +137,9 @@ public class SrcDataDao extends AbstractDao<SrcData, Void> {
     @Override
     public void readEntity(Cursor cursor, SrcData entity, int offset) {
         entity.setMeasure(cursor.isNull(offset + 0) ? null : measureConverter.convertToEntityProperty(cursor.getString(offset + 0)));
-        entity.setRegion_adamin(cursor.isNull(offset + 1) ? null : region_adaminConverter.convertToEntityProperty(cursor.getString(offset + 1)));
+        entity.setLocation(cursor.isNull(offset + 1) ? null : locationConverter.convertToEntityProperty(cursor.getString(offset + 1)));
+        entity.setFalldown(cursor.isNull(offset + 2) ? null : falldownConverter.convertToEntityProperty(cursor.getString(offset + 2)));
+        entity.setRegion_adamin(cursor.isNull(offset + 3) ? null : region_adaminConverter.convertToEntityProperty(cursor.getString(offset + 3)));
      }
     
     @Override
