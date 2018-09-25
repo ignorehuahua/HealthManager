@@ -11,7 +11,7 @@ import org.greenrobot.greendao.annotation.Generated;
 public class Reports {
 
     private int id;
-    private int user_id;
+    private int uid;
     private int type;
     private int src_id;
     private int status;
@@ -19,11 +19,12 @@ public class Reports {
     private int result_id;
     private String result;
     private String remark;
-    @Generated(hash = 2027799750)
-    public Reports(int id, int user_id, int type, int src_id, int status,
+
+    @Generated(hash = 1468360800)
+    public Reports(int id, int uid, int type, int src_id, int status,
             String create_time, int result_id, String result, String remark) {
         this.id = id;
-        this.user_id = user_id;
+        this.uid = uid;
         this.type = type;
         this.src_id = src_id;
         this.status = status;
@@ -35,17 +36,18 @@ public class Reports {
     @Generated(hash = 953319297)
     public Reports() {
     }
+
     public int getId() {
         return this.id;
     }
     public void setId(int id) {
         this.id = id;
     }
-    public int getUser_id() {
-        return this.user_id;
+    public int getUid() {
+        return this.uid;
     }
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUid(int user_id) {
+        this.uid = user_id;
     }
     public int getType() {
         return this.type;

@@ -31,6 +31,9 @@ import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
 
+import org.greenrobot.greendao.query.DeleteQuery;
+import org.greenrobot.greendao.query.QueryBuilder;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -58,6 +61,7 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
     private TextView tvNoData;
     private DaoSession mDaoSession;
     private ReportsDao reportsDao;
+    private QueryBuilder<Reports> queryBuilder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +85,7 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
         HealthLifeApplication mApplication = (HealthLifeApplication) getActivity().getApplication();
         mDaoSession = mApplication.getDaoSession();
         reportsDao = mDaoSession.getReportsDao();
+        queryBuilder = reportsDao.queryBuilder();
     }
 
     private void initView(View view) {
@@ -176,7 +181,8 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
     }
 
     private void loadDataFromDb() {
-        healthGuidanceList = reportsDao.loadAll();
+        queryBuilder.where(ReportsDao.Properties.Uid.eq(PreferenceUtil.getSelectedUserUID(mContext)));
+        healthGuidanceList = queryBuilder.list();
         if (healthGuidanceList.size() > 0) {
             tvNoData.setVisibility(View.GONE);
         } else {
@@ -207,7 +213,8 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
                 Gson gson = new Gson();
                 ReportData reportData = gson.fromJson(responseContent, ReportData.class);
                 healthGuidanceList = reportData.getData().getReports();
-                reportsDao.deleteAll();
+                DeleteQuery<Reports> deleteQuery = queryBuilder.where(ReportsDao.Properties.Uid.eq(PreferenceUtil.getSelectedUserUID(mContext))).buildDelete();
+                deleteQuery.executeDeleteWithoutDetachingEntities();
                 for (Reports reports : healthGuidanceList) {
                     reportsDao.insert(reports);
                 }

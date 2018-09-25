@@ -25,7 +25,7 @@ public class ReportsDao extends AbstractDao<Reports, Void> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, int.class, "id", false, "ID");
-        public final static Property User_id = new Property(1, int.class, "user_id", false, "USER_ID");
+        public final static Property Uid = new Property(1, int.class, "uid", false, "UID");
         public final static Property Type = new Property(2, int.class, "type", false, "TYPE");
         public final static Property Src_id = new Property(3, int.class, "src_id", false, "SRC_ID");
         public final static Property Status = new Property(4, int.class, "status", false, "STATUS");
@@ -49,7 +49,7 @@ public class ReportsDao extends AbstractDao<Reports, Void> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"REPORTS\" (" + //
                 "\"ID\" INTEGER NOT NULL ," + // 0: id
-                "\"USER_ID\" INTEGER NOT NULL ," + // 1: user_id
+                "\"UID\" INTEGER NOT NULL ," + // 1: uid
                 "\"TYPE\" INTEGER NOT NULL ," + // 2: type
                 "\"SRC_ID\" INTEGER NOT NULL ," + // 3: src_id
                 "\"STATUS\" INTEGER NOT NULL ," + // 4: status
@@ -69,7 +69,7 @@ public class ReportsDao extends AbstractDao<Reports, Void> {
     protected final void bindValues(DatabaseStatement stmt, Reports entity) {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
-        stmt.bindLong(2, entity.getUser_id());
+        stmt.bindLong(2, entity.getUid());
         stmt.bindLong(3, entity.getType());
         stmt.bindLong(4, entity.getSrc_id());
         stmt.bindLong(5, entity.getStatus());
@@ -95,7 +95,7 @@ public class ReportsDao extends AbstractDao<Reports, Void> {
     protected final void bindValues(SQLiteStatement stmt, Reports entity) {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
-        stmt.bindLong(2, entity.getUser_id());
+        stmt.bindLong(2, entity.getUid());
         stmt.bindLong(3, entity.getType());
         stmt.bindLong(4, entity.getSrc_id());
         stmt.bindLong(5, entity.getStatus());
@@ -126,7 +126,7 @@ public class ReportsDao extends AbstractDao<Reports, Void> {
     public Reports readEntity(Cursor cursor, int offset) {
         Reports entity = new Reports( //
             cursor.getInt(offset + 0), // id
-            cursor.getInt(offset + 1), // user_id
+            cursor.getInt(offset + 1), // uid
             cursor.getInt(offset + 2), // type
             cursor.getInt(offset + 3), // src_id
             cursor.getInt(offset + 4), // status
@@ -141,7 +141,7 @@ public class ReportsDao extends AbstractDao<Reports, Void> {
     @Override
     public void readEntity(Cursor cursor, Reports entity, int offset) {
         entity.setId(cursor.getInt(offset + 0));
-        entity.setUser_id(cursor.getInt(offset + 1));
+        entity.setUid(cursor.getInt(offset + 1));
         entity.setType(cursor.getInt(offset + 2));
         entity.setSrc_id(cursor.getInt(offset + 3));
         entity.setStatus(cursor.getInt(offset + 4));
