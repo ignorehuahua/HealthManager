@@ -119,7 +119,7 @@ public class HealthLifeApplication extends Application{
                     PreferenceUtil.setNewConcern(getApplicationContext(), true);
                     return;
                 } else if (msg.title.equals(getString(R.string.apply_pass))) {
-                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(ConstantValues.ACTION_CONCERN_REQUEST_RECEIVED));
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(ConstantValues.ACTION_CONCERN_REQUEST_ACCEPTED));
                     return;
                 }
                 MessageDao messageDao = daoSession.getMessageDao();
