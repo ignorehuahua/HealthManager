@@ -21,12 +21,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
-import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,9 +41,8 @@ import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.adapter.MemberListAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.concern.Concerns;
 import com.njzhikejia.echohealth.healthlife.entity.concern.MyFollowsData;
-import com.njzhikejia.echohealth.healthlife.entity.rule.Pulse;
+import com.njzhikejia.echohealth.healthlife.entity.rule.RuleResult;
 import com.njzhikejia.echohealth.healthlife.entity.rule.WarnRule;
-import com.njzhikejia.echohealth.healthlife.entity.user.User;
 import com.njzhikejia.echohealth.healthlife.entity.user.UserDetailsResponse;
 import com.njzhikejia.echohealth.healthlife.greendao.ConcernsDao;
 import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
@@ -59,7 +56,6 @@ import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
 import com.njzhikejia.echohealth.healthlife.widget.BadgeDrawerArrowDrawable;
-import com.njzhikejia.echohealth.healthlife.widget.BadgeView;
 import com.njzhikejia.echohealth.healthlife.widget.banner.CycleViewPager;
 import com.njzhikejia.echohealth.healthlife.widget.banner.ViewUtil;
 import java.io.File;
@@ -115,7 +111,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         initView();
         judgeNewConcerns();
         loadRealtives();
-        queryUserInfo();
         getWarnRules();
         initPopupWindow();
     }
@@ -417,32 +412,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             return;
         }
 
-//        OKHttpClientManager.getInstance().getAsync(CommonRequest.getRealtivesList(PreferenceUtil.getLoginUserUID(this)), new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                Logger.e(TAG, "loadRelatives failure");
-//                stopRefresh();
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                String responseContent = response.body().string();
-//                Logger.d(TAG, "onResponse code = "+response.code() + "responseContent = "+responseContent);
-//                if (response.code() == 200) {
-//                    Gson gson = new Gson();
-//                    RelativesData relativesData = gson.fromJson(responseContent, RelativesData.class);
-//                    memberList = relativesData.getData().getRelatives();
-//                    RelativesData.Data.Relatives me = new RelativesData.Data.Relatives();
-//                    me.setName(getString(R.string.me));
-//                    me.setPhone(PreferenceUtil.getLoginUserPhone(MainActivity.this));
-//                    me.setUid(PreferenceUtil.getLoginUserUID(MainActivity.this));
-//                    memberList.add(me);
-//                    Comparator cmp = new ChineseCharComp();
-//                    Collections.sort(memberList, cmp);
-//                    mHandler.sendEmptyMessage(LOAD_RELATIVES_SUCCESS);
-//                }
-//            }
-//        });
+        /**
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getRealtivesList(PreferenceUtil.getLoginUserUID(this)), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.e(TAG, "loadRelatives failure");
+                stopRefresh();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+                Logger.d(TAG, "onResponse code = "+response.code() + "responseContent = "+responseContent);
+                if (response.code() == 200) {
+                    Gson gson = new Gson();
+                    RelativesData relativesData = gson.fromJson(responseContent, RelativesData.class);
+                    memberList = relativesData.getData().getRelatives();
+                    RelativesData.Data.Relatives me = new RelativesData.Data.Relatives();
+                    me.setName(getString(R.string.me));
+                    me.setPhone(PreferenceUtil.getLoginUserPhone(MainActivity.this));
+                    me.setUid(PreferenceUtil.getLoginUserUID(MainActivity.this));
+                    memberList.add(me);
+                    Comparator cmp = new ChineseCharComp();
+                    Collections.sort(memberList, cmp);
+                    mHandler.sendEmptyMessage(LOAD_RELATIVES_SUCCESS);
+                }
+            }
+        }); */
 
         OKHttpClientManager.getInstance().getAsync(CommonRequest.getMyFollows(PreferenceUtil.getLoginUserUID(this)), new Callback() {
             @Override
@@ -484,6 +480,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mAdapter.setList(memberList);
     }
 
+    /**
     // 查询用户详情
     private void queryUserInfo() {
         if (!NetWorkUtils.isNetworkConnected(this)) {
@@ -510,7 +507,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }
             }
         });
-    }
+    } */
 
     private void getWarnRules() {
         if (!NetWorkUtils.isNetworkConnected(this)) {
@@ -530,6 +527,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Logger.d(TAG, "code = "+response.code() + "content = "+content);
                 Gson gson = new Gson();
                 WarnRule warnRule = gson.fromJson(content, WarnRule.class);
+                String data = warnRule.getData().getRules().getData();
+                Logger.d(TAG, "data = "+data);
+                Gson gsonRule = new Gson();
+                RuleResult ruleResult = gsonRule.fromJson(data, RuleResult.class);
 
             }
         });

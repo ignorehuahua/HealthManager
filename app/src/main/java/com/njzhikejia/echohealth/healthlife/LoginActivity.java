@@ -185,11 +185,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 mHandler.sendEmptyMessage(LOGIN_SUCCESS);
                 int uid = loginResponse.getData().getLogin().getUid();
                 String secKey = loginResponse.getData().getLogin().getSec_key();
+                String userName = loginResponse.getData().getLogin().getName();
                 Logger.d(TAG, "UID = "+uid+" sec_key = "+secKey);
                 PreferenceUtil.putLoginUserUID(LoginActivity.this, uid);
                 PreferenceUtil.putSecKey(LoginActivity.this, secKey);
                 PreferenceUtil.putLoginUserPhone(LoginActivity.this, name);
                 PreferenceUtil.putLoginUserPwd(LoginActivity.this, etPwd.getText().toString());
+                PreferenceUtil.putLoginUserName(LoginActivity.this, userName);
                 startUdateDeviceInfoService();
             }
         });

@@ -35,7 +35,7 @@ public class PreferenceUtil {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(key, value);
-        editor.apply();
+        editor.commit();
     }
 
     public static int getInt(Context context, String key, int defaultValue) {

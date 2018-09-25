@@ -40,6 +40,7 @@ public class LoginResponse  {
         public class Login{
             int uid;
             String sec_key;
+            String name;
 
             public int getUid() {
                 return uid;
@@ -55,6 +56,14 @@ public class LoginResponse  {
 
             public void setSec_key(String sec_key) {
                 this.sec_key = sec_key;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
             }
         }
     }

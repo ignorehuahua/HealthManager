@@ -1,9 +1,12 @@
 package com.njzhikejia.echohealth.healthlife.entity.rule;
 
-public class Pulse {
+/**
+ * Created by 16222 on 2018/9/25.
+ */
 
-   private int min;
-   private int max;
+public class Diastolic {
+    private int min;
+    private int max;
 
     public int getMin() {
         return min;
