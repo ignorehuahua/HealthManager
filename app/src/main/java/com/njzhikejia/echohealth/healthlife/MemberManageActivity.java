@@ -71,10 +71,8 @@ public class MemberManageActivity extends BaseActivity {
 
     private void setCurrentPage() {
         Intent intent = getIntent();
-        if (intent.getIntExtra(HealthLifeApplication.KEY_JUMP_TO_FOLLOW_ME, 0) == 1) {
+        if (intent.getIntExtra(HealthLifeApplication.KEY_JUMP_TO_FOLLOW_ME, 0) == 1 || PreferenceUtil.getNewConcern(this)) {
             mViewPager.setCurrentItem(1);
-        } else if (PreferenceUtil.getNewConcern(this)) {
-
         }
     }
 
