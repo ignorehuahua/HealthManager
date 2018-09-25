@@ -51,6 +51,17 @@ public class ServerAddrUtils {
     }
 
     /**
+     * http://120.55.22.117:28001/user/2/alarm/rules
+     * 获取告警规则
+     * @param userId
+     * @return
+     */
+    public static String getWarnRuleUrl(int userId) {
+        return ROOT_SERVER_ADDR + "/user/" + userId + "/alarm/rules";
+    }
+
+
+    /**
      * 获取告警列表
      * @param uid
      * @return

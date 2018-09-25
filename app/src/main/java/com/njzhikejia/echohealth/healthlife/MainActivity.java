@@ -43,6 +43,8 @@ import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.adapter.MemberListAdapter;
 import com.njzhikejia.echohealth.healthlife.entity.concern.Concerns;
 import com.njzhikejia.echohealth.healthlife.entity.concern.MyFollowsData;
+import com.njzhikejia.echohealth.healthlife.entity.rule.Pulse;
+import com.njzhikejia.echohealth.healthlife.entity.rule.WarnRule;
 import com.njzhikejia.echohealth.healthlife.entity.user.User;
 import com.njzhikejia.echohealth.healthlife.entity.user.UserDetailsResponse;
 import com.njzhikejia.echohealth.healthlife.greendao.ConcernsDao;
@@ -114,6 +116,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         judgeNewConcerns();
         loadRealtives();
         queryUserInfo();
+        getWarnRules();
         initPopupWindow();
     }
 
@@ -508,6 +511,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         });
     }
+
+    private void getWarnRules() {
+        if (!NetWorkUtils.isNetworkConnected(this)) {
+            ToastUtil.showShortToast(this, R.string.net_work_error);
+            return;
+        }
+
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getWarnRuleRequest(PreferenceUtil.getLoginUserUID(this)), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.d(TAG, "get warn rules failure");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String content = response.body().string();
+                Logger.d(TAG, "code = "+response.code() + "content = "+content);
+                Gson gson = new Gson();
+                WarnRule warnRule = gson.fromJson(content, WarnRule.class);
+
+            }
+        });
+    }
+
 
     private void initBanner() {
         List<View> views = new ArrayList<View>();

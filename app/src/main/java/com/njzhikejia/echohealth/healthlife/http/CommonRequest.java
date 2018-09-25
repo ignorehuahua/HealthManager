@@ -144,6 +144,15 @@ public class CommonRequest {
    }
 
     /**
+     * 获取告警规则
+     * @param uid
+     * @return
+     */
+    public static Request getWarnRuleRequest(int uid) {
+        return getRequest(ServerAddrUtils.getWarnRuleUrl(uid));
+    }
+
+    /**
      * 获取告警列表
      * @param uid
      * @return
