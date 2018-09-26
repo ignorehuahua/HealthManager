@@ -32,6 +32,15 @@ public class DaoMaster extends AbstractDaoMaster {
         NoticesDao.createTable(db, ifNotExists);
         RegionAdaminDao.createTable(db, ifNotExists);
         SrcDataDao.createTable(db, ifNotExists);
+        Blood_sugarDao.createTable(db, ifNotExists);
+        Body_temperatureDao.createTable(db, ifNotExists);
+        BpDao.createTable(db, ifNotExists);
+        DiastolicDao.createTable(db, ifNotExists);
+        PulseDao.createTable(db, ifNotExists);
+        RuleResultDao.createTable(db, ifNotExists);
+        Spo2Dao.createTable(db, ifNotExists);
+        SystolicDao.createTable(db, ifNotExists);
+        Vein_whole_bloodDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -47,6 +56,15 @@ public class DaoMaster extends AbstractDaoMaster {
         NoticesDao.dropTable(db, ifExists);
         RegionAdaminDao.dropTable(db, ifExists);
         SrcDataDao.dropTable(db, ifExists);
+        Blood_sugarDao.dropTable(db, ifExists);
+        Body_temperatureDao.dropTable(db, ifExists);
+        BpDao.dropTable(db, ifExists);
+        DiastolicDao.dropTable(db, ifExists);
+        PulseDao.dropTable(db, ifExists);
+        RuleResultDao.dropTable(db, ifExists);
+        Spo2Dao.dropTable(db, ifExists);
+        SystolicDao.dropTable(db, ifExists);
+        Vein_whole_bloodDao.dropTable(db, ifExists);
     }
 
     /**
@@ -76,6 +94,15 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(NoticesDao.class);
         registerDaoClass(RegionAdaminDao.class);
         registerDaoClass(SrcDataDao.class);
+        registerDaoClass(Blood_sugarDao.class);
+        registerDaoClass(Body_temperatureDao.class);
+        registerDaoClass(BpDao.class);
+        registerDaoClass(DiastolicDao.class);
+        registerDaoClass(PulseDao.class);
+        registerDaoClass(RuleResultDao.class);
+        registerDaoClass(Spo2Dao.class);
+        registerDaoClass(SystolicDao.class);
+        registerDaoClass(Vein_whole_bloodDao.class);
     }
 
     public DaoSession newSession() {

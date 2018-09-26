@@ -33,9 +33,9 @@ public class SpecificDataDao extends AbstractDao<SpecificData, Void> {
         public final static Property Measure_time = new Property(6, String.class, "measure_time", false, "MEASURE_TIME");
         public final static Property Create_time = new Property(7, String.class, "create_time", false, "CREATE_TIME");
         public final static Property Operator = new Property(8, int.class, "operator", false, "OPERATOR");
-        public final static Property Value1 = new Property(9, float.class, "value1", false, "VALUE1");
-        public final static Property Value2 = new Property(10, float.class, "value2", false, "VALUE2");
-        public final static Property Value3 = new Property(11, float.class, "value3", false, "VALUE3");
+        public final static Property Value1 = new Property(9, double.class, "value1", false, "VALUE1");
+        public final static Property Value2 = new Property(10, double.class, "value2", false, "VALUE2");
+        public final static Property Value3 = new Property(11, double.class, "value3", false, "VALUE3");
         public final static Property Status = new Property(12, int.class, "status", false, "STATUS");
         public final static Property Session_id = new Property(13, int.class, "session_id", false, "SESSION_ID");
         public final static Property Remark = new Property(14, String.class, "remark", false, "REMARK");
@@ -174,9 +174,9 @@ public class SpecificDataDao extends AbstractDao<SpecificData, Void> {
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // measure_time
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // create_time
             cursor.getInt(offset + 8), // operator
-            cursor.getFloat(offset + 9), // value1
-            cursor.getFloat(offset + 10), // value2
-            cursor.getFloat(offset + 11), // value3
+            cursor.getDouble(offset + 9), // value1
+            cursor.getDouble(offset + 10), // value2
+            cursor.getDouble(offset + 11), // value3
             cursor.getInt(offset + 12), // status
             cursor.getInt(offset + 13), // session_id
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // remark
@@ -197,9 +197,9 @@ public class SpecificDataDao extends AbstractDao<SpecificData, Void> {
         entity.setMeasure_time(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setCreate_time(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setOperator(cursor.getInt(offset + 8));
-        entity.setValue1(cursor.getFloat(offset + 9));
-        entity.setValue2(cursor.getFloat(offset + 10));
-        entity.setValue3(cursor.getFloat(offset + 11));
+        entity.setValue1(cursor.getDouble(offset + 9));
+        entity.setValue2(cursor.getDouble(offset + 10));
+        entity.setValue3(cursor.getDouble(offset + 11));
         entity.setStatus(cursor.getInt(offset + 12));
         entity.setSession_id(cursor.getInt(offset + 13));
         entity.setRemark(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));

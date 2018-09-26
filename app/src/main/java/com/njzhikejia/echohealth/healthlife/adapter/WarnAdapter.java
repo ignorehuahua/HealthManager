@@ -80,12 +80,11 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
         Notices warnInfo = list.get(position);
         if (warnInfo == null) {
             Logger.e(TAG, "warnInfo is null");
+            return;
         }
-        matchWarnType(holder, warnInfo);
-        if (warnInfo != null && warnInfo.getSrc_data() != null && warnInfo.getSrc_data().getMeasure() != null) {
-            holder.tvMeasureTime.setText(warnInfo.getSrc_data().getMeasure().getMeasure_time());
 
-        }
+        matchWarnType(holder, warnInfo);
+
         Logger.d(TAG, "remark = "+warnInfo.getRemark());
 //        {"notice_desc":"心率疑似异常 [心率偏高]"}
         Gson gson = new Gson();
@@ -181,11 +180,13 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
                         break;
                 }
                 holder.tvTimeLabel.setText(R.string.measure_time);
+                holder.tvMeasureTime.setText(notice.getSrc_data().getMeasure().getMeasure_time());
                 break;
             case FENCE_WARN:
                 holder.ivType.setImageResource(R.drawable.ic_fence);
                 holder.tvType.setText(R.string.fence_warn);
                 holder.tvTimeLabel.setText(R.string.warn_time);
+                holder.tvMeasureTime.setText(notice.getSrc_data().getMeasure().getMeasure_time());
                 break;
 
             case SOS_WARN:
@@ -193,17 +194,19 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
                 holder.tvType.setText(R.string.sos_warn);
                 holder.tvTimeLabel.setText(R.string.warn_time);
                 double heartRate = notice.getSrc_data().getMeasure().getValue1();
-                holder.tvWarnExplanation.setText(mContext.getString(R.string.warn_heart_rate) + String.valueOf(heartRate));
+                holder.tvWarnExplanation.setText(mContext.getString(R.string.warn_heart_rate) + String.valueOf(heartRate) + "(" + mContext.getString(R.string.heart_rate_with_unit) + ")");
                 holder.tvMeasureValue.setText(mContext.getString(R.string.warn_location) + notice.getSrc_data().getLocation().getAddress());
+                holder.tvWarnInfo.setVisibility(View.GONE);
+                holder.tvMeasureTime.setText(notice.getSrc_data().getMeasure().getMeasure_time());
                 break;
             case FALL_WARN:
                 holder.ivType.setImageResource(R.drawable.ic_fall);
                 holder.tvType.setText(R.string.fall_warn);
                 holder.tvTimeLabel.setText(R.string.warn_time);
-                if (notice.getSrc_data().getLocation() != null) {
-                    holder.tvMeasureValue.setText(mContext.getString(R.string.warn_location) + notice.getSrc_data().getLocation().getAddress());
-                }
+                holder.tvMeasureValue.setText(mContext.getString(R.string.warn_location) + notice.getSrc_data().getFalldown().getAddress());
                 holder.tvWarnExplanation.setVisibility(View.GONE);
+                holder.tvWarnInfo.setVisibility(View.GONE);
+                holder.tvMeasureTime.setText(notice.getSrc_data().getFalldown().getAction_time());
                 break;
         }
     }
