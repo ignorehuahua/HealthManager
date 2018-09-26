@@ -36,6 +36,8 @@ import com.njzhikejia.echohealth.healthlife.util.NetWorkUtils;
 import com.njzhikejia.echohealth.healthlife.util.PreferenceUtil;
 import com.njzhikejia.echohealth.healthlife.util.ToastUtil;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -66,6 +68,7 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
     private TextView tvNoData;
     private LocalBroadcastManager mLocalBroadcastManager;
     private FollowBroadcastReceiver mReceiver;
+    private QueryBuilder<Concerns> queryBuilder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,6 +90,7 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
         HealthLifeApplication mApplication = (HealthLifeApplication) getActivity().getApplication();
         mDaoSession = mApplication.getDaoSession();
         concernsDao = mDaoSession.getConcernsDao();
+        queryBuilder = concernsDao.queryBuilder();
     }
 
     private void initView(View view) {
@@ -208,7 +212,8 @@ public class MyFollowsFragment extends BaseFragment implements SwipeRefreshLayou
     }
 
     private void loadDataFromDb() {
-        myFollowsList = concernsDao.loadAll();
+        queryBuilder.where(ConcernsDao.Properties.Uid.notEq(PreferenceUtil.getLoginUserUID(mContext)));
+        myFollowsList = queryBuilder.list();
         mAdapter.setList(myFollowsList);
         checkEmptyData();
     }

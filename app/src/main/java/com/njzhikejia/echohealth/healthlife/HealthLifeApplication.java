@@ -54,7 +54,7 @@ public class HealthLifeApplication extends Application{
     private Handler handler;
     private static final String DB_NAME = "healthlife.db";
     private DaoSession daoSession;
-    private String deviceToken;
+    private String mDeviceToken;
     public static final String KEY_JUMP_TO_FOLLOW_ME = "jump_to_follow_me";
 
     @Override
@@ -101,9 +101,6 @@ public class HealthLifeApplication extends Application{
          */
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "47dee1bd3a3f8f2cd4963e79e3092216");
         PushAgent mPushAgent = PushAgent.getInstance(this);
-        deviceToken = mPushAgent.getRegistrationId();
-        PreferenceUtil.putDeviceToken(getApplicationContext(), deviceToken);
-        postDeviceInfo();
         UmengMessageHandler messageHandler = new UmengMessageHandler() {
 
             /**
@@ -239,7 +236,10 @@ public class HealthLifeApplication extends Application{
             public void onSuccess(String deviceToken) {
                 //注册成功会返回device token
                 Logger.d(TAG, "Umeng registerCallback onSuccess! token = "+deviceToken);
-        }
+                mDeviceToken = deviceToken;
+                PreferenceUtil.putDeviceToken(getApplicationContext(), deviceToken);
+                postDeviceInfo();
+            }
 
             @Override
             public void onFailure(String s, String s1) {
@@ -253,7 +253,7 @@ public class HealthLifeApplication extends Application{
      */
     private void postDeviceInfo() {
         OKHttpClientManager.getInstance().postAsync(CommonRequest.postDeviceInfoRequest(PreferenceUtil.getLoginUserUID(getApplicationContext()),
-                deviceToken, 1), new Callback() {
+                mDeviceToken, 1), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "post device info failure!!!!");
