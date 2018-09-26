@@ -70,11 +70,11 @@ public class MeasureDataAdapter extends RecyclerView.Adapter<MeasureDataAdapter.
             case BLOOD_PRESSURE:
                 if (measureData.getBlood_pressure_type() == DIASTOLIC_PRESSURE) {
                     holder.tvDataType.setText(R.string.diastolic_pressure);
-                    holder.tvDataValue.setText(String.valueOf(measureData.getValue1()));
+                    holder.tvDataValue.setText(String.valueOf((int)measureData.getValue1()));
                     holder.ivType.setImageResource(R.drawable.ic_diastolic);
                 } else {
                     holder.tvDataType.setText(R.string.systolic_pressure);
-                    holder.tvDataValue.setText(String.valueOf(measureData.getValue2()));
+                    holder.tvDataValue.setText(String.valueOf((int)measureData.getValue2()));
                     holder.ivType.setImageResource(R.drawable.ic_systolic);
                 }
                 holder.tvDataUnit.setText(R.string.blood_pressure_unit);
@@ -82,7 +82,7 @@ public class MeasureDataAdapter extends RecyclerView.Adapter<MeasureDataAdapter.
             case HEART_RATE:
                 holder.tvDataType.setText(R.string.heart_rate);
                 holder.tvDataUnit.setText(R.string.rate);
-                holder.tvDataValue.setText(String.valueOf(measureData.getValue1()));
+                holder.tvDataValue.setText(String.valueOf((int)measureData.getValue1()));
                 holder.ivType.setImageResource(R.drawable.ic_heart_rate);
                 break;
             case BLOOD_SUGAR:

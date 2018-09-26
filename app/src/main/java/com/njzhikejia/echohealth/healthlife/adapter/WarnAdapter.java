@@ -152,7 +152,9 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
                         String systolicStandValue = getSystolicStandValue(ruleResult);
                         holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), diastolicStandardValue + systolicStandValue) +
                                 "(" +mContext.getString(R.string.blood_pressure_unit) + ")");
-                        matchBloodPressureValueColor(holder, value1Text, value2Text);
+                        int blood_value1 = (int) notice.getSrc_data().getMeasure().getValue1();
+                        int blood_value2 = (int) notice.getSrc_data().getMeasure().getValue2();
+                        matchBloodPressureValueColor(holder, String.valueOf(blood_value1), String.valueOf(blood_value2));
                         break;
                     case HEART_RATE_WARN:
                         holder.ivType.setImageResource(R.drawable.ic_heart_rate);
@@ -160,7 +162,8 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
                         String heartStandardValue = getHeartRateStandardValue(ruleResult);
                         holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), heartStandardValue) +
                                 "(" +mContext.getString(R.string.heart_rate_with_unit) + ")");
-                        matchMeasuredValueColor(holder, value1Text, mContext.getString(R.string.heart_rate_with_unit));
+                        int rate_value = (int) notice.getSrc_data().getMeasure().getValue1();
+                        matchMeasuredValueColor(holder, String.valueOf(rate_value), mContext.getString(R.string.heart_rate_with_unit));
                         break;
                     case BLOOD_SUGAR_WARN:
                         holder.ivType.setImageResource(R.drawable.ic_blood_fat);
@@ -193,7 +196,7 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
                 holder.ivType.setImageResource(R.drawable.ic_sos);
                 holder.tvType.setText(R.string.sos_warn);
                 holder.tvTimeLabel.setText(R.string.warn_time);
-                double heartRate = notice.getSrc_data().getMeasure().getValue1();
+                int heartRate = (int) notice.getSrc_data().getMeasure().getValue1();
                 holder.tvWarnExplanation.setText(mContext.getString(R.string.warn_heart_rate) + String.valueOf(heartRate) + "(" + mContext.getString(R.string.heart_rate_with_unit) + ")");
                 holder.tvMeasureValue.setText(mContext.getString(R.string.warn_location) + notice.getSrc_data().getLocation().getAddress());
                 holder.tvWarnInfo.setVisibility(View.GONE);
@@ -219,8 +222,8 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
      */
     private String getDiastolicStandardValue(RuleResult rule) {
         String value = mContext.getString(R.string.diastolic_pressure);
-        double min = rule.getBp().getDiastolic().getMin();
-        double max = rule.getBp().getDiastolic().getMax();
+        int min = (int) rule.getBp().getDiastolic().getMin();
+        int max = (int) rule.getBp().getDiastolic().getMax();
         return value + String.valueOf(min) + "-" + String.valueOf(max) + ",";
     }
 
@@ -232,8 +235,8 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
      */
     private String getSystolicStandValue(RuleResult rule) {
         String value = mContext.getString(R.string.systolic_pressure);
-        double min = rule.getBp().getSystolic().getMin();
-        double max = rule.getBp().getSystolic().getMax();
+        int min = (int) rule.getBp().getSystolic().getMin();
+        int max = (int) rule.getBp().getSystolic().getMax();
         return value + String.valueOf(min) + "-" + String.valueOf(max);
     }
 
@@ -245,8 +248,8 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
      */
     private String getHeartRateStandardValue(RuleResult ruleResult) {
 
-        double min = ruleResult.getPulse().getMin();
-        double max = ruleResult.getPulse().getMax();
+        int min = (int) ruleResult.getPulse().getMin();
+        int max = (int) ruleResult.getPulse().getMax();
         return String.valueOf(min) + "-" + String.valueOf(max);
     }
 
