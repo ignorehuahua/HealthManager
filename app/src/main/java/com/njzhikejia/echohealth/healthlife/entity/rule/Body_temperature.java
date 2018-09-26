@@ -1,9 +1,13 @@
 package com.njzhikejia.echohealth.healthlife.entity.rule;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+
 /**
  * Created by 16222 on 2018/9/25.
  */
 
+@Entity
 public class Body_temperature {
 
     private double normal_min;
@@ -15,6 +19,25 @@ public class Body_temperature {
     private double high_min;
     private double high_max;
     private double super_high_min;
+
+    @Generated(hash = 1285841416)
+    public Body_temperature(double normal_min, double normal_max, double low_min,
+            double low_max, double medium_min, double medium_max, double high_min,
+            double high_max, double super_high_min) {
+        this.normal_min = normal_min;
+        this.normal_max = normal_max;
+        this.low_min = low_min;
+        this.low_max = low_max;
+        this.medium_min = medium_min;
+        this.medium_max = medium_max;
+        this.high_min = high_min;
+        this.high_max = high_max;
+        this.super_high_min = super_high_min;
+    }
+
+    @Generated(hash = 140813680)
+    public Body_temperature() {
+    }
 
     public double getNormal_min() {
         return normal_min;

@@ -17,11 +17,14 @@ import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.HealthLifeApplication;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.adapter.WarnAdapter;
+import com.njzhikejia.echohealth.healthlife.entity.rule.RuleResult;
+import com.njzhikejia.echohealth.healthlife.entity.rule.WarnRule;
 import com.njzhikejia.echohealth.healthlife.entity.warn.Notices;
 import com.njzhikejia.echohealth.healthlife.entity.warn.WarnNoticesData;
 import com.njzhikejia.echohealth.healthlife.greendao.DaoSession;
 import com.njzhikejia.echohealth.healthlife.greendao.NoticesDao;
 import com.njzhikejia.echohealth.healthlife.greendao.ReportsDao;
+import com.njzhikejia.echohealth.healthlife.greendao.RuleResultDao;
 import com.njzhikejia.echohealth.healthlife.http.CommonRequest;
 import com.njzhikejia.echohealth.healthlife.http.OKHttpClientManager;
 import com.njzhikejia.echohealth.healthlife.util.ConstantValues;
@@ -57,10 +60,16 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     private WarnHandler mHandler;
     private static final int KEY_WARN = 22;
     private static final int KEY_FAILURE = 23;
+    private static final int KEY_GET_RULE_SUCCESS = 24;
+    private static final int KEY_GET_RULE_FAILURE = 25;
     private DaoSession mDaoSession;
     private NoticesDao noticesDao;
     private TextView tvNoData;
     private QueryBuilder<Notices> queryBuilder;
+    private RuleResultDao ruleResultDao;
+    private QueryBuilder<RuleResult> ruleResultQueryBuilder;
+    private List<RuleResult> ruleResultList;
+    private RuleResult ruleResult;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,9 +82,9 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         Logger.d(TAG, "onCrateView");
         mContext = getActivity();
         View view = inflater.inflate(R.layout.fragment_warning, null);
+        mHandler = new WarnHandler(this);
         initSession();
         initView(view);
-        mHandler = new WarnHandler(this);
         return view;
     }
 
@@ -83,7 +92,9 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         HealthLifeApplication mApplication = (HealthLifeApplication) getActivity().getApplication();
         mDaoSession = mApplication.getDaoSession();
         noticesDao = mDaoSession.getNoticesDao();
+        ruleResultDao = mDaoSession.getRuleResultDao();
         queryBuilder = noticesDao.queryBuilder();
+        ruleResultQueryBuilder = ruleResultDao.queryBuilder();
     }
 
     private void initView(View view) {
@@ -99,6 +110,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         warnInfoList = new ArrayList<>();
         mAdapter = new WarnAdapter(mContext, warnInfoList);
         mRecycleView.setAdapter(mAdapter);
+        getWarnRules();
         loadWarnNotices();
     }
 
@@ -154,6 +166,13 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
                         warningFragmentWeakReference.get().loadDataFromDb();
                     }
                     break;
+                case KEY_GET_RULE_SUCCESS:
+                    break;
+                case KEY_GET_RULE_FAILURE:
+                    if (warningFragmentWeakReference.get() != null) {
+                        warningFragmentWeakReference.get().loadWarnRulesFromDb();
+                    }
+                    break;
             }
         }
     }
@@ -166,6 +185,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     }
 
     private void loadDataFromDb() {
+        loadWarnRulesFromDb();
         queryBuilder.where(NoticesDao.Properties.Uid.eq(PreferenceUtil.getSelectedUserUID(mContext)));
         warnInfoList = queryBuilder.list();
         checkEmptyData();
@@ -201,5 +221,62 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
                 mHandler.sendEmptyMessage(KEY_WARN);
             }
         });
+    }
+
+    private void getWarnRules() {
+        if (!NetWorkUtils.isNetworkConnected(mContext)) {
+            ToastUtil.showShortToast(mContext, R.string.net_work_error);
+            mHandler.sendEmptyMessage(KEY_GET_RULE_FAILURE);
+            return;
+        }
+
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getWarnRuleRequest(PreferenceUtil.getSelectedUserUID(mContext)), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.d(TAG, "get warn rules failure");
+                mHandler.sendEmptyMessage(KEY_GET_RULE_FAILURE);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String content = response.body().string();
+                Logger.d(TAG, "code = "+response.code() + "content = "+content);
+                Gson gson = new Gson();
+                WarnRule warnRule = gson.fromJson(content, WarnRule.class);
+                String data = warnRule.getData().getRules().getData();
+                Logger.d(TAG, "data = "+data);
+                Gson gsonRule = new Gson();
+                ruleResult = gsonRule.fromJson(data, RuleResult.class);
+                int uid = warnRule.getData().getRules().getUid();
+                ruleResult.setUid(uid);
+                mAdapter.setRuleResult(ruleResult);
+                int deletedUid = PreferenceUtil.getSelectedUserUID(mContext);
+                if (uid == 0) {
+                    deletedUid = 0;
+                }
+                DeleteQuery<RuleResult> deleteQuery = ruleResultQueryBuilder.where(RuleResultDao.Properties.Uid.eq(deletedUid)).buildDelete();
+                deleteQuery.executeDeleteWithoutDetachingEntities();
+                ruleResultDao.insert(ruleResult);
+                mHandler.sendEmptyMessage(KEY_GET_RULE_SUCCESS);
+            }
+        });
+    }
+
+    private void loadWarnRulesFromDb() {
+        ruleResultList = new ArrayList<>();
+        ruleResultQueryBuilder.where(RuleResultDao.Properties.Uid.eq(PreferenceUtil.getSelectedUserUID(mContext)));
+        ruleResultList = ruleResultQueryBuilder.list();
+        Logger.d(TAG, "select uid result size = "+ruleResultList.size());
+        if (ruleResultList.size() == 0) {
+            QueryBuilder<RuleResult> mQueryBuilder = ruleResultDao.queryBuilder();
+            mQueryBuilder.where(RuleResultDao.Properties.Uid.eq(0));
+            ruleResultList = mQueryBuilder.list();
+            Logger.d(TAG, "default result size = "+ruleResultList.size());
+        }
+
+        if (ruleResultList.size() > 0) {
+            ruleResult = ruleResultList.get(0);
+            mAdapter.setRuleResult(ruleResult);
+        }
     }
 }

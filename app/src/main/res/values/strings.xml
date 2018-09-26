@@ -38,7 +38,7 @@
     <string name="height_with_unit">身高(cm)</string>
     <string name="weight_with_unit">体重(kg)</string>
     <string name="measure_time">测量时间:&#160;</string>
-    <string name="warn_time">告警时间: </string>
+    <string name="warn_time">告警时间:&#160;</string>
     <string name="measure_state">测量状态</string>
     <string name="note">备注</string>
     <string name="normal_state">常规</string>
@@ -89,7 +89,7 @@
     <string name="medical_payment">医疗支付:</string>
     <string name="male">男</string>
     <string name="female">女</string>
-    <string name="high">高</string>
+    <string name="high">偏高</string>
     <string name="low">偏低</string>
     <string name="normal">正常</string>
     <string name="blood_pressure_report">血压报告</string>
@@ -104,7 +104,7 @@
     <string name="fence_warn">围栏告警</string>
     <string name="fall_warn">跌倒告警</string>
     <string name="standard_value">标准值:&#160;%1$s</string>
-    <string name="result">结论:</string>
+    <string name="result">结论:&#160;</string>
     <string name="measured_value">本次实测值:&#160;%1$s%2$s</string>
     <string name="blood_pressure_measured_value">本次实测值:&#160;舒张压%1$s,收缩压%2$s(mmHg)</string>
     <string name="net_work_error">网络未连接，请连接网络后重试</string>
@@ -145,8 +145,10 @@
     <string name="feedback_sent_success">意见已发送</string>
     <string name="feedback_sent_failure">意见发送失败，请检查网络后重试</string>
     <string name="apply_pass">申请通过</string>
-    <string name="version_code">版本号:</string>
+    <string name="version_code">版本号:&#160;</string>
     <string name="app_desc">康养管家是一款为用户及家人提供健康数据分析、报告、告警以及定位等丰富的健康和养生服务信息管理的客户端应用。</string>
     <string name="check_update">检查更新</string>
     <string name="feedback_img">图片(选填，最多三张)</string>
+    <string name="warn_heart_rate">告警时心率:&#160;</string>
+    <string name="warn_location">告警位置:&#160;</string>
 </resources>

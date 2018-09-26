@@ -1,9 +1,13 @@
 package com.njzhikejia.echohealth.healthlife.entity.rule;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+
 /**
  * Created by 16222 on 2018/9/25.
  */
 
+@Entity
 public class Spo2 {
     private double normal_min;
     private double normal_max;
@@ -13,6 +17,24 @@ public class Spo2 {
     private double medium_max;
     private double serious_min;
     private double serious_max;
+
+    @Generated(hash = 699318617)
+    public Spo2(double normal_min, double normal_max, double light_min,
+            double light_max, double medium_min, double medium_max,
+            double serious_min, double serious_max) {
+        this.normal_min = normal_min;
+        this.normal_max = normal_max;
+        this.light_min = light_min;
+        this.light_max = light_max;
+        this.medium_min = medium_min;
+        this.medium_max = medium_max;
+        this.serious_min = serious_min;
+        this.serious_max = serious_max;
+    }
+
+    @Generated(hash = 1154571411)
+    public Spo2() {
+    }
 
     public double getNormal_min() {
         return normal_min;

@@ -531,7 +531,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Logger.d(TAG, "data = "+data);
                 Gson gsonRule = new Gson();
                 RuleResult ruleResult = gsonRule.fromJson(data, RuleResult.class);
-
             }
         });
     }

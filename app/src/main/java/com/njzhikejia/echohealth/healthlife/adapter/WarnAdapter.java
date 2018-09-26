@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.R;
+import com.njzhikejia.echohealth.healthlife.entity.rule.RuleResult;
 import com.njzhikejia.echohealth.healthlife.entity.warn.Notices;
 import com.njzhikejia.echohealth.healthlife.entity.warn.WarnNoticesData;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
@@ -47,6 +48,15 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
     private static final int BLOOD_SUGAR_WARN = 3;
     private static final int BLOOD_OXYGEN_WARN = 7;
 
+    private RuleResult ruleResult;
+
+    public RuleResult getRuleResult() {
+        return ruleResult;
+    }
+
+    public void setRuleResult(RuleResult ruleResult) {
+        this.ruleResult = ruleResult;
+    }
 
     public WarnAdapter(Context context, List<Notices> list) {
         this.mContext = context;
@@ -105,6 +115,7 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
         return list.size();
     }
 
+
     class WarnViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivType;
@@ -138,8 +149,8 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
                     case BLOOD_PRESSURE_WARN:
                         holder.ivType.setImageResource(R.drawable.ic_diastolic);
                         holder.tvType.setText(R.string.blood_pressure_warn);
-                        String diastolicStandardValue = mContext.getString(R.string.diastolic_pressure) + "60-90,";
-                        String systolicStandValue = mContext.getString(R.string.systolic_pressure) + "90-140";
+                        String diastolicStandardValue = getDiastolicStandardValue(ruleResult);
+                        String systolicStandValue = getSystolicStandValue(ruleResult);
                         holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), diastolicStandardValue + systolicStandValue) +
                                 "(" +mContext.getString(R.string.blood_pressure_unit) + ")");
                         matchBloodPressureValueColor(holder, value1Text, value2Text);
@@ -147,7 +158,7 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
                     case HEART_RATE_WARN:
                         holder.ivType.setImageResource(R.drawable.ic_heart_rate);
                         holder.tvType.setText(R.string.heart_rate_warn);
-                        String heartStandardValue = "60-100";
+                        String heartStandardValue = getHeartRateStandardValue(ruleResult);
                         holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), heartStandardValue) +
                                 "(" +mContext.getString(R.string.heart_rate_with_unit) + ")");
                         matchMeasuredValueColor(holder, value1Text, mContext.getString(R.string.heart_rate_with_unit));
@@ -155,7 +166,7 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
                     case BLOOD_SUGAR_WARN:
                         holder.ivType.setImageResource(R.drawable.ic_blood_fat);
                         holder.tvType.setText(R.string.blood_sugar_warn);
-                        String sugarStandardValue = "3.1-6.2";
+                        String sugarStandardValue = getBloodSugarStandardValue(ruleResult);
                         holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), sugarStandardValue) +
                                 "(" +mContext.getString(R.string.blood_sugar_unit) + ")");
                         matchMeasuredValueColor(holder, value1Text, mContext.getString(R.string.blood_sugar_unit));
@@ -163,7 +174,7 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
                     case BLOOD_OXYGEN_WARN:
                         holder.ivType.setImageResource(R.drawable.ic_blood_oxygen);
                         holder.tvType.setText(R.string.blood_oxygen_warn);
-                        String oxygenStandardValue = "95-100";
+                        String oxygenStandardValue = getBloodOxygenStandardValue(ruleResult);
                         holder.tvWarnExplanation.setText(String.format(mContext.getString(R.string.standard_value), oxygenStandardValue) +
                                 "(" +mContext.getString(R.string.blood_oxygen_unit) + ")");
                         matchMeasuredValueColor(holder, value1Text, mContext.getString(R.string.blood_oxygen_unit));
@@ -181,13 +192,77 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
                 holder.ivType.setImageResource(R.drawable.ic_sos);
                 holder.tvType.setText(R.string.sos_warn);
                 holder.tvTimeLabel.setText(R.string.warn_time);
+                double heartRate = notice.getSrc_data().getMeasure().getValue1();
+                holder.tvWarnExplanation.setText(mContext.getString(R.string.warn_heart_rate) + String.valueOf(heartRate));
+                holder.tvMeasureValue.setText(mContext.getString(R.string.warn_location) + notice.getSrc_data().getLocation().getAddress());
                 break;
             case FALL_WARN:
                 holder.ivType.setImageResource(R.drawable.ic_fall);
                 holder.tvType.setText(R.string.fall_warn);
                 holder.tvTimeLabel.setText(R.string.warn_time);
+                if (notice.getSrc_data().getLocation() != null) {
+                    holder.tvMeasureValue.setText(mContext.getString(R.string.warn_location) + notice.getSrc_data().getLocation().getAddress());
+                }
+                holder.tvWarnExplanation.setVisibility(View.GONE);
                 break;
         }
+    }
+
+
+    /**
+     * 舒张压标准值
+     * @param rule
+     * @return
+     */
+    private String getDiastolicStandardValue(RuleResult rule) {
+        String value = mContext.getString(R.string.diastolic_pressure);
+        double min = rule.getBp().getDiastolic().getMin();
+        double max = rule.getBp().getDiastolic().getMax();
+        return value + String.valueOf(min) + "-" + String.valueOf(max) + ",";
+    }
+
+
+    /**
+     * 收缩压标准值
+     * @param rule
+     * @return
+     */
+    private String getSystolicStandValue(RuleResult rule) {
+        String value = mContext.getString(R.string.systolic_pressure);
+        double min = rule.getBp().getSystolic().getMin();
+        double max = rule.getBp().getSystolic().getMax();
+        return value + String.valueOf(min) + "-" + String.valueOf(max);
+    }
+
+
+    /**
+     * 心率标准值
+     * @param ruleResult
+     * @return
+     */
+    private String getHeartRateStandardValue(RuleResult ruleResult) {
+
+        double min = ruleResult.getPulse().getMin();
+        double max = ruleResult.getPulse().getMax();
+        return String.valueOf(min) + "-" + String.valueOf(max);
+    }
+
+    /**
+     * 血糖标准值
+     * @param ruleResult
+     * @return
+     */
+    private String getBloodSugarStandardValue(RuleResult ruleResult) {
+        double min = ruleResult.getBlood_sugar().getVein_whole_blood().getMin();
+        double max = ruleResult.getBlood_sugar().getVein_whole_blood().getMax();
+        return String.valueOf(min) + "-" + String.valueOf(max);
+    }
+
+
+    private String getBloodOxygenStandardValue(RuleResult ruleResult) {
+        double min = ruleResult.getSpo2().getNormal_min();
+        double max = ruleResult.getSpo2().getNormal_max();
+        return String.valueOf(min) + "-" + String.valueOf(max);
     }
 
     private void matchMeasuredValueColor(WarnViewHolder holder, String measuredValue, String valueUnit) {
