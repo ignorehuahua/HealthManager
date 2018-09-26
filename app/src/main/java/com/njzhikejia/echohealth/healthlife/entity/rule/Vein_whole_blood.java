@@ -5,22 +5,22 @@ package com.njzhikejia.echohealth.healthlife.entity.rule;
  */
 
 public class Vein_whole_blood {
-    private float min;
-    private float max;
+    private double min;
+    private double max = 1.2f;
 
-    public float getMin() {
+    public double getMin() {
         return min;
     }
 
-    public void setMin(float min) {
+    public void setMin(double min) {
         this.min = min;
     }
 
-    public float getMax() {
+    public double getMax() {
         return max;
     }
 
-    public void setMax(float max) {
+    public void setMax(double max) {
         this.max = max;
     }
 }

@@ -15,18 +15,19 @@ public class SpecificData {
     String measure_time;
     String create_time;
     int operator;
-    float value1;
-    float value2;
-    float value3;
+    double value1;
+    double value2;
+    double value3;
     int status;
     int session_id;
     String remark;
     String card_uuid;
     int blood_pressure_type;
-    @Generated(hash = 853370812)
+
+    @Generated(hash = 7712344)
     public SpecificData(int id, int uid, int device_id, int src_type, int context,
             int type, String measure_time, String create_time, int operator,
-            float value1, float value2, float value3, int status, int session_id,
+            double value1, double value2, double value3, int status, int session_id,
             String remark, String card_uuid, int blood_pressure_type) {
         this.id = id;
         this.uid = uid;
@@ -46,110 +47,144 @@ public class SpecificData {
         this.card_uuid = card_uuid;
         this.blood_pressure_type = blood_pressure_type;
     }
+
     @Generated(hash = 1766359722)
     public SpecificData() {
     }
+
     public int getId() {
-        return this.id;
+        return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
+
     public int getUid() {
-        return this.uid;
+        return uid;
     }
+
     public void setUid(int uid) {
         this.uid = uid;
     }
+
     public int getDevice_id() {
-        return this.device_id;
+        return device_id;
     }
+
     public void setDevice_id(int device_id) {
         this.device_id = device_id;
     }
+
     public int getSrc_type() {
-        return this.src_type;
+        return src_type;
     }
+
     public void setSrc_type(int src_type) {
         this.src_type = src_type;
     }
+
     public int getContext() {
-        return this.context;
+        return context;
     }
+
     public void setContext(int context) {
         this.context = context;
     }
+
     public int getType() {
-        return this.type;
+        return type;
     }
+
     public void setType(int type) {
         this.type = type;
     }
+
     public String getMeasure_time() {
-        return this.measure_time;
+        return measure_time;
     }
+
     public void setMeasure_time(String measure_time) {
         this.measure_time = measure_time;
     }
+
     public String getCreate_time() {
-        return this.create_time;
+        return create_time;
     }
+
     public void setCreate_time(String create_time) {
         this.create_time = create_time;
     }
+
     public int getOperator() {
-        return this.operator;
+        return operator;
     }
+
     public void setOperator(int operator) {
         this.operator = operator;
     }
-    public float getValue1() {
-        return this.value1;
+
+    public double getValue1() {
+        return value1;
     }
-    public void setValue1(float value1) {
+
+    public void setValue1(double value1) {
         this.value1 = value1;
     }
-    public float getValue2() {
-        return this.value2;
+
+    public double getValue2() {
+        return value2;
     }
-    public void setValue2(float value2) {
+
+    public void setValue2(double value2) {
         this.value2 = value2;
     }
-    public float getValue3() {
-        return this.value3;
+
+    public double getValue3() {
+        return value3;
     }
-    public void setValue3(float value3) {
+
+    public void setValue3(double value3) {
         this.value3 = value3;
     }
+
     public int getStatus() {
-        return this.status;
+        return status;
     }
+
     public void setStatus(int status) {
         this.status = status;
     }
+
     public int getSession_id() {
-        return this.session_id;
+        return session_id;
     }
+
     public void setSession_id(int session_id) {
         this.session_id = session_id;
     }
+
     public String getRemark() {
-        return this.remark;
+        return remark;
     }
+
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
     public String getCard_uuid() {
-        return this.card_uuid;
+        return card_uuid;
     }
+
     public void setCard_uuid(String card_uuid) {
         this.card_uuid = card_uuid;
     }
+
     public int getBlood_pressure_type() {
-        return this.blood_pressure_type;
+        return blood_pressure_type;
     }
+
     public void setBlood_pressure_type(int blood_pressure_type) {
         this.blood_pressure_type = blood_pressure_type;
     }
-
 }

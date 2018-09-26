@@ -6,22 +6,22 @@ package com.njzhikejia.echohealth.healthlife.entity.rule;
 
 public class Systolic {
 
-    private int min;
-    private int max;
+    private double min;
+    private double max;
 
-    public int getMin() {
+    public double getMin() {
         return min;
     }
 
-    public void setMin(int min) {
+    public void setMin(double min) {
         this.min = min;
     }
 
-    public int getMax() {
+    public double getMax() {
         return max;
     }
 
-    public void setMax(int max) {
+    public void setMax(double max) {
         this.max = max;
     }
 }

@@ -130,8 +130,8 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
     private void matchWarnType(WarnViewHolder holder, Notices notice) {
         switch (notice.getType()) {
             case MEASURE_DATA_WARN:
-                float value1 = notice.getSrc_data().getMeasure().getValue1();
-                float value2 = notice.getSrc_data().getMeasure().getValue2();
+                double value1 = notice.getSrc_data().getMeasure().getValue1();
+                double value2 = notice.getSrc_data().getMeasure().getValue2();
                 String value1Text = String.valueOf(value1);
                 String value2Text = String.valueOf(value2);
                 switch (notice.getSrc_data().getMeasure().getType()) {
