@@ -16,7 +16,6 @@ import com.google.gson.Gson;
 import com.njzhikejia.echohealth.healthlife.R;
 import com.njzhikejia.echohealth.healthlife.entity.rule.RuleResult;
 import com.njzhikejia.echohealth.healthlife.entity.warn.Notices;
-import com.njzhikejia.echohealth.healthlife.entity.warn.WarnNoticesData;
 import com.njzhikejia.echohealth.healthlife.util.Logger;
 
 import java.util.List;
@@ -25,11 +24,12 @@ import java.util.List;
  * Created by 16222 on 2018/6/30.
  */
 
-public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolder>{
+public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolder> implements View.OnClickListener {
 
     private static final String TAG = "WarnAdapter";
     private Context mContext;
     private List<Notices> list;
+    private View mFooterView;
 
     // 告警类型；1：数据指标告警；2：围栏告警；3：SOS告警；4：跌倒告警。
     private static final int MEASURE_DATA_WARN = 1;
@@ -47,6 +47,10 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
     private static final int HEART_RATE_WARN = 2;
     private static final int BLOOD_SUGAR_WARN = 3;
     private static final int BLOOD_OXYGEN_WARN = 7;
+
+    public static final int TYPE_FOOTER = 1;  //说明是带有Footer的
+    public static final int TYPE_NORMAL = 2;  //说明是不带有header和footer的
+
 
     private RuleResult ruleResult;
 
@@ -70,6 +74,10 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
 
     @Override
     public WarnViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(mFooterView != null && viewType == TYPE_FOOTER){
+            mFooterView.setOnClickListener(this);
+            return new WarnViewHolder(mFooterView);
+        }
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_warn, parent, false);
         WarnViewHolder viewHolder = new WarnViewHolder(view);
         return viewHolder;
@@ -77,24 +85,51 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
 
     @Override
     public void onBindViewHolder(WarnViewHolder holder, int position) {
-        Notices warnInfo = list.get(position);
-        if (warnInfo == null) {
-            Logger.e(TAG, "warnInfo is null");
-            return;
-        }
+        if(getItemViewType(position) == TYPE_NORMAL) {
+            Notices warnInfo = list.get(position);
+            if (warnInfo == null) {
+                Logger.e(TAG, "warnInfo is null");
+                return;
+            }
 
-        matchWarnType(holder, warnInfo);
+            matchWarnType(holder, warnInfo);
 
-        Logger.d(TAG, "remark = "+warnInfo.getRemark());
+            Logger.d(TAG, "remark = "+warnInfo.getRemark());
 //        {"notice_desc":"心率疑似异常 [心率偏高]"}
-        Gson gson = new Gson();
-        String remarkJson = warnInfo.getRemark();
-        if (!TextUtils.isEmpty(remarkJson)) {
-            RemarkDesc desc = gson.fromJson(remarkJson, RemarkDesc.class);
-            Logger.d(TAG, "desc = "+desc.getNotice_desc());
-            holder.tvWarnInfo.setText(desc.getNotice_desc());
+            Gson gson = new Gson();
+            String remarkJson = warnInfo.getRemark();
+            if (!TextUtils.isEmpty(remarkJson)) {
+                RemarkDesc desc = gson.fromJson(remarkJson, RemarkDesc.class);
+                Logger.d(TAG, "desc = "+desc.getNotice_desc());
+                holder.tvWarnInfo.setText(desc.getNotice_desc());
+            }
         }
+    }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (mFooterView == null) {
+            return TYPE_NORMAL;
+        }
+        if (position == getItemCount() - 1) {
+            return TYPE_FOOTER;
+        }
+        return TYPE_NORMAL;
+    }
+
+    public View getFooterView() {
+        return mFooterView;
+    }
+    public void setFooterView(View footerView) {
+        mFooterView = footerView;
+        notifyItemInserted(getItemCount()-1);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mFooterClickListener != null) {
+            mFooterClickListener.onFooterClick();
+        }
     }
 
     class RemarkDesc{
@@ -111,7 +146,11 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
 
     @Override
     public int getItemCount() {
-        return list.size();
+        if (mFooterView == null) {
+            return list.size();
+        } else {
+            return list.size() + 1;
+        }
     }
 
 
@@ -127,6 +166,9 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
 
         public WarnViewHolder(View itemView) {
             super(itemView);
+            if (itemView == mFooterView) {
+                return;
+            }
             ivType = itemView.findViewById(R.id.iv_type);
             tvType = itemView.findViewById(R.id.tv_warn_type);
             tvWarnInfo = itemView.findViewById(R.id.tv_warn_info);
@@ -292,5 +334,15 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
         style.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.red)),index[0],index[0]+value1.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         style.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.red)),index[1],index[1]+value2.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         holder.tvMeasureValue.setText(style);
+    }
+
+    public interface OnFooterClickListener {
+        void onFooterClick();
+    }
+
+    private OnFooterClickListener mFooterClickListener = null;
+
+    public void setOnFooterClickListener(OnFooterClickListener listener) {
+        this.mFooterClickListener = listener;
     }
 }

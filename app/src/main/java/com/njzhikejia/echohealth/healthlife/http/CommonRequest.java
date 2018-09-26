@@ -157,8 +157,8 @@ public class CommonRequest {
      * @param uid
      * @return
      */
-   public static Request getUserWarnInfo(int uid) {
-       return getRequest(ServerAddrUtils.getWarnListUrl(uid));
+   public static Request getUserWarnInfo(int uid, int page, int count) {
+       return getRequest(ServerAddrUtils.getWarnListUrl(uid, page, count));
    }
 
    public static Request getLocation(int uid) {

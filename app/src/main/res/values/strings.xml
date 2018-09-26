@@ -151,4 +151,5 @@
     <string name="feedback_img">图片(选填，最多三张)</string>
     <string name="warn_heart_rate">告警时心率:&#160;</string>
     <string name="warn_location">告警位置:&#160;</string>
+    <string name="load_more">加载更多...</string>
 </resources>

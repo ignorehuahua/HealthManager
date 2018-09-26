@@ -70,6 +70,10 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     private QueryBuilder<RuleResult> ruleResultQueryBuilder;
     private List<RuleResult> ruleResultList;
     private RuleResult ruleResult;
+    private int mPage;
+    private int mCount;
+    private static final int DEFAULT_PAGE = 0;
+    private static final int DEFAULT_COUNT = 8;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,9 +113,25 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         mRecycleView.setLayoutManager(layoutManager);
         warnInfoList = new ArrayList<>();
         mAdapter = new WarnAdapter(mContext, warnInfoList);
+        setFooterView(mRecycleView);
         mRecycleView.setAdapter(mAdapter);
         getWarnRules();
-        loadWarnNotices();
+        loadWarnNotices(DEFAULT_PAGE, DEFAULT_COUNT);
+        mAdapter.setOnFooterClickListener(new WarnAdapter.OnFooterClickListener() {
+            @Override
+            public void onFooterClick() {
+                Logger.d(TAG, "onFooterClick");
+                getWarnRules();
+                int currentSize = warnInfoList.size();
+//                if (currentSize % 8 == 0)
+//                loadWarnNotices();
+            }
+        });
+    }
+
+    private void setFooterView(RecyclerView recyclerView) {
+        View footer = LayoutInflater.from(mContext).inflate(R.layout.list_footer, recyclerView, false);
+        mAdapter.setFooterView(footer);
     }
 
     private void checkEmptyData() {
@@ -132,7 +152,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     @Override
     public void onRefresh() {
         Logger.d(TAG, "onRefresh");
-        loadWarnNotices();
+        loadWarnNotices(DEFAULT_PAGE, DEFAULT_COUNT);
         mHandler.sendEmptyMessageDelayed(ConstantValues.MSG_REFRESH_TIME_OUT, ConstantValues.REFRESH_TIME_OUT);
     }
 
@@ -192,14 +212,14 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         mAdapter.setlist(warnInfoList);
     }
 
-    private void loadWarnNotices() {
+    private void loadWarnNotices(int page, int count) {
         if (!NetWorkUtils.isNetworkConnected(mContext)) {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
             stopRefresh();
             loadDataFromDb();
             return;
         }
-        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserWarnInfo(PreferenceUtil.getSelectedUserUID(mContext)), new Callback() {
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserWarnInfo(PreferenceUtil.getSelectedUserUID(mContext), page, count), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "loadWarnNotices onFailure");

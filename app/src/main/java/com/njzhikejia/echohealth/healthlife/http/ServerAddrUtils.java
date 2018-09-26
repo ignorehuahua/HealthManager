@@ -66,8 +66,8 @@ public class ServerAddrUtils {
      * @param uid
      * @return
      */
-    public static String getWarnListUrl(int uid) {
-        return ROOT_SERVER_ADDR + "/user/" + uid + "/alarm/notices?status=0,1,2&type=1,2,3,4" ;
+    public static String getWarnListUrl(int uid, int page, int count) {
+        return ROOT_SERVER_ADDR + "/user/" + uid + "/alarm/notices?status=0,1,2&type=1,2,3,4" + "&page=" + page + "&count=" +count;
     }
 
     /**
