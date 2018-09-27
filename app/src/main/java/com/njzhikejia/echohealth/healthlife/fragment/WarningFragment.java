@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -74,6 +75,8 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     private int mCount;
     private static final int DEFAULT_PAGE = 0;
     private static final int DEFAULT_COUNT = 8;
+    private static final String KEY_LOAD_SIZE = "key_load_size";
+    private boolean pull_refresh = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,20 +114,20 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mRecycleView.setHasFixedSize(true);
         mRecycleView.setLayoutManager(layoutManager);
-        warnInfoList = new ArrayList<>();
+        warnInfoList = new CopyOnWriteArrayList<>();
         mAdapter = new WarnAdapter(mContext, warnInfoList);
-        setFooterView(mRecycleView);
         mRecycleView.setAdapter(mAdapter);
         getWarnRules();
-        loadWarnNotices(DEFAULT_PAGE, DEFAULT_COUNT);
+        loadWarnNotices(DEFAULT_PAGE, DEFAULT_COUNT, false);
         mAdapter.setOnFooterClickListener(new WarnAdapter.OnFooterClickListener() {
             @Override
             public void onFooterClick() {
                 Logger.d(TAG, "onFooterClick");
                 getWarnRules();
                 int currentSize = warnInfoList.size();
-//                if (currentSize % 8 == 0)
-//                loadWarnNotices();
+                int remainder = currentSize/8;
+                Logger.d(TAG, "current size = "+currentSize + "remainder = "+remainder);
+                loadWarnNotices(remainder, DEFAULT_COUNT, false);
             }
         });
     }
@@ -134,11 +137,17 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         mAdapter.setFooterView(footer);
     }
 
+    private void removeFooterView() {
+        mAdapter.setFooterView(null);
+    }
+
     private void checkEmptyData() {
         if (warnInfoList != null && warnInfoList.size() > 0) {
+            setFooterView(mRecycleView);
             tvNoData.setVisibility(View.GONE);
         } else {
             tvNoData.setVisibility(View.VISIBLE);
+            removeFooterView();
         }
     }
 
@@ -152,7 +161,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     @Override
     public void onRefresh() {
         Logger.d(TAG, "onRefresh");
-        loadWarnNotices(DEFAULT_PAGE, DEFAULT_COUNT);
+        loadWarnNotices(DEFAULT_PAGE, DEFAULT_COUNT, true);
         mHandler.sendEmptyMessageDelayed(ConstantValues.MSG_REFRESH_TIME_OUT, ConstantValues.REFRESH_TIME_OUT);
     }
 
@@ -177,6 +186,11 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
                     if (warningFragmentWeakReference.get() != null) {
                         warningFragmentWeakReference.get().stopRefresh();
                         warningFragmentWeakReference.get().checkEmptyData();
+                        Bundle bundle = msg.getData();
+                        int loadSize = bundle.getInt(KEY_LOAD_SIZE, 0);
+                        if (loadSize < DEFAULT_COUNT) {
+                            warningFragmentWeakReference.get().removeFooterView();
+                        }
                         warningFragmentWeakReference.get().mAdapter.setlist(warningFragmentWeakReference.get().warnInfoList);
                     }
                     break;
@@ -212,7 +226,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
         mAdapter.setlist(warnInfoList);
     }
 
-    private void loadWarnNotices(int page, int count) {
+    private void loadWarnNotices(int page, int count, final boolean pull_refresh) {
         if (!NetWorkUtils.isNetworkConnected(mContext)) {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
             stopRefresh();
@@ -232,13 +246,27 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
                 Logger.d(TAG, "code = "+response.code() + "responseContent = "+responseContent);
                 Gson gson = new Gson();
                 WarnNoticesData warnNoticesData = gson.fromJson(responseContent, WarnNoticesData.class);
-                warnInfoList = warnNoticesData.getData().getNotices();
+                List<Notices> tempList = warnNoticesData.getData().getNotices();
+                int oldSize = warnInfoList.size();
+                if (pull_refresh) {
+                    warnInfoList.clear();
+                    mAdapter.notifyItemRangeRemoved(0, oldSize);
+                }
+                warnInfoList.addAll(tempList);
+                mAdapter.notifyItemRangeInserted(oldSize, tempList.size());
                 DeleteQuery<Notices> deleteQuery = queryBuilder.where(NoticesDao.Properties.Uid.eq(PreferenceUtil.getSelectedUserUID(mContext))).buildDelete();
                 deleteQuery.executeDeleteWithoutDetachingEntities();
                 for (Notices notices : warnInfoList) {
                     noticesDao.insert(notices);
                 }
-                mHandler.sendEmptyMessage(KEY_WARN);
+
+                Message msg = Message.obtain();
+                Bundle bundle = new Bundle();
+                bundle.putInt(KEY_LOAD_SIZE, tempList.size());
+                msg.setData(bundle);
+                msg.what = KEY_WARN;
+                mHandler.sendMessage(msg);
+//                mHandler.sendEmptyMessage(KEY_WARN);
             }
         });
     }

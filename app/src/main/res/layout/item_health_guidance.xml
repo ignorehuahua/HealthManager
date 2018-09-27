@@ -22,21 +22,25 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"/>
 
+            <RelativeLayout
+                android:id="@+id/rl_report_content"
+                android:layout_width="match_parent"
+                android:layout_toRightOf="@id/iv_health_guidance_avatar"
+                android:layout_marginLeft="12dp"
+                android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/tv_health_guidance_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/iv_health_guidance_avatar"
                     android:textColor="@color/name_color"
-                    android:textSize="16sp"
-                    android:layout_marginLeft="10dp"/>
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/tv_health_guidance_result"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_health_guidance_name"
-                    android:layout_marginLeft="10dp"
                     android:textSize="16dp"
                     android:textColor="@color/toolbar"
                     android:layout_marginTop="10dp" />
@@ -53,6 +57,7 @@
                 android:layout_alignParentRight="true"/>
 
         </RelativeLayout>
+            </RelativeLayout>
 
     <View
         android:layout_width="match_parent"

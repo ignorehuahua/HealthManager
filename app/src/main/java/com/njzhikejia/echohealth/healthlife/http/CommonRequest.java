@@ -158,6 +158,7 @@ public class CommonRequest {
      * @return
      */
    public static Request getUserWarnInfo(int uid, int page, int count) {
+       Logger.d(TAG, "getUserWarnInfo url = "+ServerAddrUtils.getWarnListUrl(uid, page, count));
        return getRequest(ServerAddrUtils.getWarnListUrl(uid, page, count));
    }
 

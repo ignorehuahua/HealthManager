@@ -21,50 +21,50 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
+        MessageDao.createTable(db, ifNotExists);
         ConcernedsDao.createTable(db, ifNotExists);
         ConcernsDao.createTable(db, ifNotExists);
         SpecificDataDao.createTable(db, ifNotExists);
-        MessageDao.createTable(db, ifNotExists);
+        SrcDataDao.createTable(db, ifNotExists);
+        RegionAdaminDao.createTable(db, ifNotExists);
+        NoticesDao.createTable(db, ifNotExists);
+        MeasureDao.createTable(db, ifNotExists);
         ReportsDao.createTable(db, ifNotExists);
         ExtendDao.createTable(db, ifNotExists);
         UserDao.createTable(db, ifNotExists);
-        MeasureDao.createTable(db, ifNotExists);
-        NoticesDao.createTable(db, ifNotExists);
-        RegionAdaminDao.createTable(db, ifNotExists);
-        SrcDataDao.createTable(db, ifNotExists);
+        RuleResultDao.createTable(db, ifNotExists);
+        Vein_whole_bloodDao.createTable(db, ifNotExists);
+        DiastolicDao.createTable(db, ifNotExists);
         Blood_sugarDao.createTable(db, ifNotExists);
         Body_temperatureDao.createTable(db, ifNotExists);
-        BpDao.createTable(db, ifNotExists);
-        DiastolicDao.createTable(db, ifNotExists);
         PulseDao.createTable(db, ifNotExists);
-        RuleResultDao.createTable(db, ifNotExists);
-        Spo2Dao.createTable(db, ifNotExists);
         SystolicDao.createTable(db, ifNotExists);
-        Vein_whole_bloodDao.createTable(db, ifNotExists);
+        BpDao.createTable(db, ifNotExists);
+        Spo2Dao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
+        MessageDao.dropTable(db, ifExists);
         ConcernedsDao.dropTable(db, ifExists);
         ConcernsDao.dropTable(db, ifExists);
         SpecificDataDao.dropTable(db, ifExists);
-        MessageDao.dropTable(db, ifExists);
+        SrcDataDao.dropTable(db, ifExists);
+        RegionAdaminDao.dropTable(db, ifExists);
+        NoticesDao.dropTable(db, ifExists);
+        MeasureDao.dropTable(db, ifExists);
         ReportsDao.dropTable(db, ifExists);
         ExtendDao.dropTable(db, ifExists);
         UserDao.dropTable(db, ifExists);
-        MeasureDao.dropTable(db, ifExists);
-        NoticesDao.dropTable(db, ifExists);
-        RegionAdaminDao.dropTable(db, ifExists);
-        SrcDataDao.dropTable(db, ifExists);
+        RuleResultDao.dropTable(db, ifExists);
+        Vein_whole_bloodDao.dropTable(db, ifExists);
+        DiastolicDao.dropTable(db, ifExists);
         Blood_sugarDao.dropTable(db, ifExists);
         Body_temperatureDao.dropTable(db, ifExists);
-        BpDao.dropTable(db, ifExists);
-        DiastolicDao.dropTable(db, ifExists);
         PulseDao.dropTable(db, ifExists);
-        RuleResultDao.dropTable(db, ifExists);
-        Spo2Dao.dropTable(db, ifExists);
         SystolicDao.dropTable(db, ifExists);
-        Vein_whole_bloodDao.dropTable(db, ifExists);
+        BpDao.dropTable(db, ifExists);
+        Spo2Dao.dropTable(db, ifExists);
     }
 
     /**
@@ -83,26 +83,26 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
+        registerDaoClass(MessageDao.class);
         registerDaoClass(ConcernedsDao.class);
         registerDaoClass(ConcernsDao.class);
         registerDaoClass(SpecificDataDao.class);
-        registerDaoClass(MessageDao.class);
+        registerDaoClass(SrcDataDao.class);
+        registerDaoClass(RegionAdaminDao.class);
+        registerDaoClass(NoticesDao.class);
+        registerDaoClass(MeasureDao.class);
         registerDaoClass(ReportsDao.class);
         registerDaoClass(ExtendDao.class);
         registerDaoClass(UserDao.class);
-        registerDaoClass(MeasureDao.class);
-        registerDaoClass(NoticesDao.class);
-        registerDaoClass(RegionAdaminDao.class);
-        registerDaoClass(SrcDataDao.class);
+        registerDaoClass(RuleResultDao.class);
+        registerDaoClass(Vein_whole_bloodDao.class);
+        registerDaoClass(DiastolicDao.class);
         registerDaoClass(Blood_sugarDao.class);
         registerDaoClass(Body_temperatureDao.class);
-        registerDaoClass(BpDao.class);
-        registerDaoClass(DiastolicDao.class);
         registerDaoClass(PulseDao.class);
-        registerDaoClass(RuleResultDao.class);
-        registerDaoClass(Spo2Dao.class);
         registerDaoClass(SystolicDao.class);
-        registerDaoClass(Vein_whole_bloodDao.class);
+        registerDaoClass(BpDao.class);
+        registerDaoClass(Spo2Dao.class);
     }
 
     public DaoSession newSession() {
