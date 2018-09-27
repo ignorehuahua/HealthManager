@@ -75,7 +75,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
     private int mCount;
     private static final int DEFAULT_PAGE = 0;
     private static final int DEFAULT_COUNT = 8;
-    private static final String KEY_LOAD_SIZE = "key_load_size";
+    private static final String KEY_LOAD_SIZE = "key_load_report_size";
     private boolean pull_refresh = false;
 
     @Override
@@ -125,7 +125,7 @@ public class WarningFragment extends BaseFragment implements SwipeRefreshLayout.
                 Logger.d(TAG, "onFooterClick");
                 getWarnRules();
                 int currentSize = warnInfoList.size();
-                int remainder = currentSize/8;
+                int remainder = currentSize/DEFAULT_COUNT;
                 Logger.d(TAG, "current size = "+currentSize + "remainder = "+remainder);
                 loadWarnNotices(remainder, DEFAULT_COUNT, false);
             }

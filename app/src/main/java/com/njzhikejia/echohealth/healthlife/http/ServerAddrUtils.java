@@ -46,8 +46,8 @@ public class ServerAddrUtils {
      * @param uid
      * @return
      */
-    public static String getReportUrl(int uid) {
-        return ROOT_SERVER_ADDR + "/user/" + uid + "/reports/" + "?uid=" + uid + "&appid=4&t=" + System.currentTimeMillis();
+    public static String getReportUrl(int uid, int page, int count) {
+        return ROOT_SERVER_ADDR + "/user/" + uid + "/reports/" + "?uid=" + uid + "&appid=4&page=" + page + "&count=" + count + "&t=" +System.currentTimeMillis();
     }
 
     /**
@@ -67,7 +67,8 @@ public class ServerAddrUtils {
      * @return
      */
     public static String getWarnListUrl(int uid, int page, int count) {
-        return ROOT_SERVER_ADDR + "/user/" + uid + "/alarm/notices?status=0,1,2&type=1,2,3,4" + "&page=" + page + "&count=" +count;
+        return ROOT_SERVER_ADDR + "/user/" + uid + "/alarm/notices?status=0,1,2&type=1,2,3,4&appid=4&page=" + page + "&count=" +count
+                + "&t=" + System.currentTimeMillis();
     }
 
     /**

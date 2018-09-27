@@ -49,7 +49,7 @@ public class WarnAdapter  extends RecyclerView.Adapter<WarnAdapter.WarnViewHolde
     private static final int BLOOD_OXYGEN_WARN = 7;
 
     public static final int TYPE_FOOTER = 1;  //说明是带有Footer的
-    public static final int TYPE_NORMAL = 2;  //说明是不带有header和footer的
+    public static final int TYPE_NORMAL = 2;  //说明是不带有footer的
 
 
     private RuleResult ruleResult;

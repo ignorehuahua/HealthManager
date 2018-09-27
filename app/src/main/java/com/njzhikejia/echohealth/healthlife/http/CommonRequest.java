@@ -139,8 +139,9 @@ public class CommonRequest {
      * @param uid
      * @return
      */
-   public static Request getUserReports(int uid) {
-       return getRequest(ServerAddrUtils.getReportUrl(uid));
+   public static Request getUserReports(int uid, int page, int count) {
+       Logger.d(TAG, "report url = "+ServerAddrUtils.getReportUrl(uid, page, count));
+       return getRequest(ServerAddrUtils.getReportUrl(uid, page, count));
    }
 
     /**

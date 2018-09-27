@@ -62,6 +62,9 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
     private DaoSession mDaoSession;
     private ReportsDao reportsDao;
     private QueryBuilder<Reports> queryBuilder;
+    private static final int DEFAULT_PAGE = 0;
+    private static final int DEFAULT_COUNT = 8;
+    private static final String KEY_LOAD_SIZE = "key_load_size";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,8 +116,26 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
                     startActivity(intentDetail);
                 }
             }
+
+            @Override
+            public void onFooterClick() {
+                Logger.d(TAG, "onFooterClick");
+                int currentSize = healthGuidanceList.size();
+                int remainder = currentSize/DEFAULT_COUNT;
+                Logger.d(TAG, "current size = "+currentSize + "remainder = "+remainder);
+                loadReports(remainder, DEFAULT_COUNT, false);
+            }
         });
-        loadReports();
+        loadReports(DEFAULT_PAGE, DEFAULT_COUNT, false);
+    }
+
+    private void setFooterView(RecyclerView recyclerView) {
+        View footer = LayoutInflater.from(mContext).inflate(R.layout.list_footer, recyclerView, false);
+        mAdapter.setFooterView(footer);
+    }
+
+    private void removeFooterView() {
+        mAdapter.setFooterView(null);
     }
 
     static class HealthGuidanceHandler extends Handler {
@@ -131,22 +152,23 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
                 case ConstantValues.MSG_REFRESH_TIME_OUT:
                     if (healthGuidanceFragmentWeakReference.get() != null) {
                         healthGuidanceFragmentWeakReference.get().stopRefresh();
-                        if (healthGuidanceFragmentWeakReference.get().healthGuidanceList.size() == 0) {
-                            healthGuidanceFragmentWeakReference.get().tvNoData.setVisibility(View.VISIBLE);
-                        }
+                        healthGuidanceFragmentWeakReference.get().checkEmptyData();
                     }
                     break;
                 case KEY_REPORT:
                     if (healthGuidanceFragmentWeakReference.get() != null) {
+                        Logger.d(TAG, "handleMessage KEY_REPORT");
                         healthGuidanceFragmentWeakReference.get().stopRefresh();
-                        if (healthGuidanceFragmentWeakReference.get().healthGuidanceList.size() > 0) {
-                            healthGuidanceFragmentWeakReference.get().tvNoData.setVisibility(View.GONE);
-                            healthGuidanceFragmentWeakReference.get().mAdapter.setList(healthGuidanceFragmentWeakReference.get().healthGuidanceList);
-                        } else {
-                            healthGuidanceFragmentWeakReference.get().tvNoData.setVisibility(View.VISIBLE);
+                        healthGuidanceFragmentWeakReference.get().checkEmptyData();
+                        Bundle bundle = msg.getData();
+                        int loadSize = bundle.getInt(KEY_LOAD_SIZE, 0);
+                        Logger.d(TAG, "loadSize = "+loadSize);
+                        if (loadSize < DEFAULT_COUNT) {
+                            Logger.d(TAG, "removeFooterView");
+                            healthGuidanceFragmentWeakReference.get().removeFooterView();
                         }
 
-
+                        healthGuidanceFragmentWeakReference.get().mAdapter.setList(healthGuidanceFragmentWeakReference.get().healthGuidanceList);
                     }
                     break;
                 case KEY_FAILURE:
@@ -159,10 +181,20 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
         }
     }
 
+    private void checkEmptyData() {
+        if (healthGuidanceList != null && healthGuidanceList.size() > 0) {
+            setFooterView(mRecycleView);
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
+            removeFooterView();
+        }
+    }
+
     @Override
     public void onRefresh() {
         Logger.d(TAG, "onRefresh");
-        loadReports();
+        loadReports(DEFAULT_PAGE, DEFAULT_COUNT, true);
         mHandler.sendEmptyMessageDelayed(ConstantValues.MSG_REFRESH_TIME_OUT, ConstantValues.REFRESH_TIME_OUT);
     }
 
@@ -183,22 +215,18 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
     private void loadDataFromDb() {
         queryBuilder.where(ReportsDao.Properties.Uid.eq(PreferenceUtil.getSelectedUserUID(mContext)));
         healthGuidanceList = queryBuilder.list();
-        if (healthGuidanceList.size() > 0) {
-            tvNoData.setVisibility(View.GONE);
-        } else {
-            tvNoData.setVisibility(View.VISIBLE);
-        }
+        checkEmptyData();
         mAdapter.setList(healthGuidanceList);
     }
 
-    private void loadReports() {
+    private void loadReports(int page, int count, final boolean pull_refresh) {
         if (!NetWorkUtils.isNetworkConnected(mContext)) {
             ToastUtil.showShortToast(mContext, R.string.net_work_error);
             stopRefresh();
             loadDataFromDb();
             return;
         }
-        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserReports(PreferenceUtil.getSelectedUserUID(mContext)), new Callback() {
+        OKHttpClientManager.getInstance().getAsync(CommonRequest.getUserReports(PreferenceUtil.getSelectedUserUID(mContext), page, count), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logger.e(TAG, "onFailure");
@@ -212,13 +240,26 @@ public class HealthGuidanceFragment extends BaseFragment implements SwipeRefresh
                 Logger.d(TAG, "onResponse code = "+response.code() + "responseContent = "+responseContent);
                 Gson gson = new Gson();
                 ReportData reportData = gson.fromJson(responseContent, ReportData.class);
-                healthGuidanceList = reportData.getData().getReports();
+                List<Reports> tempList = reportData.getData().getReports();
+                int oldSize = healthGuidanceList.size();
+                if (pull_refresh) {
+                    healthGuidanceList.clear();
+                    mAdapter.notifyItemRangeRemoved(0, oldSize);
+                }
+                healthGuidanceList.addAll(tempList);
+                mAdapter.notifyItemRangeInserted(oldSize, tempList.size());
                 DeleteQuery<Reports> deleteQuery = queryBuilder.where(ReportsDao.Properties.Uid.eq(PreferenceUtil.getSelectedUserUID(mContext))).buildDelete();
                 deleteQuery.executeDeleteWithoutDetachingEntities();
                 for (Reports reports : healthGuidanceList) {
                     reportsDao.insert(reports);
                 }
-                mHandler.sendEmptyMessage(KEY_REPORT);
+                Message msg = Message.obtain();
+                Bundle bundle = new Bundle();
+                bundle.putInt(KEY_LOAD_SIZE, tempList.size());
+                msg.setData(bundle);
+                msg.what = KEY_REPORT;
+                mHandler.sendMessage(msg);
+//                mHandler.sendEmptyMessage(KEY_REPORT);
             }
         });
     }
