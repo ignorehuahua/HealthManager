@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bg_main">
+    android:background="@color/dark">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -22,12 +22,51 @@
         android:layout_marginTop="60dp"
         android:layout_marginRight="16dp">
 
+        <RelativeLayout
+            android:id="@+id/rl_qr_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp">
+
+        <com.njzhikejia.echohealth.healthlife.widget.CircleImageView
+            android:id="@+id/iv_qr_avatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            app:civ_border_width="1dp"
+            android:layout_marginRight="12dp"
+            android:layout_centerVertical="true"
+            app:civ_border_color="@color/light"
+            android:src="@drawable/icon_avatar_default"/>
+
+        <TextView
+            android:id="@+id/tv_qr_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/name_color"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/iv_qr_avatar"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_qr_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/shape_gray"
+            android:layout_toRightOf="@id/iv_qr_avatar"
+            android:paddingTop="6dp"
+            android:textSize="15sp"
+            android:layout_below="@id/tv_qr_name"/>
+
+        </RelativeLayout>
+
         <ImageView
             android:id="@+id/iv_qr_code"
+            android:layout_below="@id/rl_qr_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="10dp"/>
 
         <TextView
             android:layout_below="@id/iv_qr_code"
